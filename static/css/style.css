@@ -5,3 +5,9 @@
     margin: 0;
     font-family: 'Poppins', sans-serif;
 }
+
+body {
+    height: 100vh;
+    background-color: bisque;
+    display: block;
+}

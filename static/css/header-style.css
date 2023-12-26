@@ -1,70 +1,45 @@
 header {
     display: flex;
+    padding: 10px;
+    /* background-color: rgb(241, 0, 0); */
+    box-shadow:  2px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+    display: flex;
     justify-content: space-between;
-    padding: 15px;
-    /* background-color: yellow; */
-    box-shadow: 0px 5px 3px #8888882a;
-
+    padding: 0 10px;
+    background-color: white;
+    width: 100%;
+    color: var(--secondary-color);
 }
 
-.header-content-left {
+.header-container-site-logo {
     display: flex;
-    /* background-color: blue; */
-    align-items: center;
+
 }
 
-.header-content-center {
-    display: flex;
-    align-items: center;
-    padding: 0 10px 0 10px;
-}
-
-.header-content-center a {
+.header-container-site-intro {
     display: flex;
     align-items: center;
-    padding: 0 10px 0 10px;
 }
 
-.header-content-right {
+#header-logo {
+    height: 2em;
+    width: auto;
+}
+
+#header-title {
+    font-size: 2em;
+    font-weight: 600;
+}
+
+.header-container-main-content {
+    display: none;
+}
+
+.header-container-getstarted {
     display: flex;
-    /* background-color: blueviolet; */
     align-items: center;
-}
-
-.header-content-right-links {
-    display: flex;
-    align-items: center;
-    padding: 0 10px 0 10px;
-}
-
-.header-content-right-links div {
-    padding: 0 10px 0 10px;
     
 }
-
-.header-content-right-log-getstart {
-    /* border: 2px solid black; */
-    border-radius: 100vh;
-    display: flex;
-    align-items: center;
-}
-
-.header-content-right-log-getstart a {
-    padding: 0 10px 0 10px; 
-}
-
-#header-content-link-getstart {
-    /* background-color: blue; */
-    border: 3px solid black;
-    font-weight: bolder;
-    padding: 15px;
-    border-radius: 100px;
-    position: relative;
-    transition: background-color 0.5s ease, color 0.5s ease;
-}
-
-#header-content-link-getstart:hover {
-    background-color: black;
-    color: white;
-}
-

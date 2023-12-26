@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnSync Home</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar-style.css') }}"> -->
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/sidebar-style.css">
+    <link rel="stylesheet" href="../static/css/header-style.css">
+    <link rel="stylesheet" href="../static/css/main-style.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-container-site-intro">
+                <div class="header-container-site-logo">
+                    <img id="header-logo" src="../static/resources/images/learnsync_logo.png" alt="" srcset="{{ url_for('static', filename='images/learnsync_logo.png') }}">
+                </div>
+            </div>
+            <div class="header-container-site-title">
+                <span id="header-title">LearnSync</span>
+            </div>
+            <div class="header-container-getstarted">
+                <a href="#" id="getstarted">Get Started</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="primary-intro-container">
+            <div class="primary-intro-left-content">
+                <span id="primary-intro-title">LearnSync</span>
+                <span id="primary-intro-tagline">Your Learning Companion!</span>
+            </div>
+            <div class="primary-intro-right-content">
+                <div class="primary-intro-img-container">
+                    <img src="../static/resources/images/learn-sync-intro.jpg" alt="" id="primary-intro-img">
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

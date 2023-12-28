@@ -6,17 +6,22 @@ header {
 }
 
 .header-container {
+    margin-inline: 15%;
     display: flex;
-    justify-content: space-between;
     padding: 0 10px;
     background-color: white;
+    justify-content: space-evenly;
     width: 100%;
     color: var(--secondary-color);
 }
 
 .header-container-site-logo {
     display: flex;
+    
+}
 
+.header-container-site-title {
+    margin-inline: 10%;
 }
 
 .header-container-site-intro {

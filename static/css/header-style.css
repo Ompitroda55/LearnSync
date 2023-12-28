@@ -2,7 +2,7 @@ header {
     display: flex;
     padding: 10px;
     /* background-color: rgb(241, 0, 0); */
-    box-shadow:  2px 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow:  4px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .header-container {
@@ -22,11 +22,18 @@ header {
 
 .header-container-site-title {
     margin-inline: 10%;
+    min-width: 30%;
+    /* background-color: aliceblue; */
+    display: flex;
+    justify-content: center;
 }
 
 .header-container-site-intro {
     display: flex;
     align-items: center;
+    justify-content: center;
+    min-width: 30%;
+    /* background-color: yellow; */
 }
 
 #header-logo {
@@ -46,5 +53,7 @@ header {
 .header-container-getstarted {
     display: flex;
     align-items: center;
-    
+    justify-content: center;
+    min-width: 30%;
+    /* background-color: rgb(255, 0, 98); */
 }

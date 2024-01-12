@@ -1,0 +1,42 @@
+Unified Platform: Integrate various tools into a cohesive, unified learning platform.
+Immersive Gamification: Implement engaging and motivating gamification for a truly immersive experience.
+Comprehensive Techniques: Prioritize memory enhancement techniques, including spaced repetition, in the design.
+Vibrant Community Integration: Foster a warm and vibrant community atmosphere for collaborative learning.
+Sleek User Interface: Design a modern and user-friendly interface for a smooth learning journey.
+
+ Spaced Repetition Scheduler
+ Task Scheduler
+ To-Do Lists
+ Pomodoro Timer
+ Friend's Activity Panel
+ Domain Leaderboard
+ Group Leaderboard
+ Badges
+ Daily Tasks Streaks
+ Group + Task Streaks
+
+Integration Needed:
+
+Google Calendar & Email API:
+
+Seamless scheduling and reminders for enhanced study planning.
+Google OAuth API:
+
+Secure user authentication, leveraging Google's trusted authentication system.
+MongoDB:
+
+Efficient, scalable, and flexible NoSQL database for robust data management.
+Basic Technologies Used:
+
+Front-End: HTML, CSS, JS:
+
+Modern, interactive, and responsive user interface for an engaging experience.
+Backend Framework: Flask, Python:
+
+Python's simplicity and Flask's flexibility for efficient backend development.
+Database: MongoDB:
+
+NoSQL advantage, offering scalability and adaptability for LearnSync's data.
+User Authentication: Flask Login, Google OAuth V2.0:
+
+Secure user login, combining Flask simplicity with Google's authentication reliability.

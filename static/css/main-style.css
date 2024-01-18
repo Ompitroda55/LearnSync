@@ -1,0 +1,27 @@
+.main-intro-container {
+    /* background-color: lightskyblue; */
+    height: 80vh;
+    margin: 0 15vw;
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.main-intro-content {
+    /* background-color: pink; */
+    flex: 1;
+    font-size: 3vw;
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.main-intro-img {
+    flex: 1;
+    height: 60%;
+    width: auto;
+    background-image: url("../resources/images/no-back-ilstrn.png");
+    background-size: cover;
+    background-position: center;
+}

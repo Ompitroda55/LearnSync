@@ -1,0 +1,14 @@
+.header-container {
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    height: 5vh;
+    background-color: rgb(255, 105, 255);
+    padding: 15px;
+    margin: 0 20vw;
+}
+
+.header-link-container {
+    display: flex;
+    justify-content: space-between;
+}

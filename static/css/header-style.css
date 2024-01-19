@@ -1,3 +1,7 @@
+header {
+    border-bottom: 3px solid black;
+}
+
 .header-container {
     display: flex;
     justify-content:space-between;
@@ -7,16 +11,21 @@
     /* background-color: rgb(255, 105, 255); */
     /* padding: 15px; */
     margin: 0 15vw;
+    padding: 1em 15px;
 }
 
 .header-title-container {
     display: flex;
     align-items: center;
+    flex: 1;
 }
 
 .header-link-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+
+    flex: 1;
+    /* background-color: beige; */
 }
 
 .header-title-container-links {
@@ -26,7 +35,10 @@
 
 .header-title-container-logo{
     display: flex;
-    align-items: start;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    /* background-color: brown; */
 }
 
 #header-logo {

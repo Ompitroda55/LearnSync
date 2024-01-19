@@ -1,30 +1,41 @@
 .main-intro-container {
-    position: relative; /* Set to relative */
-    overflow: hidden; /* Add overflow: hidden */
-    height: 100vh;
+    position: relative;
+    /* Set to relative */
+    overflow: hidden;
+    /* Add overflow: hidden */
+    height: 90vh;
     /* margin: 0 15vw; */
     padding: 15px;
     display: flex;
-    flex-direction: row;
+    /* flex-direction: row; */
     align-items: center;
+    /* background-color: black; */
 }
 
 
 .main-intro-container-content {
     height: 100%;
     margin: 0 15vw;
+    width: 100%;
     padding: 15px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    /* background-color: blue; */
+
 }
+
 .main-intro-content {
     /* background-color: pink; */
-    flex: 1;
+    width: 100%;
+    /* flex: 1; */
     font-size: 3vw;
     display: flex;
     align-items: center;
+    justify-content: center;
     text-align: left;
+    line-height: 10vh;
+    color: var(--primary-color);
 }
 
 .main-intro-img {
@@ -52,25 +63,26 @@
 }
 
 .bouncing-blob--blue {
-    background: #90c0f7;
+    background: #1900ff;
 }
 
 .bouncing-blob--white {
-    background: #ffffff;
+    background: #6f00ff;
     z-index: 2;
     width: 15vw;
 }
 
 .bouncing-blob--purple {
-    background: #ff0095;
+    background: #00e1ff;
 }
 
 .bouncing-blob--pink {
-    background: #ff730050;
+    background: #ff00aa;
 }
 
 .bouncing-blobs-container {
-    position: absolute; /* Set to absolute */
+    position: absolute;
+    /* Set to absolute */
     z-index: -1;
     top: 0;
     left: 0;
@@ -156,24 +168,6 @@
     }
 }
 
-.tutorial-link a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    font-size: 20px;
-    text-decoration: none;
-    font-weight: 600;
-    gap: 0 5px;
-    border: 2px solid;
-    border-radius: 5px;
-    padding: 4px 10px;
-}
-
-.tutorial-link svg {
-    width: 30px;
-}
-
 @media(max-width: 500px) {
     .tutorial-link a {
         font-size: 14px;
@@ -182,5 +176,45 @@
 
     .tutorial-link svg {
         width: 15px;
+    }
+}
+
+/* For the typing text */
+.main-intro-content p span.typed-text {
+    font-weight: normal;
+    color: var(--primary-color);
+}
+
+.main-intro-content p span.cursor {
+    display: inline-block;
+    background-color: #000000;
+    margin-left: 0.1rem;
+    width: 3px;
+    animation: blink 1s infinite;
+}
+
+.main-intro-content p span.cursor.typing {
+    animation: none;
+}
+
+@keyframes blink {
+    0% {
+        background-color: #ccc;
+    }
+
+    49% {
+        background-color: #ccc;
+    }
+
+    50% {
+        background-color: transparent;
+    }
+
+    99% {
+        background-color: transparent;
+    }
+
+    100% {
+        background-color: #ccc;
     }
 }

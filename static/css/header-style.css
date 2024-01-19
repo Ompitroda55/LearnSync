@@ -1,8 +1,16 @@
 header {
-    border-bottom: 3px solid black;
+    position: sticky;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    width: 100%; /* Make sure the header takes the full width initially */
+    transition: all 0.6s ease; /* Apply transition to all properties */
+    
 }
 
 .header-container {
+    /* background-color: rgba(255, 255, 255, 0.9); */
     display: flex;
     justify-content:space-between;
 
@@ -31,6 +39,7 @@ header {
 .header-title-container-links {
     font-weight: bolder;
     font-size: 2.5em;
+    transition: font-size 0.3s ease;
 }
 
 .header-title-container-logo{
@@ -43,5 +52,16 @@ header {
 
 #header-logo {
     height: 6em;
-    /* background-color: black; */
+    transition: height 0.5s ease; /* Add transition for height */
+}
+
+.header-small {
+    /* width: 50vw; */
+    margin: 2em auto 1em; /* Adjust the margin to center vertically and horizontally */
+    border-bottom: 3px solid black;
+    font-size: small;
+}
+
+.header-small #header-logo {
+    height: 3em; /* Adjust the height of the logo for the small menu */
 }

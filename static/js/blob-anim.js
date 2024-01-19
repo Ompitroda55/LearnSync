@@ -1,5 +1,5 @@
-const MIN_SPEED = 2.5
-const MAX_SPEED = 5
+const MIN_SPEED = 1.5
+const MAX_SPEED = 3
 
 function randomNumber(min, max) {
   return Math.random() * (max - min) + min
@@ -66,3 +66,18 @@ function initBlobs() {
 }
 
 initBlobs()
+
+window.addEventListener('scroll', function () {
+    const header = document.querySelector('header');
+    const scrollPosition = window.scrollY;
+
+    if (scrollPosition > 50) {
+        header.classList.add('header-small'); // Add the new class for small menu
+        header.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+        header.style.backdropFilter = 'blur(10px)';
+    } else {
+        header.classList.remove('header-small'); // Remove the class when scrolling back up
+        header.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        header.style.backdropFilter = 'blur(10px)';
+    }
+});

@@ -19,37 +19,56 @@
     width: 100%;
     padding: 15px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     /* background-color: blue; */
 
 }
 
 .main-intro-content {
-    /* background-color: pink; */
+    /* background-color: pink;   */
+    height: 10%;
     width: 100%;
-    /* flex: 1; */
+    flex: 2;
     font-size: 3vw;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     text-align: left;
     line-height: 10vh;
     color: var(--primary-color);
 }
 
+
 .main-intro-img {
-    flex: 1;
+    /* flex: 1; */
     height: 60%;
     width: auto;
-    background-image: url("../resources/images/no-back-ilstrn.png");
+    /* background-image: url("../resources/images/no-back-ilstrn.png"); */
     background-size: cover;
     background-position: center;
 }
 
+.main-intro-content-links{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+    height: fit-content;
+    /* background-color: purple; */
+    padding: 10px;
+    margin-top: 20px;
+    gap: 10px;
+    color: white;
+    font-size: 3vh;
+}
 
+.main-intro-content-links a:hover {
+    background-color: white; /* Total white on hover */
+    color: black;
+}
 
-
+/* For the changing background */
 .bouncing-blob {
     width: 32vw;
     aspect-ratio: 1;
@@ -217,4 +236,79 @@
     100% {
         background-color: #ccc;
     }
+}
+
+/* Code for features section of main */
+
+.main-features-container {
+    /* background-color: rgb(255, 147, 255); */
+    margin: 0 15vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-features-container-heading {
+    font-size: 4em;
+    /* background-color: pink; */
+}
+
+.main-features-container-features {
+    /* background-color: aquamarine; */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1vh;
+}
+
+.txt-bold-cursv {
+    font-weight: 600;
+    font-family: 'Satisfy', cursive;
+    font-size: 150%;
+}
+
+.feature-container-text {
+    /* background-color: teal; */
+    /* background-color: blue; */
+    /* border: 50%; */
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    justify-content: center;
+    /* margin: 6vh 0; */
+}
+.feature-container-text-header{
+    font-family: 'Satisfy', cursive;
+    font-size: 4em;
+    font-weight: 800;
+    padding: 10vh 0vh 0vh 4vh;
+    text-align: left;
+    /* background-color: yellow; */
+}
+
+.feature-container-text-content {
+    /* background-color: aquamarine; */
+    padding: 0 1vh 6vw 4vh;
+    font-size: 1.5em;
+    text-align: justify;
+}
+
+.feature-container-logo {
+    height: 50vh;
+    /* background-color: black; */
+    background-position: center;
+    background-size: cover;
+}
+
+#feature-1 {
+    background-image: url("../resources/images/pomodoro-timer.png");
+}
+
+#feature-2 {
+    background-image: url("../resources/images/streak.png");
+    /* background-color: black; */
+}
+#feature-3 {
+    background-image: url("../resources/images/community-1.png");
+}
+#feature-4 {
+    background-image: url("../resources/images/task-scheduler.png");
 }

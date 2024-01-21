@@ -12,30 +12,36 @@
     <link rel="stylesheet" href="../static/css/header-style.css">
     <link rel="stylesheet" href="../static/css/main-style.css">
     <link rel="stylesheet" href="../static/css/home-style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.js"></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 
 <body>
-    <main>
-        <header>
-            <div class="header-container">
-                <div class="header-title-container">
-    
-                    <div class="header-title-container-links">
-                        LearnSync
-                    </div>
-                </div>
-                <div class="header-title-container-logo">
-                    <img id="header-logo" src="../static/resources/images/test-logo.png" alt="">
-                </div>
-                <div class="header-link-container">
-                    <div class="header-link-container-getstarted">
-                        <a href="#" id="getstarted-header">
-                            Get Started
-                        </a>
-                    </div>
+    <header>
+        <div class="header-container">
+            <div class="header-title-container">
+                <div class="header-title-container-links">
+                    LearnSync
                 </div>
             </div>
-        </header>
+            <!-- <div class="header-title-container-logo">
+                <img id="header-logo" src="../static/resources/images/test-logo.png" alt="">
+            </div> -->
+            <div class="header-link-container">
+                <div class="header-link-container-getstarted">
+                    <a href="#" id="getstarted-header">
+                        Get Started &nbsp;
+                        <span class="material-symbols-outlined">
+                            arrow_right_alt
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
         <div class="main-intro-container">
             <div class="bouncing-blobs-container">
                 <div class="bouncing-blobs-glass"></div>
@@ -49,23 +55,98 @@
                     <div class="bouncing-blob bouncing-blob--pink"></div>
                 </div>
             </div>
-            <div class="main-intro-container-content">
-                <div class="main-intro-content">
-                     
-                    <p>Welcome to<br><span id="welLS" style="font-size: 10vw; font-weight: bolder;"> LearnSync </span><br><span id="revlern" style="font-weight: 900;">Revolutionizing learning by</span> <br> <span class="typed-text"></span><span class="cursor">&nbsp;</span></p>
+            <div class="main-intro-container-content" >
+                <div class="main-intro-content" data-aos="zoom-in-down" data-aos-duration="1000">
+
+                    <p>Welcome to<br><span id="welLS" style="font-size: 10vw; font-weight: bolder;"> LearnSync
+                        </span><br><span id="revlern" style="font-weight: 900;">Revolutionizing learning by</span> <br>
+                        <span class="typed-text"></span><span class="cursor">&nbsp;</span></p>
                 </div>
-                <script src="../static/js/intro-script.js"></script>
-                <!-- <div class="main-intro-img"> -->
-                    <!-- <img id="main-intro-img" src="../static/resources/images/girl.png" alt=""> -->
+                <!-- <div class="main-intro-content-links">
+                    <a href="">Features</a>
+                    <a href="">Pomodoro Timer</a>
+                    <a href="">Login</a>
                 <!-- </div> -->
+                <script src="../static/js/intro-script.js"></script>
             </div>
         </div>
-        <div style="height: 300vh;">THis is not main div</div>
+        </div> -->
+        <div class="main-features-container" >
+            <div class="main-features-container-heading" data-aos="fade-up" data-aos-duration="1000">
+                Feature we offer
+            </div>
+            <div class="main-features-container-features">
+                <div class="feature-container-text" data-aos="fade-up" data-aos-duration="1000">
+                    <div class="feature-container-text-header">
+                        Pomodoro Timer
+                    </div>
+                    <div class="feature-container-text-content">
+                        Enhances <span class="txt-bold-cursv">focus & productivity</span> with structured work intervals
+                        and breaks, fostering a <span class="txt-bold-cursv">balanced study routine and preventing
+                            burnout</span> for effective learning.
+                    </div>
+                </div>
+                <div class="feature-container-logo" id="feature-1" data-aos="fade-left" data-aos-duration="1000"></div>
+                <div class="feature-container-logo" id="feature-2" data-aos="fade-right" data-aos-duration="1000"></div>
+                <div class="feature-container-text" data-aos="fade-up" data-aos-duration="1000" >
+                    <div class="feature-container-text-header">
+                        Streaks between friends
+                    </div>
+                    <div class="feature-container-text-content">
+                        Gamifies learning, creating a <span class="txt-bold-cursv">sense of accomplishment</span>
+                        through streaks and challenges, <span class="txt-bold-cursv">motivating users to stay
+                            consistent</span> in completing tasks and achieving goals.
+                    </div>
+                </div>
+                <div class="feature-container-text" data-aos="fade-up" data-aos-duration="1000">
+                    <div class="feature-container-text-header">
+                        Community Cohesion
+                    </div>
+                    <div class="feature-container-text-content">
+                        Fosters a supportive learning community through the <span class="txt-bold-cursv">Friend's
+                            Activity Panel</span>, encouraging collaboration, sharing achievements, and providing a
+                        sense of <span class="txt-bold-cursv">shared progress and motivation.</span>
+                    </div>
+                </div>
+                <div class="feature-container-logo" id="feature-3" data-aos="fade-left" data-aos-duration="1000"></div>
+                <div class="feature-container-logo" id="feature-4" data-aos="fade-right" data-aos-duration="1000"></div>
+                <div class="feature-container-text" data-aos="fade-up" data-aos-duration="1000">
+                    <div class="feature-container-text-header">
+                        Augment Learning Habits
+                    </div>
+                    <div class="feature-container-text-content">
+                        Optimizes memory retention through spaced repetition, ensuring efficient learning by scheduling
+                        repetitive tasks strategically for enhanced knowledge retention over time.
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
     </main>
     <footer>
 
     </footer>
-    <script src="../static/js/blob-anim.js"></script>r
+    <script src="../static/js/blob-anim.js"></script>
+    <script>
+        // Script for height(image) == height(text)
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get all feature containers
+            var featureContainers = document.querySelectorAll(".main-features-container-features .feature-container-text");
+        
+            // Iterate through each feature container
+            featureContainers.forEach(function (container) {
+                // Get the height of the text container
+                var textContainerHeight = container.querySelector(".feature-container-text-content").offsetHeight;
+        
+                // Set the height of the logo container
+                container.querySelector(".feature-container-logo").style.height = textContainerHeight + "px";
+            });
+        });
+        </script>
+        <script>
+            AOS.init();
+        </script>
 </body>
 
 </html>

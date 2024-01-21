@@ -67,6 +67,7 @@ function initBlobs() {
 
 initBlobs()
 
+// For Header
 window.addEventListener('scroll', function () {
     const header = document.querySelector('header');
     const scrollPosition = window.scrollY;
@@ -81,3 +82,5 @@ window.addEventListener('scroll', function () {
         header.style.backdropFilter = 'blur(10px)';
     }
 });
+
+// For height of !feature == img 

@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&family=Satisfy&family=Varela+Round&display=swap');
+
+:root {
+
+    /* Core Colours */
+    --feather-green: #9302cc;   /* Primary Colour */
+    --mask-green: #bb38db;
+    --eel: #4b4b4b;
+    --snow: #ffffff;
+
+    /* Secondary Colours */
+    --macaw: #1cb0f6;
+    --cardinal: #ff4b4b;
+    --bee: #f3f457;             /* Secondary Colour */
+    --fox: #ff9600;
+    --beetle: #ce82ff;
+    --humpback: #2b70c9;
+
+    /* Tints */
+    --eel: #4b4b4b; /* Black */
+    --wolf: #777777;
+    --hare: #afafaf;
+    --swan: #e5e5e5;
+    --polar: #f7f7f7;
+    --snow: #ffffff; /* White */
+
+    /* Font Style */
+    --main-font: 'Poppins', sans-serif;     /* For text */ 
+    --cursive-font-0: 'Pacifico', cursive;  /* For highlighting text */ 
+    --cursive-font-1: 'Satisfy', cursive;   /* Alterative for highlighting text */
+    --logo-font: 'Varela Round', sans-serif;/* For LearnSync Text */
+
+    /* Font Size */
+    --logo-font-size: 2.5rem;
+    --heading-font-size: 2rem;
+    --sub-heading-font-size: 1.5rem;
+    --default-font-size: 1rem; /* Default */
+    --less-imp-font-size: 0.5rem;
+}
+
+.logo {
+    font-family: var(--logo-font);
+    font-size: var(--logo-font-size);
+    color: var(--feather-green);
+    font-weight: 800;
+}
+
+.heading {
+    font-family: var(--cursive-font-0);
+    font-size: var(--heading-font-size);
+    font-weight: 600;
+    /* color: var(--eel); */
+    line-height: 2rem;
+}
+
+.sub-heading {
+    font-family: var(--main-font);
+    font-size: var(--sub-heading-font-size);
+    font-weight: 600;
+    /* color: var(--eel); */
+    line-height: 1.5rem;
+}
+
+.simple-text {
+    font-family: var(--main-font);
+    /* color: var(--eel); */
+    font-size: var(--heading-font-size);
+    line-height: 1.5rem;
+}
+
+.less-imp-text {
+    font-family: var(--main-font);
+    color: var(--hare);
+    font-size: var(--less-imp-font-size);
+}

@@ -1,0 +1,146 @@
+header {
+    display: flex;
+    /* background-color: brown; */
+    height: 100svh;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    /* background-color: lightcyan; */
+    margin: 0 auto;
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    background-color: var(--snow);
+    /* backdrop-filter: blur(10px); */
+    transition: border-bottom 0.3s ease-in-out;
+}
+
+.nav-placeholder {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    /* background-color: lightcyan; */
+    margin: 0 auto;
+    z-index: 1000;
+    top: 0;
+    /* background-color: red; */
+}
+
+.nav-placeholder-container {
+    display: flex;
+    min-width: 60svw;
+    flex-direction: row;
+    /* background-color: pink; */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-border {
+    border-bottom: 3px solid var(--hare);
+}
+
+.nav-container {
+    display: flex;
+    min-width: 60svw;
+    flex-direction: row;
+    /* background-color: pink; */
+    justify-content: space-between;
+    align-items: center;
+}
+
+#top-get-started {
+    display: none;
+    width: fit-content;
+    height: fit-content;
+}
+
+.intro {
+    /* background-color: aquamarine; */
+    display: flex;
+    flex: row;
+    max-width: 60svw;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-intro-left {
+    flex: 1;
+}
+
+.header-intro-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    gap: 10px;
+}
+
+.header-intro-right-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: black; */
+    gap: 20px;
+}
+
+.outro {
+    background-color: var(--hare);
+    color: var(--snow);
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    /* background-color: black; */
+}
+
+.features {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 60svw;
+    gap: 10svh;
+}
+
+.feature-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.flex-inv {
+    flex-direction: row-reverse;
+}
+
+.feature-desc {
+    flex: 1;
+}
+
+.feature-img {
+    height: 50svh;
+    flex: 1;
+}
+
+
+
+@media only screen and (max-width: 768px) {
+
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+
+}
+
+@media only screen and (min-width: 1025px) {
+
+}

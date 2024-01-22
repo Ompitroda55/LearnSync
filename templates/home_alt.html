@@ -1,13 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearnSync Home</title>
+    <link rel="stylesheet" href="../static/css/style-updated.css">
+    <link rel="stylesheet" href="../static/css/style-home.css">
+
+
 </head>
+
 <body>
-    <header></header>
-    <main></main>
+    <header>
+        <div class="nav-placeholder">
+            <div class="nav-placeholder-container">
+                <div class="logo">LearnSync</div>
+                <a href="" style="display: none;">Get Started</a>
+            </div>
+        </div>
+        <div class="nav">
+            <div class="nav-container">
+                <div class="logo">LearnSync</div>
+                <a href="" id="top-get-started" class="link-primary">Get Started</a>
+            </div>
+        </div>
+        <div class="intro">
+            <div class="header-intro-left">
+                <img src="../static/resources/images/streak.png" alt="" height="600px">
+            </div>
+            <div class="header-intro-right">
+
+                <span class="heading" style="text-align: center;">The free, fun & effective way to augment your learning!</span>
+                <div class="header-intro-right-links">
+                    <a href="" class="link-primary" id="target-1">Get Started</a>
+                    <a href="" class="link-secondary">I already have an account</a>
+                </div>
+            </div>
+        </div>
+        <div class="outro">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab velit aliquid repellat, labore
+            illum tempora qui est corrupti architecto deleniti fugiat provident tenetur officiis, sit perferendis
+            repudiandae asperiores corporis similique.</div>
+    </header>
+    <main>
+        <div class="features">
+            <div class="feature-container">
+                <div class="feature-desc">
+                    <div class="heading">pomodoro timer.</div>
+                    <div class="simple-text">Enhance concentration with structured work intervals and breaks, optimizing study sessions for efficient learning.</div>
+                </div>
+                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="">
+            </div>
+            <div class="feature-container flex-inv">
+                <div class="feature-desc">
+                    <div class="heading">streaks between friends.</div>
+                    <div class="simple-text">Gamify learning, fostering motivation through task streaks, healthy competition, and a sense of achievement.</div>
+                </div>
+                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="">
+            </div>
+            <div class="feature-container">
+                <div class="feature-desc">
+                    <div class="heading">community cohesion.</div>
+                    <div class="simple-text">Build a supportive network by sharing progress, collaborating, and staying motivated within a connected learning community.</div>
+                </div>
+                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="">
+            </div>
+            <div class="feature-container flex-inv" >
+                <div class="feature-desc">
+                    <div class="heading">flash cards.</div>
+                    <div class="simple-text">Reinforce key concepts through interactive flashcards, allowing users to create, review, and test knowledge for enhanced recall and understanding.</div>
+                </div>
+                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="">
+            </div>
+        </div>
+        <div class="any-time-where">
+
+        </div>
+    </main>
     <footer></footer>
+
+    <!-- Script for Get-Starte Button to Navbar when scrolled below it. -->
+    <script>
+        window.addEventListener('scroll', function () {
+            var scrollPosition = window.scrollY;
+            var navHeight = document.querySelector('.nav').offsetHeight;
+            var navElement = document.querySelector('.nav');
+
+            if (scrollPosition > navHeight) {
+                navElement.classList.add('nav-border');
+            } else {
+                navElement.classList.remove('nav-border');
+            }
+        });
+    </script>
+    <script>
+        // Add event listener to the scroll event
+        window.addEventListener('scroll', function () {
+            var targetElement = document.getElementById('target-1');
+            // Get the height from the top of the page
+            var elementHeightFromTop = targetElement.offsetTop;
+
+            // Get the current scroll position from the top of the page
+            var currentScroll = window.pageYOffset;
+
+            if (currentScroll > elementHeightFromTop -60) {
+                document.getElementById('top-get-started').style.display = 'block';
+            } else {
+                document.getElementById('top-get-started').style.display = 'none';
+            }
+            console.log('Element height from top of the page: ' + elementHeightFromTop + ' pixels');
+            console.log('Current scroll position from the top: ' + currentScroll + ' pixels');
+        });
+
+    </script>
+
+
 </body>
+
 </html>

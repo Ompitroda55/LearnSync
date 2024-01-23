@@ -67,20 +67,20 @@ function initBlobs() {
 
 initBlobs()
 
-// For Header
-window.addEventListener('scroll', function () {
-    const header = document.querySelector('header');
-    const scrollPosition = window.scrollY;
+// // For Header
+// window.addEventListener('scroll', function () {
+//     const header = document.querySelector('header');
+//     const scrollPosition = window.scrollY;
 
-    if (scrollPosition > 50) {
-        header.classList.add('header-small'); // Add the new class for small menu
-        header.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-        header.style.backdropFilter = 'blur(10px)';
-    } else {
-        header.classList.remove('header-small'); // Remove the class when scrolling back up
-        header.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-        header.style.backdropFilter = 'blur(10px)';
-    }
-});
+//     if (scrollPosition > 50) {
+//         header.classList.add('header-small'); // Add the new class for small menu
+//         header.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+//         header.style.backdropFilter = 'blur(10px)';
+//     } else {
+//         header.classList.remove('header-small'); // Remove the class when scrolling back up
+//         header.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+//         header.style.backdropFilter = 'blur(10px)';
+//     }
+// });
 
 // For height of !feature == img 

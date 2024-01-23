@@ -8,10 +8,17 @@
     <link rel="stylesheet" href="../static/css/style-updated.css">
     <link rel="stylesheet" href="../static/css/style-home.css">
 
+    <!-- AOS Library Import CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.js"></script>
+
+
 
 </head>
 
 <body>
+
+
     <header>
         <div class="nav-placeholder">
             <div class="nav-placeholder-container">
@@ -26,11 +33,11 @@
             </div>
         </div>
         <div class="intro">
-            <div class="header-intro-left">
-                <img src="../static/resources/images/streak.png" alt="" height="600px">
+            <div class="header-intro-left"  >
+                <!-- <img src="../static/resources/images/streak.png" alt="" style="object-fit: cover; height: 100%;"> -->
             </div>
-            <div class="header-intro-right">
-
+            <div class="header-intro-right" >
+                
                 <span class="heading" style="text-align: center;">The free, fun & effective way to augment your learning!</span>
                 <div class="header-intro-right-links">
                     <a href="" class="link-primary" id="target-1">Get Started</a>
@@ -42,35 +49,48 @@
             illum tempora qui est corrupti architecto deleniti fugiat provident tenetur officiis, sit perferendis
             repudiandae asperiores corporis similique.</div>
     </header>
+    <!-- <div class="bouncing-blobs-container">
+        <div class="bouncing-blobs-glass"></div>
+        <div class="bouncing-blobs">
+            <div class="bouncing-blob bouncing-blob--blue"></div>
+            <div class="bouncing-blob bouncing-blob--blue"></div>
+            <div class="bouncing-blob bouncing-blob--blue"></div>
+            <div class="bouncing-blob bouncing-blob--white"></div>
+            <div class="bouncing-blob bouncing-blob--purple"></div>
+            <div class="bouncing-blob bouncing-blob--purple"></div>
+            <div class="bouncing-blob bouncing-blob--pink"></div>
+        </div>
+    </div>
+    <script src="../static/js/blob-anim.js"></script> -->
     <main>
         <div class="features">
             <div class="feature-container">
-                <div class="feature-desc">
+                <div class="feature-desc" data-aos="fade-up" data-aos-duration="1000">
                     <div class="heading">pomodoro timer.</div>
                     <div class="simple-text">Enhance concentration with structured work intervals and breaks, optimizing study sessions for efficient learning.</div>
                 </div>
-                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="">
+                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="" data-aos="fade-left" data-aos-duration="1000">
             </div>
             <div class="feature-container flex-inv">
-                <div class="feature-desc">
+                <div class="feature-desc" data-aos="fade-up" data-aos-duration="1000">
                     <div class="heading">streaks between friends.</div>
                     <div class="simple-text">Gamify learning, fostering motivation through task streaks, healthy competition, and a sense of achievement.</div>
                 </div>
-                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="">
+                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="" data-aos="fade-right" data-aos-duration="1000">
             </div>
             <div class="feature-container">
-                <div class="feature-desc">
+                <div class="feature-desc" data-aos="fade-up" data-aos-duration="1000">
                     <div class="heading">community cohesion.</div>
                     <div class="simple-text">Build a supportive network by sharing progress, collaborating, and staying motivated within a connected learning community.</div>
                 </div>
-                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="">
+                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="" data-aos="fade-left" data-aos-duration="1000">
             </div>
             <div class="feature-container flex-inv" >
-                <div class="feature-desc">
+                <div class="feature-desc" data-aos="fade-up" data-aos-duration="1000">
                     <div class="heading">flash cards.</div>
                     <div class="simple-text">Reinforce key concepts through interactive flashcards, allowing users to create, review, and test knowledge for enhanced recall and understanding.</div>
                 </div>
-                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="">
+                <img class="feature-img" src="../static/resources/images/ideal img/no-back-ilstrn.png" alt="" data-aos="fade-right" data-aos-duration="1000">
             </div>
         </div>
         <div class="any-time-where">
@@ -112,6 +132,10 @@
             console.log('Current scroll position from the top: ' + currentScroll + ' pixels');
         });
 
+    </script>
+    <!-- Script for Animation on Divs inin() -->
+    <script>
+        AOS.init();
     </script>
 
 

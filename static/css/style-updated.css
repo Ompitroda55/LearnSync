@@ -7,6 +7,7 @@
     --feather-green: #58cc02;
     --mask-green: #89e219;
     /* --mask-green: #bb38db; */
+    --foot-green: #d2ff9f; /* --used for footer */
     --eel: #4b4b4b;
     --snow: #ffffff;
 
@@ -35,7 +36,7 @@
     /* Font Size */
     --logo-font-size: 2.5rem;
     --heading-font-size: 3rem;
-    --sub-heading-font-size: 1.rem;
+    --sub-heading-font-size: 1.5rem;
     --default-font-size: 1.15rem; /* Default */
     --less-imp-font-size: 1rem;
 
@@ -50,6 +51,7 @@
     font-family: var(--main-font);
     color: var(--eel);
     font-size: var(--default-font-size);
+
 }
 
 .logo {
@@ -137,8 +139,14 @@
     color: var(--snow);
 }
 
-@media only screen and (max-width: 768px) {
-
+@media only screen and (max-width: 425px) {
+    :root {
+        --logo-font-size: 24pt;
+        --heading-font-size: 16pt;
+        --sub-heading-font-size: 14pt;
+        --default-font-size: 12pt; /* Default */
+        --less-imp-font-size: 8pt;
+    }
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) {

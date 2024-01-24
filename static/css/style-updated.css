@@ -5,6 +5,7 @@
     /* Core Colours */
     /* --feather-green: #9302cc;   Primary Colour */
     --feather-green: #58cc02;
+    --feather-green-mask: #429700;
     --mask-green: #89e219;
     /* --mask-green: #bb38db; */
     --foot-green: #d2ff9f; /* --used for footer */
@@ -13,6 +14,7 @@
 
     /* Secondary Colours */
     --macaw: #1cb0f6;
+    --macaw-mask: #b6e8ff;
     --cardinal: #ff4b4b;
     --bee: #ffc800;             /* Secondary Colour */
     --fox: #ff9600;
@@ -41,7 +43,7 @@
     --less-imp-font-size: 1rem;
 
     /* Links Basic Config */
-    --link-radius: 12px;
+    --link-radius: 18px;
 }
 
 * body {
@@ -58,6 +60,15 @@
     font-family: var(--logo-font);
     font-size: var(--logo-font-size);
     color: var(--feather-green);
+    font-weight: 800;
+    text-align: center;
+    line-height: 2em;
+}
+
+.logo-alt {
+    font-family: var(--logo-font);
+    font-size: var(--logo-font-size);
+    color: var(--snow);
     font-weight: 800;
     text-align: center;
     line-height: 2em;
@@ -102,9 +113,9 @@
     font-family: var(--main-font);
     padding: 10px;
     border-radius: var(--link-radius);
-    box-shadow: 0px 4px 1px var(--hare);
+    box-shadow: 0px 6px 1px var(--feather-green-mask);
     transition: background-color.2s ease-in-out;
-    border: 3px solid var(--swan);
+    /* border: 3px solid var(--swan); */
     width: 100%;
     text-align: center;
     font-size: var(--sub-heading-font-size);
@@ -125,8 +136,8 @@
     background-color: var(--snow);
     font-family: var(--main-font);
     border-radius: var(--link-radius);
-    box-shadow: 0px 4px 1px var(--hare);
-    border: 3px solid var(--swan);
+    box-shadow: 0px 6px 1px var(--hare);
+    /* border: 3px solid var(--swan); */
     transition: background-color .3s ease-in-out;
     width: 100%;
     font-size: var(--sub-heading-font-size);
@@ -137,6 +148,28 @@
 .link-secondary:hover {
     background-color: var(--macaw);
     color: var(--snow);
+}
+
+.link-tertiary {
+    text-decoration: none;
+    padding: 10px;
+    text-align: center;
+    color: var(--hare);
+    background-color: var(--snow);
+    font-family: var(--main-font);
+    border-radius: var(--link-radius);
+    box-shadow: 0px 6px 1px var(--macaw-mask);
+    /* border: 3px solid var(--swan); */
+    transition: background-color .3s ease-in-out;
+    /* width: 100%; */
+    font-size: var(--sub-heading-font-size);
+    max-width: fit-content;
+    min-width: 10svw;
+}
+
+.link-tertiary:hover {
+    background-color: var(--snow);
+    color: var(--eel);
 }
 
 @media only screen and (max-width: 425px) {

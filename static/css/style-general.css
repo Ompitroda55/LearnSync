@@ -89,7 +89,7 @@ header {
 
 .header-intro-right-links {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     /* background-color: black; */

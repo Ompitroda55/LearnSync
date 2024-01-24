@@ -1,0 +1,77 @@
+login-overlay {
+    position: fixed;
+    min-height: 100svh;
+    width: 100%;
+    /* background-color: red; */
+    background-color: var(--snow);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    justify-content: center;
+}
+
+login-overlay > * {
+    box-sizing: border-box;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3svh;
+    /* background-color: azure; */
+}
+
+.login-container {
+    text-align: center;
+}
+
+.login-container .sub-heading {
+    color: var(--macaw);
+    font-size: var(--sub-heading-font-size);
+    margin-bottom: 15px;
+}
+
+.login-container input {
+    padding: 10px 0;
+    text-align: left;
+    color: var(--macaw);
+    background-color: var(--snow);
+    font-family: var(--main-font);
+    border-radius: var(--link-radius);
+    box-shadow: 0px 6px 1px var(--hare);
+    border: 1px solid var(--swan);
+    width: 100%;
+    padding: 10px;
+    font-size: var(--sub-heading-font-size);
+    margin-bottom: 10px;
+}
+
+.login-container .link-secondary {
+    text-decoration: none;
+    padding: 10px;
+    text-align: center;
+    color: var(--macaw);
+    background-color: var(--snow);
+    font-family: var(--main-font);
+    border-radius: var(--link-radius);
+    box-shadow: 0px 6px 1px var(--macaw-mask);
+    transition: background-color 0.3s ease-in-out;
+    width: 100%;
+    font-size: var(--sub-heading-font-size);
+    min-width: 100%;
+}
+
+.login-container .link-secondary:hover {
+    background-color: var(--macaw);
+    color: var(--snow);
+}
+
+#close-login {
+    position: absolute;
+    top: 2svh;
+    left: 2svw;
+    color: var(--hare) !important;
+    background-color: var(--cardinal);
+}

@@ -1,0 +1,135 @@
+main-container {
+    width: 100%;
+    /* background-color: aquamarine; */
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+nav {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    background-color: var(--snow);
+    /* background-color: pink; */
+    /* padding: 0 15px 0 15px; */
+    border-right: var(--default-border-width) solid var(--swan);
+    padding: 10px 15px 0 15px;
+}
+
+.nav-list-item {
+    display: flex;
+    justify-content: left;
+    border: var(--default-border-width) solid transparent;
+    align-items: center;
+    /* gap: 100px; */
+    gap: 10px;
+    font-size: var(--sub-heading-font-size);
+    font-weight: 600;
+    padding: 15px;
+    margin: 0;
+}
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding-left: 0;
+    gap: 1svh;
+    padding:10px;
+}
+
+.nav-list a {
+    border-radius: var(--border-radius);
+    color: var(--eel);
+}
+
+.nav-list a:hover {
+    background-color: var(--polar);
+}
+
+.nav-list-item li{
+    list-style: none;
+    padding-left: 0;
+}
+
+.nav-list-item-link {
+    text-decoration: none;
+}
+
+.nav-list-icon {
+    height: 64px;
+    width: auto;
+}
+
+.content-container {
+    height: 300vh;
+}
+
+.logo {
+    text-align: left;
+}
+
+.active {
+    background-color: var(--macaw-mask);
+    color: white;
+}
+
+.active li{
+    border-radius: var(--border-radius);
+    border: var(--default-border-width) solid var(--macaw);
+    background-color: var(--macaw-mask);
+    color: var(--macaw);
+}
+
+#nav-list-more-menu {
+    position: relative;
+}
+
+.more-content-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background-color: yellow;
+    box-sizing: border-box;
+    min-width: fit-content;
+    top: 100%;
+    left: 100%;
+}
+
+.more-content-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5svh;
+    /* margin: 0; */
+    padding: 0;
+}
+
+main-content-container {
+    /* background-color: red; */
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+content-container {
+    display: flex;
+    flex-direction: column;
+    height: 300svh;
+    padding: 15px;
+}
+
+.pomodoro-container {
+    color: var(--eel) !important;
+    height: 40svh;
+}
+
+extras-container {
+    display: flex;
+    height: 100svh;
+    position: sticky;
+    bottom: 0;
+}

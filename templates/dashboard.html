@@ -3,9 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>LearnSync Dashboard</title>
+    <link rel="stylesheet" href="../static/css/style-updated.css">
+    <link rel="stylesheet" href="../static/css/style-dashboard.css">
 </head>
 <body>
-    
+    <main-container>
+        <nav>
+            <div class="logo">LearnSync</div>
+            <ul class="nav-list">
+                <a href="#" class="nav-list-item-link active" onclick="toggleActive(event)">
+                    <li class="nav-list-item" >
+                        <img src="../static/resources/images/dashboard/home-icon.png" alt="" srcset="" class="nav-list-icon">
+                        Dashboard
+                    </li>
+                </a>
+                <a href="#" class="nav-list-item-link" onclick="toggleActive(event)">
+                    <li class="nav-list-item">
+                        <img src="../static/resources/images/dashboard/leaderboard-icon.png" alt="" srcset="" class="nav-list-icon">
+                        Leaderbords
+                    </li>
+                </a>
+                <a href="#" class="nav-list-item-link" onclick="toggleActive(event)">
+                    <li class="nav-list-item">
+                        <img src="../static/resources/images/dashboard/profile-icon.png" alt="" srcset="" class="nav-list-icon">
+                        Profile
+                    </li>
+                </a>
+                <a href="#" class="nav-list-item-link" onclick="toggleActive(event)">
+                        <li class="nav-list-item">
+                        <img src="../static/resources/images/dashboard/settings-icon.png" alt="" srcset="" class="nav-list-icon">
+                        Settings
+                    </li>
+                </a>
+                <a href="#" class="nav-list-item-link " popovertarget="more-info" onclick="toggleActive(event)">
+                    <li class="nav-list-item" id="nav-list-more-menu">
+                        <img src="../static/resources/images/dashboard/more-icon.png" alt="" srcset="" class="nav-list-icon">
+                        More
+                    </li>
+                </a>
+            </ul>
+            <!-- <div popover id="more-info" class="more-content-container container-default">
+                <a href="" class="more-content-links general-links">
+                    Empty
+                </a>
+                <a href="" class="more-content-links general-links">
+                    Help
+                </a>
+                <hr>
+                <a href="" class="more-content-links general-links">
+                    Signout
+                </a>
+            </div> -->
+        </nav>
+        <main-content-container>
+            <content-container>
+                <div class="pomodoro-container container-default">
+                    <div class="sub-heading">Pomodoro Timer</div>
+                </div>
+            </content-container>
+            <extras-container>
+                <div class="pomodoro-container container-default">
+                    <div class="sub-heading">Pomodoro Timer</div>
+                </div>
+            </extras-container>
+        </main-content-container>
+    </main-container>
+
+    <script>
+        // Function to toggle active class
+        function toggleActive(event) {
+            // Prevent default link behavior
+            event.preventDefault();
+
+            // Remove active class from all links
+            const links = document.querySelectorAll('.nav-list-item-link');
+            links.forEach(link => link.classList.remove('active'));
+
+            // Add active class to the clicked link
+            event.currentTarget.classList.add('active');
+        }
+    </script>
 </body>
 </html>

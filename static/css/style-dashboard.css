@@ -28,8 +28,9 @@ nav {
     align-items: center;
     /* gap: 100px; */
     gap: 10px;
+    font-family: var(--logo-font);
     font-size: var(--sub-heading-font-size);
-    font-weight: 600;
+    /* font-weight: 600; */
     padding: 15px;
     margin: 0;
 }
@@ -113,6 +114,7 @@ main-content-container {
     /* background-color: red; */
     display: grid;
     grid-template-columns: 2fr 1fr;
+    align-items: right;
 }
 
 content-container {
@@ -122,6 +124,10 @@ content-container {
     padding: 15px;
 }
 
+.container-home {
+    display: flex;
+}
+
 .pomodoro-container {
     color: var(--eel) !important;
     height: 40svh;
@@ -129,7 +135,20 @@ content-container {
 
 extras-container {
     display: flex;
-    height: 100svh;
-    position: sticky;
+    height: 120svh;
+    padding: 15px;
+    /* background-color: red; */
     bottom: 0;
+    position: sticky;
+}
+
+/* For Leaderboards Section */
+.leaderboard {
+    height: 60svh;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+    text-align: cne;
 }

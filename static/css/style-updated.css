@@ -12,6 +12,7 @@
     --eel: #4b4b4b;
     --snow: #ffffff;
 
+
     /* Secondary Colours */
     --macaw: #1cb0f6;
     --macaw-mask: #d6f1ffbd;
@@ -45,7 +46,7 @@
     /* Links Basic Config */
     --link-radius: 18px;
     --border-radius: 16px;
-    --default-border-width: 4px;
+    --default-border-width: 3px;
 }
 
 * body {
@@ -179,8 +180,8 @@
     border: var(--default-border-width) solid var(--swan);
     border-radius: var(--border-radius);
     padding: 15px;
-    max-width: fit-content;
-    background-color: var(--polar);
+    max-width: 960px;  
+    background-color: var(--snow);
 }
 
 hr {

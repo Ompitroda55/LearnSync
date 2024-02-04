@@ -25,6 +25,12 @@
                         Leaderbords
                     </li>
                 </a>
+                <a href="#" class="nav-list-item-link" onclick="toggleActive(event, 'container-leaderboard')">
+                    <li class="nav-list-item">
+                        <img src="../static/resources/images/dashboard/flash-card-icon.png" alt="" srcset="" class="nav-list-icon">
+                        Flashcards
+                    </li>
+                </a>
                 <a href="#" class="nav-list-item-link" onclick="toggleActive(event, 'container-profile')">
                     <li class="nav-list-item">
                         <img src="../static/resources/images/dashboard/profile-icon.png" alt="" srcset="" class="nav-list-icon">
@@ -59,32 +65,65 @@
         </nav>
         <main-content-container>
             <content-container>
-                <div class="container-home" id="container-home">
+                <!-- <div class="container-home" id="container-home">
                     <div class="container-default home-pomodoro-timer">
-                        <div class="heading"id="time">25:00</div>
-                        <button id="start">Start</button>
-                        <button id="stop">Stop</button>
-                        <button id="reset">Reset</button>
-
+                        <div class="container-pomodoro-timer">
+                            <div class="heading">Pomodoro Timer</div>
+                            <div class="heading"id="time">25:00</div>
+                            <button id="start">Start</button>
+                            <button id="stop">Stop</button>
+                            <button id="reset">Reset</button>
+                        </div>
+                        <div class="container-pomodoro-selector">
+                            <form>
+                                <label>
+                                    <input type="radio" name="os" data-option="0" value="windows" checked>
+                                    Windows
+                                </label>
+                                <label>
+                                    <input type="radio" name="os" data-option="1" value="mac">
+                                    Mac
+                                </label>
+                                <label>
+                                    <input type="radio" name="os" data-option="2" value="linux">
+                                    Linux
+                                </label>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <div class="container-leaderboard" id="container-leaderboard">
+                </div> -->
+                <!-- <div class="container-leaderboard" id="container-leaderboard">
                     <div class="header-leaderboard container-default">
                         <div class="heading">Profile</div>
 
                     </div>
-                </div>
-                <div class="container-profile container-default" id="container-profile">
+                </div> -->
+                <!-- <div class="container-profile container-default" id="container-profile">
                     <div class="heading">Profile</div>
 
-                </div>
-                <div class="container-preferences container-default" id="container-preferences">
+                </div> -->
+                <!-- <div class="container-preferences container-default" id="container-preferences">
                     <div class="heading">Preferences</div>
 
+                </div> -->
+                <div class="container-flash-cards">
+                    <div class="heading">Flashcards Packs</div>
+                    <div class="flash-cards-categories">
+                        <a href="" class="link-secondary">Tuen Khamoun</a>
+                        <a href="" class="link-secondary">Tuen Khamoun</a>
+                        <a href="" class="link-secondary">Tuen Khamoun</a>
+                        <a href="" class="link-secondary">Tuen Khamoun</a>
+                        <a href="" class="link-secondary">Tuen Khamoun</a>
+                        <a href="" class="link-secondary">Tuen Khamoun</a>
+                        <a href="" class="link-secondary">Tuen Khamoun</a>
+                    </div>
+                    <div class="flash-cards-gallery">
+
+                    </div>
                 </div>
             </content-container>
             <extras-container>
-                <div class="stats-container container-default">
+                <!-- <div class="stats-container container-default">
                     <div class="stat" id="streak-stat">
                         <img class="stat-icon" src="../static/resources/images/dashboard/streak-icon.png" alt="">
                         <stat class="stat-value sub-heading">999</stat>
@@ -97,16 +136,16 @@
                         <img class="stat-icon" src="../static/resources/images/dashboard/heart-icon.png" alt="">
                         <stat class="stat-value sub-heading">999</stat>
                     </div>
-                </div>
-                <div class="stat-data container-default" id="streak-data">
-                    Tari Mano Pikjko
+                </div> -->
+                <div class="flash-card-stat-container container-default">
+
                 </div>
             </extras-container>
         </main-content-container>
     </main-container>
 
     <script>
-        // Function to toggle active class
+        // Function to toggle active class of side navigation
         function toggleActive(event) {
             // Prevent default link behavior
             event.preventDefault();

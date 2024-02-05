@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/css/style-updated.css">
+</head>
+<body>
+<div class="heading">{{ flashcard['flashcard_data'][0][0]}}</div>
+    {% for data in flashcard['flashcard_data'] %}
+    <div class="flashcard-item" style="display: flex;">
+        <div class="question">{{ data[0] }}</div>
+        <div class="answer">{{ data[1] }}</div>
+    </div>
+    {% endfor %}
+    <div class="heading">Good
+    </div>
+</body>
+</html>

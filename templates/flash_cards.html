@@ -24,77 +24,47 @@
                     <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
                     <div class="category-name less-simple-text">Literature</div>
                 </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
             </div>
-            <!-- <div class="category-bar">
-                {% for category in categories %}
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name simple-text">{{ category }}</div>
-                </div>
-                {% endfor %}
-            </div> -->
         </nav>
     </header>
     <main>
         <div class="flash-card-catalog-container">
-            <div class="flash-card-container container-default">
+            {% for flashcard in flashcards %}
+            <a href="/flashcard/{{ flashcard._id }}" class="flash-card-container container-default">
                 <img src="../static/resources/images/flashcardapp/category.png" alt="" class="card-img">
-                <div class="card-topic">Monkey</div>
-                <div class="card-category">Anthropology</div>
-                <div class="card-creator">Aum Pitroda</div>
-            </div>
+                <div class="card-topic">{{ flashcard.name }}</div>
+                <div class="card-category">{{ flashcard.category }}</div>
+                <div class="card-creator">{{ flashcard.created_at }}</div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="container-default">
+            <div class="heading">Create Flash Cards</div>
+            <form action="/insert-flash-card" method="post" id="flashCardForm">
+                <div id="card-info-fields">
+                    <input type="text" class="name" name="name" placeholder="Name">
+                    <input type="text" class="subject" name="subject" placeholder="Subject">
+                </div>
+                <div id="questionFields">
+                    <input type="text" class="question" name="question[]" placeholder="Question">
+                    <input type="text" class="answer" name="answer[]" placeholder="Answer">
+                </div>
+                <a class="link-primary" href="#" id="addFields">Add Question</a>
+                <button class="link-tertiary" type="submit">Submit</button>
+            </form>
         </div>
     </main>
+    <script>
+        document.getElementById('addFields').addEventListener('click', function(e) {
+            e.preventDefault();
+            var questionFields = document.getElementById('questionFields');
+            var newQuestionField = document.createElement('div');
+            newQuestionField.innerHTML = `
+                <input type="text" class="question" name="question[]" placeholder="Question">
+                <input type="text" class="answer" name="answer[]" placeholder="Answer">
+            `;
+            questionFields.appendChild(newQuestionField);
+        });
+    </script>
 </body>
 </html>

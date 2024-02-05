@@ -129,9 +129,11 @@ content-container {
     display: flex;
 } */
 
-.pomodoro-container {
+.home-pomodoro-timer {
     color: var(--eel) !important;
     height: 40svh;
+    display: flex;
+    flex-direction: column;
 }
 
 extras-container {
@@ -189,4 +191,20 @@ extras-container {
 
 .stat-icon {
     height: 1.5svw;
+}
+
+/* Everything for Flash Cards goes here... */
+.container-flash-cards {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.flash-cards-categories {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }

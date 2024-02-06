@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnSync Signup</title>
+    <link rel="stylesheet" href="../static/css/style-updated.css">
+    <link rel="stylesheet" href="../static/css/style-login.css">
+</head>
+
+<body>
+    <login-overlay id="login-overlay">
+        <!-- <button id="close-login" class="link-tertiary">Close</button> -->
+        <form action="../templates/flash_cards.html" id="signup-form">
+            <div class="login-container">
+                <div class="heading">Signup</div>
+                <div id="step1" class="form-step">
+                    <input type="text" name="" id="" placeholder="Username" required>
+                    <input type="password" name="" id="" placeholder="Password" required>
+                    <input type="password" name="" id="" placeholder="Re-confirm Password" required>
+                    <a href="#" class="link-primary" id="signup-link" >Signup</a>
+                    <span>or continue with</span>
+
+                    <a href="#" class="link-primary">Google</a>
+                </div>
+                <div id="step2" class="form-step">
+                    <select name="" id=""></select>
+                </div>
+                <div class="nav-form">
+                    <a id="prev-button" class="link-primary">
+                        <span class="material-symbols-outlined">
+                            arrow_back
+                        </span>&nbsp;
+                        Previous
+                    </a>
+                    <a id="next-button" class="link-primary">Next &nbsp;
+                        <span class="material-symbols-outlined">
+                            arrow_forward
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </login-overlay>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const formSteps = document.querySelectorAll('.form-step');
+            let currentStep = 0;
+            updateNavButtons();
+
+            document.querySelector('#prev-button').addEventListener('click', function (e) {
+                e.preventDefault();
+                currentStep = Math.max(0, currentStep - 1);
+                updateNavButtons();
+            });
+
+            document.querySelector('#next-button').addEventListener('click', function (e) {
+                e.preventDefault();
+                currentStep = Math.min(formSteps.length - 1, currentStep + 1);
+                updateNavButtons();
+            });
+
+            document.querySelector('#signup-link').addEventListener('click', function (e) {
+                e.preventDefault();
+                document.getElementById('signup-form').submit(); // Submit the form
+            });
+
+            function updateNavButtons() {
+                formSteps.forEach((step, index) => {
+                    step.style.display = index === currentStep ? 'flex' : 'none';
+                });
+
+                document.querySelector('#prev-button').disabled = currentStep === 0;
+                document.querySelector('#next-button').disabled = currentStep === formSteps.length - 1;
+            }
+
+        });
+    </script>
+    
+</body>
+
+</html>

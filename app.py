@@ -45,7 +45,23 @@ def createFlashCard(name, category, flashcard_data):
 
 @app.route('/')
 def index():
-    return render_template('dashboard.html')
+    return render_template('signup.html')
+
+@app.route('/sign-up')
+def signup():
+    username = request.form['username']
+    password = request.form['password']
+
+    new_user = {
+        "username": username,
+        "password": password,
+    }
+
+    # 
+    # To create a new users collection and further operations
+    # 
+    # insert_result = users_collection.insert_one(new_user)
+
 
 @app.route('/flash_card')
 def flashCardApp():

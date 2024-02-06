@@ -15,7 +15,7 @@ login-overlay > * {
     box-sizing: border-box;
 }
 
-.login-container {
+.login-container, .form-step {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,8 +23,13 @@ login-overlay > * {
     /* background-color: azure; */
 }
 
-.login-container {
+.login-container, .form-step {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    min-width: fit-content;
+    align-items: center;
 }
 
 .login-container .sub-heading {
@@ -44,7 +49,7 @@ login-overlay > * {
     border: 1px solid var(--swan);
     width: 100%;
     padding: 10px;
-    font-size: var(--sub-heading-font-size);
+    font-size: var(--normal-font-size);
     margin-bottom: 10px;
 }
 
@@ -74,4 +79,26 @@ login-overlay > * {
     left: 2svw;
     color: var(--hare) !important;
     background-color: var(--cardinal);
+}
+
+.form-step {
+    display: none;
+    flex-direction: column;
+}
+
+#step1, #step2 {
+    display: flex;
+}
+#prev-button, #next-button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.nav-form {
+    display: flex;
+    /* background-color: black; */
+    justify-content: space-between;
+    width: 100%;
 }

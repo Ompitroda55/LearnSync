@@ -90,6 +90,15 @@ nav {
     position: relative;
 }
 
+.container-default, .nav-list-item-link {
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.container-default:hover, .nav-list-item-link:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle drop shadow */
+    transform: translateY(-2px); /* Move the box upward slightly */
+}
+
 .more-content-container {
     position: absolute;
     display: flex;
@@ -113,8 +122,9 @@ nav {
 main-content-container {
     /* background-color: red; */
     display: grid;
-    grid-template-columns: 2fr 0.7fr;
+    grid-template-columns: 2fr 1fr;
     align-items: right;
+
 }
 
 content-container {
@@ -122,18 +132,66 @@ content-container {
     flex-direction: column;
     height: 300svh;
     padding: 15px;
-    background-color: red;
+    /* background-color: red; */
 }
 
-/* .container-home {
+.container-home {
     display: flex;
-} */
+    flex-direction: column;
+    /* background-color: red; */
+    gap: 15px;
+}
 
 .home-pomodoro-timer {
     color: var(--eel) !important;
-    height: 40svh;
+    height: fit-content;
     display: flex;
     flex-direction: column;
+}
+
+.container-pomodoro-timer {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#time {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1svw;
+    font-size: var(--logo-font-size);
+}
+
+#time-min, #time-sec {
+    background-color: var(--feather-green);
+    color: var(--snow);
+    padding: 15px;
+    height: fit-content;
+    border-radius: var(--border-radius);
+}
+
+#pomo-btns {
+    display: flex;
+    flex-direction: row;
+    gap: 1svw;
+    margin-top: 2svh;
+}
+
+.pomo-btn {
+    all: unset;
+    background-color: var(--feather-green);
+    color: var(--snow);
+    font-size: var(--default-font-size) ;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    padding: 10px;
+}
+
+.container-pomodoro-selector {
+
 }
 
 extras-container {
@@ -202,9 +260,26 @@ extras-container {
 
 .flash-cards-categories {
     display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
+    overflow-x: auto;
+    white-space: nowrap;
 }
+
+.flash-cards-categories::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .flash-cards-categories::-webkit-scrollbar-track {
+    background-color: var(--snow);
+  }
+  
+  .flash-cards-categories::-webkit-scrollbar-thumb {
+    background-color: var(--feather-green);
+    border-radius: var(--border-radius);
+  }
+
+  .link-secondary {
+    margin-right: 10px;
+    white-space: nowrap;
+    min-height: 50svh;
+  }

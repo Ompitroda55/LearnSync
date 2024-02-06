@@ -42,9 +42,12 @@ def createFlashCard(name, category, flashcard_data):
     id = insert_result.inserted_id
 
     return id
-    
 
 @app.route('/')
+def index():
+    return render_template('dashboard.html')
+
+@app.route('/flash_card')
 def flashCardApp():
     categories = ["Literature", "Mathematics", "Science", "History", "Geography", "Computer Science", "Art", "Music", "Health", "Business", "Test Preparation", "Miscellaneous"]
 

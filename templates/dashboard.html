@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="../static/css/style-updated.css">
     <link rel="stylesheet" href="../static/css/style-dashboard.css">
 </head>
+
 <body>
     <main-container>
         <nav>
@@ -14,38 +16,45 @@
             <hr>
             <ul class="nav-list">
                 <a href="#" class="nav-list-item-link active" onclick="toggleActive(event, 'container-home')">
-                    <li class="nav-list-item" >
-                        <img src="../static/resources/images/dashboard/home-icon.png" alt="" srcset="" class="nav-list-icon">
+                    <li class="nav-list-item">
+                        <img src="../static/resources/images/dashboard/home-icon.png" alt="" srcset=""
+                            class="nav-list-icon">
                         Dashboard
                     </li>
                 </a>
                 <a href="#" class="nav-list-item-link" onclick="toggleActive(event, 'container-leaderboard')">
                     <li class="nav-list-item">
-                        <img src="../static/resources/images/dashboard/leaderboard-icon.png" alt="" srcset="" class="nav-list-icon">
-                        Leaderbords
+                        <img src="../static/resources/images/dashboard/leaderboard-icon.png" alt="" srcset=""
+                            class="nav-list-icon">
+                        Leaderboards
                     </li>
                 </a>
                 <a href="/flash_card" class="nav-list-item-link">
                     <li class="nav-list-item">
-                        <img src="../static/resources/images/dashboard/flash-card-icon.png" alt="" srcset="" class="nav-list-icon">
+                        <img src="../static/resources/images/dashboard/flash-card-icon.png" alt="" srcset=""
+                            class="nav-list-icon">
                         Flashcards
                     </li>
                 </a>
                 <a href="#" class="nav-list-item-link" onclick="toggleActive(event, 'container-profile')">
                     <li class="nav-list-item">
-                        <img src="../static/resources/images/dashboard/profile-icon.png" alt="" srcset="" class="nav-list-icon">
+                        <img src="../static/resources/images/dashboard/profile-icon.png" alt="" srcset=""
+                            class="nav-list-icon">
                         Profile
                     </li>
                 </a>
                 <a href="#" class="nav-list-item-link" onclick="toggleActive(event, 'container-preferences')">
-                        <li class="nav-list-item">
-                        <img src="../static/resources/images/dashboard/settings-icon.png" alt="" srcset="" class="nav-list-icon">
+                    <li class="nav-list-item">
+                        <img src="../static/resources/images/dashboard/settings-icon.png" alt="" srcset=""
+                            class="nav-list-icon">
                         Preferences
                     </li>
                 </a>
-                <a href="#" class="nav-list-item-link " popovertarget="more-info" onclick="toggleActive(event, 'container-home')">
+                <a href="#" class="nav-list-item-link " popovertarget="more-info"
+                    onclick="toggleActive(event, 'container-home')">
                     <li class="nav-list-item" id="nav-list-more-menu">
-                        <img src="../static/resources/images/dashboard/more-icon.png" alt="" srcset="" class="nav-list-icon">
+                        <img src="../static/resources/images/dashboard/more-icon.png" alt="" srcset=""
+                            class="nav-list-icon">
                         More
                     </li>
                 </a>
@@ -65,33 +74,56 @@
         </nav>
         <main-content-container>
             <content-container>
-                <!-- <div class="container-home" id="container-home">
+                <div class="container-home" id="container-home">
                     <div class="container-default home-pomodoro-timer">
                         <div class="container-pomodoro-timer">
                             <div class="heading">Pomodoro Timer</div>
-                            <div class="heading"id="time">25:00</div>
-                            <button id="start">Start</button>
-                            <button id="stop">Stop</button>
-                            <button id="reset">Reset</button>
+                            <div id="time">
+                                <div id="time-min">25</div>:
+                                <div id="time-sec">00</div>
+                            </div>
+                            <div id="pomo-btns">
+                                <button id="start" class="pomo-btn">Start</button>
+                                <button id="stop" class="pomo-btn">Stop</button>
+                                <button id="reset" class="pomo-btn">Reset</button>
+                            </div>
                         </div>
                         <div class="container-pomodoro-selector">
                             <form>
                                 <label>
-                                    <input type="radio" name="os" data-option="0" value="windows" checked>
-                                    Windows
+                                    <input type="radio" name="time_opt" data-option="0" value="1" checked>
+                                    Time N-N
                                 </label>
                                 <label>
-                                    <input type="radio" name="os" data-option="1" value="mac">
-                                    Mac
+                                    <input type="radio" name="time_opt" data-option="1" value="2">
+                                    Time N-N
                                 </label>
                                 <label>
-                                    <input type="radio" name="os" data-option="2" value="linux">
-                                    Linux
+                                    <input type="radio" name="time_opt" data-option="2" value="3">
+                                    Time N-N
                                 </label>
                             </form>
                         </div>
                     </div>
-                </div> -->
+                    <div class="container-tasks container-default">
+                        <div class="heading">Tasks To-Do</div>
+                    </div>
+                    <div class="container-flash-cards container-default">
+                        <div class="heading">Flashcards Packs</div>
+                        <div class="flash-cards-categories">
+                            <a href="" class="link-secondary">Tuen Khamoun</a>
+                            <a href="" class="link-secondary">Tuen Khamoun</a>
+                            <a href="" class="link-secondary">Tuen Khamoun</a>
+                            <a href="" class="link-secondary">Tuen Khamoun</a>
+                            <a href="" class="link-secondary">Tuen Khamoun</a>
+                            <a href="" class="link-secondary">Tuen Khamoun</a>
+                            <a href="" class="link-secondary">Tuen Khamoun</a>
+                        </div>
+                        <div class="flash-cards-gallery">
+
+                        </div>
+                    </div>
+                </div>
                 <!-- <div class="container-leaderboard" id="container-leaderboard">
                     <div class="header-leaderboard container-default">
                         <div class="heading">Profile</div>
@@ -104,21 +136,6 @@
 
                 </div> -->
 
-                <div class="container-flash-cards">
-                    <div class="heading">Flashcards Packs</div>
-                    <div class="flash-cards-categories">
-                        <a href="" class="link-secondary">Tuen Khamoun</a>
-                        <a href="" class="link-secondary">Tuen Khamoun</a>
-                        <a href="" class="link-secondary">Tuen Khamoun</a>
-                        <a href="" class="link-secondary">Tuen Khamoun</a>
-                        <a href="" class="link-secondary">Tuen Khamoun</a>
-                        <a href="" class="link-secondary">Tuen Khamoun</a>
-                        <a href="" class="link-secondary">Tuen Khamoun</a>
-                    </div>
-                    <div class="flash-cards-gallery">
-
-                    </div>
-                </div>
             </content-container>
             <extras-container>
                 <!-- <div class="stats-container container-default">
@@ -160,83 +177,87 @@
     <!-- Script for hiding and showing containers -->
 
     <!-- Script for Pomodoro -->
-<script>
-    const timeDisplay = document.getElementById('time');
-const startButton = document.getElementById('start');
-const stopButton = document.getElementById('stop');
-const resetButton = document.getElementById('reset');
+    <script>
+    const timeDisplayMin = document.getElementById('time-min');
+    const timeDisplaySec = document.getElementById('time-sec');
+    const startButton = document.getElementById('start');
+    const stopButton = document.getElementById('stop');
+    const resetButton = document.getElementById('reset');
 
-let isWorkTime = true;
-let secondsLeft;
-let timerInterval;
+    let isWorkTime = true;
+    let secondsLeft;
+    let timerInterval;
 
-function updateTime() {
-  const minutes = Math.floor(secondsLeft / 60);
-  const seconds = secondsLeft % 60;
-  timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-
-function startTimer() {
-  startButton.disabled = true;
-  stopButton.disabled = false;
-  resetButton.disabled = false;
-  const startTime = new Date().getTime();
-  const endTime = startTime + (secondsLeft * 1000);
-  localStorage.setItem('endTime', endTime);
-  timerInterval = setInterval(() => {
-    const now = new Date().getTime();
-    secondsLeft = Math.round((endTime - now) / 1000);
-    updateTime();
-    if (secondsLeft <= 0) {
-      clearInterval(timerInterval);
-      if (isWorkTime) {
-        secondsLeft = 300; // 5 minutes break
-        isWorkTime = false;
-      } else {
-        secondsLeft = 1500; // 25 minutes work time
-        isWorkTime = true;
-      }
-      localStorage.removeItem('endTime');
-      startButton.disabled = false;
-      stopButton.disabled = true;
+    function updateTime() {
+        const minutes = Math.floor(secondsLeft / 60);
+        const seconds = secondsLeft % 60;
+        timeDisplayMin.textContent = `${minutes.toString().padStart(2, '0')}`;
+        timeDisplaySec.textContent = `${seconds.toString().padStart(2, '0')}`;
     }
-  }, 1000);
-}
 
-function stopTimer() {
-  clearInterval(timerInterval);
-  startButton.disabled = false;
-  stopButton.disabled = true;
-}
+    function startTimer() {
+        startButton.disabled = true;
+        stopButton.disabled = false;
+        resetButton.disabled = false;
+        const startTime = new Date().getTime();
+        const endTime = startTime + (secondsLeft * 1000);
+        localStorage.setItem('endTime', endTime);
+        timerInterval = setInterval(() => {
+            const now = new Date().getTime();
+            secondsLeft = Math.round((endTime - now) / 1000);
+            updateTime();
+            if (secondsLeft <= 0) {
+                clearInterval(timerInterval);
+                if (isWorkTime) {
+                    secondsLeft = 300; // 5 minutes break
+                    isWorkTime = false;
+                } else {
+                    secondsLeft = 1500; // 25 minutes work time
+                    isWorkTime = true;
+                }
+                localStorage.removeItem('endTime');
+                startButton.disabled = false;
+                stopButton.disabled = true;
+            }
+        }, 1000);
+    }
 
-function resetTimer() {
-  clearInterval(timerInterval);
-  isWorkTime = true;
-  secondsLeft = 1500; // Reset to 25 minutes work time
-  updateTime();
-  localStorage.removeItem('endTime');
-  startButton.disabled = false;
-  stopButton.disabled = true;
-}
+    function stopTimer() {
+        clearInterval(timerInterval);
+        startButton.disabled = false;
+        stopButton.disabled = true;
+    }
 
-// Check if there's a saved end time in localStorage
-const savedEndTime = localStorage.getItem('endTime');
-if (savedEndTime) {
-  const now = new Date().getTime();
-  secondsLeft = Math.round((savedEndTime - now) / 1000);
-  if (secondsLeft > 0) {
-    startTimer();
-  } else {
-    localStorage.removeItem('endTime');
-  }
-} else {
-  secondsLeft = 1500; // Default to 25 minutes work time
-}
+    function resetTimer() {
+        clearInterval(timerInterval);
+        isWorkTime = true;
+        secondsLeft = 1500; // Reset to 25 minutes work time
+        updateTime();
+        localStorage.removeItem('endTime');
+        startButton.disabled = false;
+        stopButton.disabled = true;
+    }
 
-startButton.addEventListener('click', startTimer);
-stopButton.addEventListener('click', stopTimer);
-resetButton.addEventListener('click', resetTimer);
+    // Check if there's a saved end time in localStorage
+    const savedEndTime = localStorage.getItem('endTime');
+    if (savedEndTime) {
+        const now = new Date().getTime();
+        secondsLeft = Math.round((savedEndTime - now) / 1000);
+        if (secondsLeft > 0) {
+            startTimer();
+        } else {
+            localStorage.removeItem('endTime');
+        }
+    } else {
+        secondsLeft = 1500; // Default to 25 minutes work time
+    }
+
+    startButton.addEventListener('click', startTimer);
+    stopButton.addEventListener('click', stopTimer);
+    resetButton.addEventListener('click', resetTimer);
 
 </script>
+
 </body>
+
 </html>

@@ -43,9 +43,15 @@ def createFlashCard(name, category, flashcard_data):
 
     return id
 
+
+# Min Entry Point
 @app.route('/')
 def index():
     return render_template('signup.html')
+
+#
+# User Signup
+#
 
 @app.route('/check-username', methods=['POST'])
 def check_username():
@@ -89,6 +95,9 @@ def signup():
     # 
     # insert_result = users_collection.insert_one(new_user)
 
+#
+# All code stuff for Flashcards goes here
+#
 
 @app.route('/flash_card')
 def flashCardApp():

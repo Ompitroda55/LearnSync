@@ -82,7 +82,7 @@
     <!-- For Username Verification -->
     <script>
         async function checkUsername(username) {
-            const response = await fetch('/check-username', {
+            const response = await fetch('/check-username-availability', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'

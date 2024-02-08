@@ -74,6 +74,7 @@
         </nav>
         <main-content-container>
             <content-container>
+                <div class="heading">{{ user['username'] }}</div>
                 <div class="container-home" id="container-home">
                     <div class="container-default home-pomodoro-timer">
                         <div class="container-pomodoro-timer">
@@ -112,12 +113,13 @@
                         <div class="container-friends container-default">
                             <div class="heading">Friends</div>
                             <div class="container-add-friend">
-                                <form action="/add-friend/user._id" method="post" id="friend-form">
-                                    <input type="text" placeholder="Friend's Username" name="friend-id" id="friend-id">
-                                    <button type="submit">Add</button>
+                                <form action="/add-friend/{{ user._id }}" method="post" id="friend-form">
+                                    <input type="text" placeholder="Friend's Username" name="friend-username"
+                                        id="friend-username">
+                                    <button type="submit" id="add-friend-btn">Add</button>
                                 </form>
                             </div>
-                            <div class="alert-box">Oh O! Invalid Username</div>
+                            <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div>
                         </div>
                         <div class="container-groups container-default">
                             <div class="heading">Groups</div>
@@ -141,19 +143,29 @@
                 <div class="stats-container container-default">
                     <div class="stat" id="streak-stat">
                         <img class="stat-icon" src="../static/resources/images/dashboard/streak-icon.png" alt="">
-                        <stat class="stat-value sub-heading">999</stat>
+                        <stat class="stat-value sub-heading">{{ user.stats[0].streaks }}</stat>
                     </div>
                     <div class="stat">
                         <img class="stat-icon" src="../static/resources/images/dashboard/gems-icon.png" alt="">
-                        <stat class="stat-value sub-heading">999</stat>
+                        <stat class="stat-value sub-heading">{{ user.stats[0].gems }}</stat>
                     </div>
                     <div class="stat">
                         <img class="stat-icon" src="../static/resources/images/dashboard/heart-icon.png" alt="">
-                        <stat class="stat-value sub-heading">999</stat>
+                        <stat class="stat-value sub-heading">{{ user.stats[0].hearts }}</stat>
                     </div>
                 </div>
-                <div class="flash-card-stat-container container-default">
-
+                <div class="notification-container container-default">
+                    <div class="sub-heading">Notifications</div>
+                    <div class="notification-friend-reqs">
+                        <div class="normal-text">Friend Req's</div>
+                        <div class="notification ">
+                            <div class="notification-from">From_User</div>
+                            <div class="notification-action" id="notification-actions">
+                                <button class="notification-action-btn-accept">Accept</button>
+                                <button class="notification-action-btn-reject">Reject</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </extras-container>
         </main-content-container>
@@ -178,86 +190,185 @@
 
     <!-- Script for Pomodoro -->
     <script>
-    const timeDisplayMin = document.getElementById('time-min');
-    const timeDisplaySec = document.getElementById('time-sec');
-    const startButton = document.getElementById('start');
-    const stopButton = document.getElementById('stop');
-    const resetButton = document.getElementById('reset');
+        const timeDisplayMin = document.getElementById('time-min');
+        const timeDisplaySec = document.getElementById('time-sec');
+        const startButton = document.getElementById('start');
+        const stopButton = document.getElementById('stop');
+        const resetButton = document.getElementById('reset');
 
-    let isWorkTime = true;
-    let secondsLeft;
-    let timerInterval;
+        let isWorkTime = true;
+        let secondsLeft;
+        let timerInterval;
 
-    function updateTime() {
-        const minutes = Math.floor(secondsLeft / 60);
-        const seconds = secondsLeft % 60;
-        timeDisplayMin.textContent = `${minutes.toString().padStart(2, '0')}`;
-        timeDisplaySec.textContent = `${seconds.toString().padStart(2, '0')}`;
-    }
-
-    function startTimer() {
-        startButton.disabled = true;
-        stopButton.disabled = false;
-        resetButton.disabled = false;
-        const startTime = new Date().getTime();
-        const endTime = startTime + (secondsLeft * 1000);
-        localStorage.setItem('endTime', endTime);
-        timerInterval = setInterval(() => {
-            const now = new Date().getTime();
-            secondsLeft = Math.round((endTime - now) / 1000);
-            updateTime();
-            if (secondsLeft <= 0) {
-                clearInterval(timerInterval);
-                if (isWorkTime) {
-                    secondsLeft = 300; // 5 minutes break
-                    isWorkTime = false;
-                } else {
-                    secondsLeft = 1500; // 25 minutes work time
-                    isWorkTime = true;
-                }
-                localStorage.removeItem('endTime');
-                startButton.disabled = false;
-                stopButton.disabled = true;
-            }
-        }, 1000);
-    }
-
-    function stopTimer() {
-        clearInterval(timerInterval);
-        startButton.disabled = false;
-        stopButton.disabled = true;
-    }
-
-    function resetTimer() {
-        clearInterval(timerInterval);
-        isWorkTime = true;
-        secondsLeft = 1500; // Reset to 25 minutes work time
-        updateTime();
-        localStorage.removeItem('endTime');
-        startButton.disabled = false;
-        stopButton.disabled = true;
-    }
-
-    // Check if there's a saved end time in localStorage
-    const savedEndTime = localStorage.getItem('endTime');
-    if (savedEndTime) {
-        const now = new Date().getTime();
-        secondsLeft = Math.round((savedEndTime - now) / 1000);
-        if (secondsLeft > 0) {
-            startTimer();
-        } else {
-            localStorage.removeItem('endTime');
+        function updateTime() {
+            const minutes = Math.floor(secondsLeft / 60);
+            const seconds = secondsLeft % 60;
+            timeDisplayMin.textContent = `${minutes.toString().padStart(2, '0')}`;
+            timeDisplaySec.textContent = `${seconds.toString().padStart(2, '0')}`;
         }
-    } else {
-        secondsLeft = 1500; // Default to 25 minutes work time
-    }
 
-    startButton.addEventListener('click', startTimer);
-    stopButton.addEventListener('click', stopTimer);
-    resetButton.addEventListener('click', resetTimer);
+        function startTimer() {
+            startButton.disabled = true;
+            stopButton.disabled = false;
+            resetButton.disabled = false;
+            const startTime = new Date().getTime();
+            const endTime = startTime + (secondsLeft * 1000);
+            localStorage.setItem('endTime', endTime);
+            timerInterval = setInterval(() => {
+                const now = new Date().getTime();
+                secondsLeft = Math.round((endTime - now) / 1000);
+                updateTime();
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    if (isWorkTime) {
+                        secondsLeft = 300; // 5 minutes break
+                        isWorkTime = false;
+                    } else {
+                        secondsLeft = 1500; // 25 minutes work time
+                        isWorkTime = true;
+                    }
+                    localStorage.removeItem('endTime');
+                    startButton.disabled = false;
+                    stopButton.disabled = true;
+                }
+            }, 1000);
+        }
 
-</script>
+        function stopTimer() {
+            clearInterval(timerInterval);
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        }
 
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isWorkTime = true;
+            secondsLeft = 1500; // Reset to 25 minutes work time
+            updateTime();
+            localStorage.removeItem('endTime');
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        }
+
+        // Check if there's a saved end time in localStorage
+        const savedEndTime = localStorage.getItem('endTime');
+        if (savedEndTime) {
+            const now = new Date().getTime();
+            secondsLeft = Math.round((savedEndTime - now) / 1000);
+            if (secondsLeft > 0) {
+                startTimer();
+            } else {
+                localStorage.removeItem('endTime');
+            }
+        } else {
+            secondsLeft = 1500; // Default to 25 minutes work time
+        }
+
+        startButton.addEventListener('click', startTimer);
+        stopButton.addEventListener('click', stopTimer);
+        resetButton.addEventListener('click', resetTimer);
+
+    </script>
+    <!-- Friend's section script goes here... Check for ID's if available or not -->
+    <script>
+        async function checkUsername(username) {
+            const response = await fetch('/check-username', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `username=${username}`
+            });
+            const data = await response.json();
+            return data.message === 'Username available';
+        }
+
+        async function checkStatus(username) {
+            const response = await fetch('/add-friend/{{ user._id }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `friend-username=${username}`
+            });
+            const data = await response.json();
+            return data.message;
+        }
+
+        document.querySelector('#add-friend-btn').addEventListener('click', async function (e) {
+            e.preventDefault();
+            const username = document.querySelector('#friend-username').value;
+            // console.log(username)
+            const user_id = '{{ user._id }}';
+            let alertbox = document.querySelector('#alert-friend-form');
+            if (!username) {
+                alertbox.style.display = 'flex';
+                alertbox.textContent = "Please enter Friends username";
+            }
+            const isFriendPresent = await checkUsername(username);
+
+            if (isFriendPresent) {
+                response = await checkStatus(username);
+                console.log(response);
+                if (response === 'Friend already in friends list') {
+                    alertbox.style.display = 'flex';
+                    alertbox.textContent = "Already you're friends";
+                } else if (response === 'Friend Request Sent!') {
+                    alertbox.style.display = 'flex';
+                    alertbox.style.backgroundColor = 'var(--feather-green)';
+                    alertbox.textContent = "Friend Request Sent!";
+                } else {
+                    alertbox.style.display = 'flex';
+                    alertbox.textContent = "Failed to add friend"
+                }
+            } else {
+                alertbox.style.display = 'flex';
+                alertbox.textContent = "Check Friend's Name";
+            }
+        });
+
+        // document.querySelector('#add-friend-btn').addEventListener('click', async function (e) {
+        //     e.preventDefault();
+        //     // const username = document.querySelector('#friend-username').value;
+        //     // console.log(username)
+        //     // let alertbox = document.querySelector('#alert-friend-form');
+        //     if (!username) {
+        //         alertbox.style.display = 'flex';
+        //         alertbox.textContent = "Please enter Friends username";
+        //     } else {
+        //         const response = await fetch(`/add-friend/${user_id}`, {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/x-www-form-urlencoded'
+        //             },
+        //             body: `friend-username=${username}`
+        //         });
+        //         const data = await response.json();
+        //         if (response.status == 200) {
+        //             alertbox.style.display = 'flex';
+        //             alertbox.textContent = data.message;
+        //         } else if (response.status == 400) {
+        //             alertbox.style.display = 'flex';
+        //             alertbox.textContent = data.message;
+        //         } else {
+        //             alertbox.style.display = 'flex';
+        //             alertbox.textContent = "Failed to add friend";
+        //         }
+        //     }
+        // });
+    </script>
+
+    <!-- Script for expanding notification -->
+    <script>
+        document.addEventListener('click', function (event) {
+            if (event.target.closest('.notification')) {
+                const notificationActions = event.target.closest('.notification').querySelector('.notification-action');
+                if (notificationActions) {
+                    notificationActions.classList.toggle('show');
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

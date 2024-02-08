@@ -203,6 +203,7 @@ hr {
     border-radius: var(--border-radius);
     padding: 5px;
     margin-top: 15px;
+    display: none;
     font-size: var(--less-imp-font-size);
     color: var(--snow);
     max-width: 100%;  

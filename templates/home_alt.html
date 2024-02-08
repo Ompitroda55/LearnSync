@@ -17,13 +17,15 @@
 <body>
     <login-overlay id="login-overlay">
         <button id="close-login" class="link-tertiary">Close</button>
-        <form action="#">
+        <form action="/login" id="form-login" method="post">
             <div class="login-container">
                 <div class="heading">Login</div>
-                <input type="text" name="" id="" placeholder="Email or Username">
-                <input type="password" name="" id="" placeholder="Password">
-                <a href="#" class="link-secondary">Login</a>
+                <input type="text" name="username" id="username" placeholder="Username">
+                <input type="password" name="password" id="password" placeholder="Password">
+                <a href="#" class="link-secondary" id="submit-link">Login</a>
+                <div class="alert-box" id="alert-login-form">Oh O! Invalid Username</div>
                 <a href="#" class="link-secondary">Google</a>
+                <div class="link-primary" id="signup-link" style="display: none;">Signup Instead</div>
             </div>
         </form>
     </login-overlay>
@@ -37,19 +39,20 @@
         <div class="nav">
             <div class="nav-container">
                 <div class="logo">LearnSync</div>
-                <a href="" id="top-get-started" class="link-primary">Get Started</a>
+                <a href="/signup" id="top-get-started" class="link-primary">Get Started</a>
             </div>
         </div>
         <div class="intro">
-            <div class="header-intro-left"  >
+            <div class="header-intro-left">
                 <img id="intro-image" src="../static/resources/images/homepage/intro-image.png" alt="" srcset="">
             </div>
-            <div class="header-intro-right" >
-                
-                <span class="heading" style="text-align: center;">The free, fun & effective way to augment your learning!</span>
+            <div class="header-intro-right">
+
+                <span class="heading" style="text-align: center;">The free, fun & effective way to augment your
+                    learning!</span>
                 <div class="header-intro-right-links">
-                    <a href="" class="link-primary" id="target-1">Get Started</a>
-                    <a href="" class="link-secondary" id="open-login">I already have an account</a>
+                    <a href="/signup" class="link-primary" id="target-1">Get Started</a>
+                    <a href="/login" class="link-secondary" id="open-login">I already have an account</a>
                 </div>
             </div>
         </div>
@@ -58,45 +61,57 @@
     <main>
         <div class="features">
             <div class="feature-container">
-                <div class="feature-desc" >
+                <div class="feature-desc">
                     <div class="heading">pomodoro timer.</div>
-                    <div class="simple-text">Enhance concentration with structured work intervals and breaks, optimizing study sessions for efficient learning.</div>
+                    <div class="simple-text">Enhance concentration with structured work intervals and breaks, optimizing
+                        study sessions for efficient learning.</div>
                 </div>
-                <img class="feature-img img" src="../static/resources/images/homepage/pomodoro-timer.png" alt="" data-aos="fade-left" data-aos-duration="1000">
+                <img class="feature-img img" src="../static/resources/images/homepage/pomodoro-timer.png" alt=""
+                    data-aos="fade-left" data-aos-duration="1000">
             </div>
             <div class="feature-container flex-inv">
                 <div class="feature-desc" data-aos="fade-up" data-aos-duration="1000">
                     <div class="heading">streaks between friends.</div>
-                    <div class="simple-text">Gamify learning, fostering motivation through task streaks, healthy competition, and a sense of achievement.</div>
+                    <div class="simple-text">Gamify learning, fostering motivation through task streaks, healthy
+                        competition, and a sense of achievement.</div>
                 </div>
-                <img class="feature-img img" src="../static/resources/images/homepage/daily-streaks.png" alt="" data-aos="fade-right" data-aos-duration="1000">
+                <img class="feature-img img" src="../static/resources/images/homepage/daily-streaks.png" alt=""
+                    data-aos="fade-right" data-aos-duration="1000">
             </div>
             <div class="feature-container">
                 <div class="feature-desc" data-aos="fade-up" data-aos-duration="1000">
                     <div class="heading">community cohesion.</div>
-                    <div class="simple-text">Build a supportive network by sharing progress, collaborating, and staying motivated within a connected learning community.</div>
+                    <div class="simple-text">Build a supportive network by sharing progress, collaborating, and staying
+                        motivated within a connected learning community.</div>
                 </div>
-                <img class="feature-img img" src="../static/resources/images/homepage/community-cohesion.png" alt="" data-aos="fade-left" data-aos-duration="1000">
+                <img class="feature-img img" src="../static/resources/images/homepage/community-cohesion.png" alt=""
+                    data-aos="fade-left" data-aos-duration="1000">
             </div>
-            <div class="feature-container flex-inv" >
+            <div class="feature-container flex-inv">
                 <div class="feature-desc" data-aos="fade-up" data-aos-duration="1000">
                     <div class="heading">flash cards.</div>
-                    <div class="simple-text">Reinforce key concepts through interactive flashcards, allowing users to create, review, and test knowledge for enhanced recall and understanding.</div>
+                    <div class="simple-text">Reinforce key concepts through interactive flashcards, allowing users to
+                        create, review, and test knowledge for enhanced recall and understanding.</div>
                 </div>
-                <img class="feature-img img" src="../static/resources/images/homepage/flash-cards.png" alt="" data-aos="fade-right" data-aos-duration="1000">
+                <img class="feature-img img" src="../static/resources/images/homepage/flash-cards.png" alt=""
+                    data-aos="fade-right" data-aos-duration="1000">
             </div>
         </div>
     </main>
     <footer id="target-2">
         <div class="foot-content">
-            <div class="heading" style="text-align: center; color: var(--snow);" data-aos="fade-up" data-aos-duration="1000">
+            <div class="heading" style="text-align: center; color: var(--snow);" data-aos="fade-up"
+                data-aos-duration="1000">
                 augment your learning <br> with LearnSync.
             </div>
-            <img src="../static/resources/images/homepage/anytime-anywhere-1.png" alt="" class="foot-img img" data-aos="fade-up" data-aos-duration="1000">
-            <div class="heading" style="text-align: center; color: var(--snow);" data-aos="fade-up" data-aos-duration="1000">
+            <img src="../static/resources/images/homepage/anytime-anywhere-1.png" alt="" class="foot-img img"
+                data-aos="fade-up" data-aos-duration="1000">
+            <div class="heading" style="text-align: center; color: var(--snow);" data-aos="fade-up"
+                data-aos-duration="1000">
                 anytime, anywhere<br> you & LearnSync.
             </div>
-            <a href="#" class="link-primary" id="" style="margin: auto;">Get Started</a data-aos="fade-upp" data-aos-duration="1000">
+            <a href="#" class="link-primary" id="" style="margin: auto;">Get Started</a data-aos="fade-upp"
+                data-aos-duration="1000">
         </div>
         <hr id="foot-hr">
         <div class="foot-main">
@@ -163,7 +178,7 @@
             // Get the current scroll position from the top of the page
             var currentScroll = window.pageYOffset;
 
-            if (currentScroll > elementHeightFromTop-60 && currentScroll < elementHeightFromTop1-60) {
+            if (currentScroll > elementHeightFromTop - 60 && currentScroll < elementHeightFromTop1 - 60) {
                 document.getElementById('top-get-started').style.display = 'block';
             } else {
                 document.getElementById('top-get-started').style.display = 'none';
@@ -178,6 +193,90 @@
         AOS.init();
     </script>
     <script src="../static/js/login-script.js"></script>
+    <!-- script for handling login function -->
+
+    <script>
+        async function checkCredentials(username, password) {
+            const requestBody = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+
+            const response = await fetch('/check-credentials', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: requestBody
+            });
+
+            const data = await response.json();
+            return data.message;
+        }
+
+        document.querySelector('#submit-link').addEventListener('click', async function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const isCredsValid = await checkCredentials(username, password);
+            console.log(isCredsValid);
+            const alertBox = document.getElementById('alert-login-form');
+            const signupLink = document.getElementById('signup-link');
+
+            if (isCredsValid === 'Valid Creds') {
+                document.getElementById('form-login').submit();
+            } else if (isCredsValid === 'Incorrect Password') {
+                alertBox.style.display = 'flex';
+                alertBox.textContent = 'Incorrect Password';
+            } else if (isCredsValid === 'Username not available') {
+                alertBox.style.display = 'flex';
+                alertBox.textContent = 'Username not found';
+                // signupLink.style.display = 'flex';
+            } else {
+                alertBox.style.display = 'flex';
+                alertBox.textContent = 'Invalid State! Reload Page.';
+            }
+        });
+    </script>
+
+    <!-- <script>
+        document.getElementById('submit-link').addEventListener('click', function (event) {
+            event.preventDefault();
+            console.log("Login Clicked")
+            login();
+        });
+        async function login() {
+            const username = document.getElementById('username').value;  
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `username=${username}&password=${password}`
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data.message);
+                    // Redirect to homepage or dashboard
+                } else {
+                    const data = await response.json();
+                    console.log(data.error);
+                    // Show error message
+                    document.getElementById('alert-login-form').innerText = data.error;
+                    document.getElementById('alert-login-form').style.display = 'block';
+                }
+            } catch (error) {
+                console.error(error);
+                // Show network error message
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            login();
+        });
+    </script> -->
 
 </body>
 

@@ -122,10 +122,24 @@ def view_flashcard(flashcard_id):
 # Everything for Dashboard goes here
 # 
 
+def fetch_user_by_id(user_id):
+    collection = db["users"]
+    user_object_id = ObjectId(user_id)
+    user = collection.find_one({"_id": user_object_id})
+    print(type(user))
+    return user
+
 @app.route("/add-friend/<user_id>", methods=['POST'])
 def addFriend(user_id):
     user = fetch_user_by_id(user_id)
     friend_id = request.form['friend-id']
+    friend_id = ObjectId(db["users"].find_one({"username": friend_id})["_id"])
+    # user_id = ObjectId(user_id)
+    db["users"].update_one({"_id": user_id}, {"$push": {"friends": friend_id}})
+    # return redirect(url_for('dashboard', user_id=user_id))
+    return "Friend Added"
+    
+    
 
 
 

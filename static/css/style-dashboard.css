@@ -100,7 +100,7 @@ nav {
 }
 
 .more-content-container {
-    position: absolute;
+    /* position: absolute; */
     display: flex;
     flex-direction: column;
     background-color: yellow;
@@ -123,7 +123,7 @@ main-content-container {
     /* background-color: red; */
     display: grid;
     grid-template-columns: 2fr 1fr;
-    align-items: right;
+    /* align-items: right; */
 
 }
 
@@ -194,6 +194,43 @@ content-container {
 
 }
 
+
+/* CSS For Social Container */
+.container-social {
+    display: flex;
+    width: 100%;
+    gap: 15px;
+    flex-direction: row;
+    text-align: center;
+}
+
+/* Code for Friends panel */
+
+.container-friends {
+    flex: 1;
+    max-height: 50svh;
+}
+
+.container-add-friend, #friend-form{
+    display: flex;
+    padding: 5px;
+    justify-content: space-around;
+    background-color: var(--snow);
+    border: 3px solid var(--feather-green);
+    border-radius: var(--border-radius);
+}
+
+#friend-form{
+    all: unset;
+}
+
+/* Code for Groups panel */
+
+.container-groups {
+    flex: 1;
+}
+
+
 extras-container {
     display: flex;
     flex-direction: column;
@@ -262,6 +299,7 @@ extras-container {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
+    gap: 15px;
 }
 
 .flash-cards-categories::-webkit-scrollbar {

@@ -108,19 +108,19 @@
                     <div class="container-tasks container-default">
                         <div class="heading">Tasks To-Do</div>
                     </div>
-                    <div class="container-flash-cards container-default">
-                        <div class="heading">Flashcards Packs</div>
-                        <div class="flash-cards-categories">
-                            <a href="" class="link-secondary">Tuen Khamoun</a>
-                            <a href="" class="link-secondary">Tuen Khamoun</a>
-                            <a href="" class="link-secondary">Tuen Khamoun</a>
-                            <a href="" class="link-secondary">Tuen Khamoun</a>
-                            <a href="" class="link-secondary">Tuen Khamoun</a>
-                            <a href="" class="link-secondary">Tuen Khamoun</a>
-                            <a href="" class="link-secondary">Tuen Khamoun</a>
+                    <div class="container-social">
+                        <div class="container-friends container-default">
+                            <div class="heading">Friends</div>
+                            <div class="container-add-friend">
+                                <form action="/add-friend/user._id" method="post" id="friend-form">
+                                    <input type="text" placeholder="Friend's ID" name="friend-id" id="friend-id">
+                                    <button type="submit">Add</button>
+                                </form>
+                            </div>
+                            <div class="alert-box">Oh O! Invalid Username</div>
                         </div>
-                        <div class="flash-cards-gallery">
-
+                        <div class="container-groups container-default">
+                            <div class="heading">Groups</div>
                         </div>
                     </div>
                 </div>
@@ -138,7 +138,7 @@
 
             </content-container>
             <extras-container>
-                <!-- <div class="stats-container container-default">
+                <div class="stats-container container-default">
                     <div class="stat" id="streak-stat">
                         <img class="stat-icon" src="../static/resources/images/dashboard/streak-icon.png" alt="">
                         <stat class="stat-value sub-heading">999</stat>
@@ -151,7 +151,7 @@
                         <img class="stat-icon" src="../static/resources/images/dashboard/heart-icon.png" alt="">
                         <stat class="stat-value sub-heading">999</stat>
                     </div>
-                </div> -->
+                </div>
                 <div class="flash-card-stat-container container-default">
 
                 </div>

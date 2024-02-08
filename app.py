@@ -2,7 +2,7 @@ from datetime import datetime
 from bson import ObjectId
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 # from flask_ngrok import run_with_ngrok
 
 app = Flask(__name__)
@@ -47,16 +47,43 @@ def createFlashCard(name, category, flashcard_data):
 def index():
     return render_template('signup.html')
 
-@app.route('/sign-up')
-def signup():
-    username = request.form['username']
-    password = request.form['password']
+@app.route('/check-username', methods=['POST'])
+def check_username():
+    collection = db["users"]
+    username = request.form.get('username')
+    user = collection.find_one({'username': username})
+    if user:
+        return jsonify({'message': 'Username already exists'}), 409
+    else:
+        return jsonify({'message': 'Username available'}), 200
 
+def createUser(username, password):
+    collection = db["users"]
+    
     new_user = {
         "username": username,
         "password": password,
+        "stats": [
+            {
+                "streaks":0,
+                "gems":0,
+                "hearts":0
+            }
+        ], 
+        "groups": [],
+        "friends": []
     }
 
+    new_user = collection.insert_one(new_user)
+    return new_user
+
+@app.route('/sign-up', methods=['POST'])
+def signup():
+    username = request.form['username']
+    password = request.form['password']
+    user = createUser(username, password)
+    # return  str(createUser(username, password)) + ' has been created.'
+    return render_template('dashboard.html', user=user)
     # 
     # To create a new users collection and further operations
     # 
@@ -90,6 +117,27 @@ def fetch_flashcard_by_id(flashcard_id):
 def view_flashcard(flashcard_id):
     flashcard = fetch_flashcard_by_id(flashcard_id)
     return render_template('view_flashcard.html', flashcard=flashcard)
+
+#
+# Everything for Dashboard goes here
+# 
+
+@app.route("/add-friend/<user_id>", methods=['POST'])
+def addFriend(user_id):
+    user = fetch_user_by_id(user_id)
+    friend_id = request.form['friend-id']
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8888)

@@ -40,7 +40,7 @@
     --heading-font-size: 3rem;
     --sub-heading-font-size: 1.5rem;
     --default-font-size: 1.15rem; /* Default */
-    --less-imp-font-size: 1rem;
+    --less-imp-font-size: 0.8rem;
 
     /* Links Basic Config */
     --link-radius: 18px;
@@ -196,6 +196,18 @@ hr {
 
 .general-links:hover {
     background-color: var(--polar);
+}
+
+.alert-box {
+    border: var(--default-border-width) solid var(--eel);
+    border-radius: var(--border-radius);
+    padding: 5px;
+    margin-top: 15px;
+    font-size: var(--less-imp-font-size);
+    color: var(--snow);
+    max-width: 100%;  
+    background-color: var(--fox);
+    background-color: var(--cardinal);
 }
 
 @media only screen and (max-width: 425px) {

@@ -12,20 +12,21 @@
 <body>
     <login-overlay id="login-overlay">
         <!-- <button id="close-login" class="link-tertiary">Close</button> -->
-        <form action="../templates/flash_cards.html" id="signup-form">
+        <form action="/sign-up" id="signup-form" method="post">
             <div class="login-container">
                 <div class="heading">Signup</div>
                 <div id="step1" class="form-step">
-                    <input type="text" name="" id="" placeholder="Username" required>
-                    <input type="password" name="" id="" placeholder="Password" required>
-                    <input type="password" name="" id="" placeholder="Re-confirm Password" required>
-                    <a href="#" class="link-primary" id="signup-link" >Signup</a>
+                    <input type="text" name="username" id="username" placeholder="Username" required>
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <input type="password" name="not-pass" id="not-pass" placeholder="Re-confirm Password" required>
+                    <a href="#" class="link-primary" id="signup-link">Signup</a>
+
                     <span>or continue with</span>
 
                     <a href="#" class="link-primary">Google</a>
                 </div>
                 <div id="step2" class="form-step">
-                    <select name="" id=""></select>
+                    <select name="not-select" id=""></select>
                 </div>
                 <div class="nav-form">
                     <a id="prev-button" class="link-primary">
@@ -61,10 +62,10 @@
                 updateNavButtons();
             });
 
-            document.querySelector('#signup-link').addEventListener('click', function (e) {
-                e.preventDefault();
-                document.getElementById('signup-form').submit(); // Submit the form
-            });
+            // document.querySelector('#signup-link').addEventListener('click', function (e) {
+            //     e.preventDefault();
+            //     document.getElementById('signup-form').submit(); // Submit the form
+            // });
 
             function updateNavButtons() {
                 formSteps.forEach((step, index) => {
@@ -77,7 +78,39 @@
 
         });
     </script>
-    
+
+    <!-- For Username Verification -->
+    <script>
+        async function checkUsername(username) {
+            const response = await fetch('/check-username', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `username=${username}`
+            });
+            const data = await response.json();
+            return data.message === 'Username available';
+        }
+
+        document.querySelector('#signup-link').addEventListener('click', async function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const not_pass = document.getElementById('not-pass').value;
+            const isUsernameAvailable = await checkUsername(username);
+            
+            if (isUsernameAvailable && password === not_pass) { console.log('Username is available and passwords match. Submitting form...');}
+
+            if (isUsernameAvailable && password === not_pass) {
+                document.getElementById('signup-form').submit();
+            } else if (!isUsernameAvailable) {
+                alert('Username already exists. Please choose a different username.');
+            } else if (password !== not_pass) {
+                alert('Passwords do not match. Please re-enter your passwords.');
+            }
+        });
+    </script>
 </body>
 
 </html>

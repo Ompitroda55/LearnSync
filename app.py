@@ -76,7 +76,7 @@ def createFlashCard(name, category, flashcard_data):
         "category" : category,
         # "created_by": ObjectId("your_user_object_id"),  # Replace with actual ObjectId of the user
         "created_at": datetime.utcnow().strftime('%Y-%m-%d'),
-        "times_opened": 10,
+        "times_opened": 0,
         "flashcard_data": flashcard_data
     }
     insert_result = collection.insert_one(new_flashcard_pack)
@@ -199,6 +199,13 @@ def fetch_flashcard_by_id(flashcard_id):
     collection = db["flashcards"]
     flashcard_object_id = ObjectId(flashcard_id)
     flashcard = collection.find_one({"_id": flashcard_object_id})
+
+    # For updating frequence of opening
+    times_opened = flashcard['times_opened'] + 1
+    filter = {'_id': ObjectId(flashcard_id)}
+    update = {'$set': {'times_opened': times_opened}}
+    collection.update_one(filter, update)
+    print(times_opened)
     print(type(flashcard))
     return flashcard
 

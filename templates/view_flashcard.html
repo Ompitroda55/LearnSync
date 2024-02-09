@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../static/css/style-updated.css">
+    <link rel="stylesheet" href="../static/css/style-view-flashcard.css">
 </head>
 <body>
-<div class="heading">{{ flashcard['flashcard_data'][0][0]}}</div>
-    {% for data in flashcard['flashcard_data'] %}
-    <div class="flashcard-item" style="display: flex;">
-        <div class="question">{{ data[0] }}</div>
-        <div class="answer">{{ data[1] }}</div>
-    </div>
-    {% endfor %}
-    <div class="heading">Good
-    </div>
+    <div class="heading">{{ flashcard['name'] }}</div>
+    <main>
+        <div class="flash-cards-container">
+            {% for data in flashcard['flashcard_data'] %}
+            <div class="card">
+                <div class="heading">{{ data[0] }}</div>
+                <span class="info">i</span>
+                <div class="answer">{{ data[1] }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
 </body>
 </html>

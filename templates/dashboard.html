@@ -74,7 +74,7 @@
         </nav>
         <main-content-container>
             <content-container>
-                <div class="heading">{{ user['username'] }}</div>
+                <div class="heading">Welcome back! {{ user['username'] }}</div>
                 <div class="container-home" id="container-home">
                     <div class="container-default home-pomodoro-timer">
                         <div class="container-pomodoro-timer">
@@ -120,6 +120,14 @@
                                 </form>
                             </div>
                             <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div>
+                            <div class="container-friends-list">
+                                {% for friend in user.friends %}
+                                <div class="friend">
+                                    <div class="friend-username">{{ friend }}</div>
+                                    <!-- You can add additional information about the friend here -->
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
                         <div class="container-groups container-default">
                             <div class="heading">Groups</div>
@@ -158,13 +166,18 @@
                     <div class="sub-heading">Notifications</div>
                     <div class="notification-friend-reqs">
                         <div class="normal-text">Friend Req's</div>
+                        {% for request in requests %}
                         <div class="notification ">
-                            <div class="notification-from">From_User</div>
+                            <div class="notification-from">{{ request.sender }}</div>
                             <div class="notification-action" id="notification-actions">
-                                <button class="notification-action-btn-accept">Accept</button>
-                                <button class="notification-action-btn-reject">Reject</button>
+                                <div class="notification-type">{{ request.type }}</div>
+                                <button class="notification-action-btn accept"
+                                    onclick="acceptFriendRequest('{{ request._id }}')">Accept</button>
+                                <button class="notification-action-btn reject"
+                                    onclick="rejectFriendRequest('{{ request._id }}')">Reject</button>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
             </extras-container>
@@ -368,6 +381,39 @@
                 }
             }
         });
+    </script>
+
+    <script>
+        async function acceptFriendRequest(requestId) {
+            const response = await fetch(`/accept-friend-request/${requestId}`, {
+                method: 'POST'
+            });
+            const data = await response.json();
+            if (response.status === 200) {
+                // Handle success, maybe hide the notification or update UI
+                console.log(data.message);
+            } else {
+                // Handle error, maybe show an error message
+                console.error(data.message);
+            }
+        }
+
+        async function rejectFriendRequest(requestId) {
+            const response = await fetch(`/reject-friend-request/${requestId}`, {
+                method: 'POST'
+            });
+            const data = await response.json();
+            if (response.status === 200) {
+                // Handle success, maybe hide the notification or update UI
+                console.log(data.message);
+                // Remove the notification from the UI
+                const notification = document.querySelector(`.notification[data-request-id="${requestId}"]`);
+                notification.style.display = 'none';
+            } else {
+                // Handle error, maybe show an error message
+                console.error(data.message);
+            }
+        }
     </script>
 </body>
 

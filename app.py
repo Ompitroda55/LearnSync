@@ -48,7 +48,9 @@ def login():
         password = request.form.get('password')
         print(username, password)
         user = collection.find_one({'username': username})
-        return render_template('dashboard.html', user=user)
+        requests = get_requests_for_receiver(str(user['_id']))
+        print(requests)
+        return render_template('dashboard.html', user=user, requests=requests)
     else:
         return render_template('home_alt.html')
 
@@ -91,7 +93,7 @@ def createFlashCard(name, category, flashcard_data):
 
 @app.route('/')
 def index():
-    return render_template('signup.html')
+    return render_template('home_alt.html')
 
 #
 # User Signup Stuff
@@ -135,6 +137,7 @@ def createRequest(from_user, to_user, type):
         "status": "pending"
     }
     new_request = collection.insert_one(new_request)
+    print(new_request)
     return new_request
 
 # Function to Create user in DB
@@ -162,15 +165,18 @@ def createUser(username, password):
 
 # Function to Handle Signup
 
-@app.route('/sign-up', methods=['POST'])
+@app.route('/sign-up', methods=['POST','GET'])
 def signup():
-    username = request.form['username']
-    password = request.form['password']
-    user = createUser(username, password)
-    user_id = str(user.inserted_id)
-    user = fetch_user_by_id(user_id)
-    print(user)
-    return render_template('dashboard.html', user=user)
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = createUser(username, password)
+        user_id = str(user.inserted_id)
+        user = fetch_user_by_id(user_id)
+        print(user)
+        return render_template('home_alt.html')
+    else:
+        return render_template('signup.html')
 
 #
 # All code stuff for Flashcards goes here
@@ -243,7 +249,7 @@ def addFriend(user_id):
         return jsonify({'message': 'Friend already in friends list'}), 400
     else:
         # If not, add the friend to the user's friends array
-        result = db["users"].update_one({"_id": ObjectId(user_id)}, {"$push": {"friends": friend_username}})
+        # result = db["users"].update_one({"_id": ObjectId(user_id)}, {"$push": {"friends": friend_username}})
         if createRequest(user['username'], friend_username, 0):
             return jsonify({'message': 'Friend Request Sent!'}), 200
         else:
@@ -252,17 +258,52 @@ def addFriend(user_id):
 def get_requests_for_receiver(receiver_id):
     collection = db["requests"]
     receiver_object_id = ObjectId(receiver_id)
-    requests = collection.find({"receiver": receiver_object_id})
+    receiver = fetch_user_by_id(receiver_object_id)
+    print(receiver, "It is receiver")
+    requests = list(collection.find({"receiver": receiver['username'], "status": "pending"}))
+    print(requests)
     return requests
+
 
 def get_requests_sender_or_receiver(object_id):
     collection = db["requests"]
     object_id = ObjectId(object_id)
-    requests = collection.find({"$or": [{"sender": object_id}, {"receiver": object_id}]})
+    requests = list(collection.find({"$or": [{"sender": object_id}, {"receiver": object_id}]}))
     return requests
 
+@app.route("/accept-friend-request/<request_id>", methods=['POST'])
+def accept_friend_request(request_id):
+    # Assuming you have a requests collection in your database
+    collection = db["requests"]
+    # Find the request by its ObjectId
+    request_object_id = ObjectId(request_id)
+    request_doc = collection.find_one({"_id": request_object_id})
+    # Assuming you have a users collection in your database
+    users_collection = db["users"]
+    
+    if request_doc:
+        sender_username = request_doc['sender']
+        receiver_username = request_doc['receiver']
+        
+        # Update sender's friend list
+        users_collection.update_one({"username": sender_username}, {"$push": {"friends": receiver_username}})
+        # Update receiver's friend list
+        users_collection.update_one({"username": receiver_username}, {"$push": {"friends": sender_username}})
+        
+        # Change the status of the request to accepted
+        collection.update_one({"_id": request_object_id}, {"$set": {"status": "accepted"}})
+        
+        return jsonify({'message': 'Friend request accepted successfully'}), 200
+    else:
+        return jsonify({'message': 'Friend request not found'}), 404
 
-
+@app.route("/reject-friend-request/<request_id>", methods=['POST'])
+def reject_friend_request(request_id):
+    collection = db["requests"]
+    request_object_id = ObjectId(request_id)
+    # Update the status of the request to rejected
+    collection.update_one({"_id": request_object_id}, {"$set": {"status": "rejected"}})
+    return jsonify({'message': 'Friend request rejected successfully'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=8888)

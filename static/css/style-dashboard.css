@@ -325,6 +325,7 @@ extras-container {
     margin-right: 10px;
     white-space: nowrap;
     min-height: 50svh;
+
 }
 
 /* For notification container - side bar */
@@ -363,4 +364,24 @@ extras-container {
 .notification-action-btn-accept, .notification-action-btn-reject {
     all: unset;
     
+}
+
+
+.todo-handler input {
+    padding: 10px 0;
+    text-align: left;
+    color: var(--macaw);
+    background-color: var(--snow);
+    font-family: var(--main-font);
+    border-radius: var(--link-radius);
+    box-shadow: 0px 6px 1px var(--hare);
+    border: 1px solid var(--swan);
+    width: 90%;
+    padding: 10px;
+    font-size: var(--normal-font-size);
+    margin-bottom: 10px;
+}
+
+.degree{
+    color: var(--feather-green);
 }

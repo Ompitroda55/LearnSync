@@ -1,5 +1,5 @@
 from datetime import datetime
-from bson import ObjectId
+from bson.objectid import ObjectId
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from flask import Flask, jsonify, render_template, request, redirect, url_for
@@ -255,6 +255,7 @@ def addFriend(user_id):
         else:
             return jsonify({'message': 'Failed to add friend'}), 500
     
+
 def get_requests_for_receiver(receiver_id):
     collection = db["requests"]
     receiver_object_id = ObjectId(receiver_id)
@@ -296,6 +297,24 @@ def accept_friend_request(request_id):
         return jsonify({'message': 'Friend request accepted successfully'}), 200
     else:
         return jsonify({'message': 'Friend request not found'}), 404
+
+@app.route("/", methods=['POST'])
+def todo1():
+    if request.method == "POST":   # if the request method is post, then insert the todo document in todos collection
+        content = request.form['content']
+        degree = request.form['degree']
+        todos.insert_one({'content': content, 'degree': degree})
+        return redirect(url_for('todo1')) # redirect the user to home page
+    all_todos = todos.find()    # display all todo documents
+    return render_template('dashboard.html', todos = all_todos) # render home page template with all todos
+#Delete Route
+@app.post("/<id>/delete/")
+def delete(id): #delete function by targeting a todo document by its own id
+    todos.delete_one({"_id":ObjectId(id)}) #deleting the selected todo document by its converted id
+    return redirect(url_for('todo1')) # again, redirecting you to the home page 
+db = client.LearnSyncDatabase # creating your flask database using your mongo client 
+todos = db.todos # creating a collection called "todos"
+
 
 @app.route("/reject-friend-request/<request_id>", methods=['POST'])
 def reject_friend_request(request_id):

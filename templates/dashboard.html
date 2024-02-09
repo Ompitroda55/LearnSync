@@ -108,6 +108,37 @@
                     </div>
                     <div class="container-tasks container-default">
                         <div class="heading">Tasks To-Do</div>
+                        <form action="/" method="post">
+                            <div class="todo-handler">
+                                <label for="content" class="todo">Enter Your Task: </label> <br>
+                                <input type="text" name="content" placeholder="write your task here..." id="todo">
+                            </div>
+                            <p class="degree">
+                                <b><label for="degree">Degree</label></b>
+                            </p>
+                            <p>
+                                <input id="degree-0" name="degree" required type="radio" value="important">
+                                <label for="degree-0">Important</label>
+                            </p>
+                            <p>
+                                <input id="degree-1" name="degree" required type="radio" value="unimportant">
+                                <label for="degree-1">Unimportant</label>
+                            </p>
+                            <button type="submit" class="link-primary">Submit</button>
+                        </form>
+                        <hr>
+                        <!-- {% for todo in todos %}
+                        <div class="todo"> -->
+                            <!--Fetching a todo-->
+                            <!-- <p> {{ todo['content'] }} <i>
+                                    ({{ todo['degree'] }})</i>
+                            </p> -->
+                            <!-- Deleting a todo -->
+                            <!-- <form method="POST" action="{{ url_for('delete', id=todo['_id']) }}">
+                                <input type="submit" value="delete todo" onclick="return confirm('Are you sure you want to delete this entry?')" />
+                            </form>
+                        </div>
+                        {% endfor %} -->
                     </div>
                     <div class="container-social">
                         <div class="container-friends container-default">
@@ -252,6 +283,36 @@
             startButton.disabled = false;
             stopButton.disabled = true;
         }
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isWorkTime = true;
+            secondsLeft = 1500; // Reset to 25 minutes work time
+            updateTime();
+            localStorage.removeItem('endTime');
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        }
+
+        // Check if there's a saved end time in localStorage
+        const savedEndTime = localStorage.getItem('endTime');
+        if (savedEndTime) {
+            const now = new Date().getTime();
+            secondsLeft = Math.round((savedEndTime - now) / 1000);
+            if (secondsLeft > 0) {
+                startTimer();
+            } else {
+                localStorage.removeItem('endTime');
+            }
+        } else {
+            secondsLeft = 1500; // Default to 25 minutes work time
+        }
+
+        startButton.addEventListener('click', startTimer);
+        stopButton.addEventListener('click', stopTimer);
+        resetButton.addEventListener('click', resetTimer);
+
+    </script>
+
 
         function resetTimer() {
             clearInterval(timerInterval);

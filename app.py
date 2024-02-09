@@ -57,7 +57,7 @@ def login():
 # Code for inserting flashcard created by user
 
 @app.route('/insert-flash-card', methods=['POST'])
-def create_FC():
+def createFlashCard():
     data = []
     name = request.form['name']
     subject = request.form['subject']
@@ -156,7 +156,8 @@ def createUser(username, password):
             }
         ], 
         "groups": [],
-        "friends": []
+        "friends": [],
+        "dailytasks": []
     }
 
     new_user = collection.insert_one(new_user)
@@ -297,6 +298,13 @@ def accept_friend_request(request_id):
         return jsonify({'message': 'Friend request accepted successfully'}), 200
     else:
         return jsonify({'message': 'Friend request not found'}), 404
+@app.route("/reject-friend-request/<request_id>", methods=['POST'])
+def reject_friend_request(request_id):
+    collection = db["requests"]
+    request_object_id = ObjectId(request_id)
+    # Update the status of the request to rejected
+    collection.update_one({"_id": request_object_id}, {"$set": {"status": "rejected"}})
+    return jsonify({'message': 'Friend request rejected successfully'}), 200
 
 @app.route("/", methods=['POST'])
 def todo1():
@@ -315,14 +323,16 @@ def delete(id): #delete function by targeting a todo document by its own id
 db = client.LearnSyncDatabase # creating your flask database using your mongo client 
 todos = db.todos # creating a collection called "todos"
 
+@app.route('/update-daily-task', methods=['POST'])
+def updateDailyTasks():
+    data = []
+    tasks = request.form.getlist('task[]')
+    for i in range(len(tasks)):
+        data.append(tasks[i])
+    print(data)
+    createFlashCard(name, subject, data)
+    return redirect(url_for('flashCardApp'))
 
-@app.route("/reject-friend-request/<request_id>", methods=['POST'])
-def reject_friend_request(request_id):
-    collection = db["requests"]
-    request_object_id = ObjectId(request_id)
-    # Update the status of the request to rejected
-    collection.update_one({"_id": request_object_id}, {"$set": {"status": "rejected"}})
-    return jsonify({'message': 'Friend request rejected successfully'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=8888)

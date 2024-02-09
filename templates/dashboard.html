@@ -463,15 +463,15 @@
 
     <!-- Script for handling daily tasks -->
     <script>
-                                document.getElementById('addFields').addEventListener('click', function(e) {
-                            e.preventDefault(); 
-                            var taskFields = document.getElementById('taskFields');
-                            var newTaskField = document.createElement('div');
-                            newTaskField.innerHTML = `
+        document.getElementById('addFields').addEventListener('click', function (e) {
+            e.preventDefault();
+            var taskFields = document.getElementById('taskFields');
+            var newTaskField = document.createElement('div');
+            newTaskField.innerHTML = `
                                 <input type="text" class="task" name="task[]" placeholder="Question">
                             `;
-                            taskFields.appendChild(newTaskField);
-                        });
+            taskFields.appendChild(newTaskField);
+        });
 
         async function updateDailyTask(requestId) {
             const response = await fetch(`/update-daily-task`, {

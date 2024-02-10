@@ -117,13 +117,8 @@
                                 </form>
                             </div>
                             <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div>
-                            <div class="container-friends-list">
-                                {% for friend in user.friends %}
-                                <div class="friend">
-                                    <div class="friend-username">{{ friend }}</div>
-                                    <!-- You can add additional information about the friend here -->
-                                </div>
-                                {% endfor %}
+                            <div class="container-friends-list" id="container-friends-list">
+
                             </div>
                         </div>
                         <div class="container-groups container-default">
@@ -159,17 +154,17 @@
             </content-container>
             <extras-container>
                 <div class="stats-container container-default">
-                    <div class="stat" id="streak-stat">
+                    <div class="stat">
                         <img class="stat-icon" src="../static/resources/images/dashboard/streak-icon.png" alt="">
-                        <stat class="stat-value sub-heading">{{ user.stats[0].streaks }}</stat>
+                        <stat class="stat-value sub-heading" id="streaks-stat"></stat>
                     </div>
                     <div class="stat">
                         <img class="stat-icon" src="../static/resources/images/dashboard/gems-icon.png" alt="">
-                        <stat class="stat-value sub-heading">{{ user.stats[0].gems }}</stat>
+                        <stat class="stat-value sub-heading" id="gems-stat"></stat>
                     </div>
                     <div class="stat">
                         <img class="stat-icon" src="../static/resources/images/dashboard/heart-icon.png" alt="">
-                        <stat class="stat-value sub-heading">{{ user.stats[0].hearts }}</stat>
+                        <stat class="stat-value sub-heading" id="hearts-stat"></stat>
                     </div>
                 </div>
                 <div class="notification-container container-default">
@@ -190,6 +185,7 @@
                         {% endfor %}
                     </div>
                 </div>
+                <div class="heading" id="homo"></div>
             </extras-container>
         </main-content-container>
     </main-container>
@@ -326,7 +322,7 @@
 
             if (isFriendPresent) {
                 response = await checkStatus(username);
-                console.log(response);
+                // console.log(response);
                 if (response === 'Friend already in friends list') {
                     alertbox.style.display = 'flex';
                     alertbox.textContent = "Already you're friends";
@@ -364,7 +360,7 @@
             const data = await response.json();
             if (response.status === 200) {
                 // Handle success, maybe hide the notification or update UI
-                console.log(data.message);
+                // console.log(data.message);
             } else {
                 // Handle error, maybe show an error message
                 console.error(data.message);
@@ -378,7 +374,7 @@
             const data = await response.json();
             if (response.status === 200) {
                 // Handle success, maybe hide the notification or update UI
-                console.log(data.message);
+                // console.log(data.message);
                 // Remove the notification from the UI
                 const notification = document.querySelector(`.notification[data-request-id="${requestId}"]`);
                 notification.style.display = 'none';
@@ -401,6 +397,138 @@
             taskFields.appendChild(newTaskField);
         });
 
+        async function getUserStats() {
+            try {
+                // const requestData = {
+                //     userId: userId,
+                //     otherVariable: otherVariable
+                // };
+
+                const userId = '{{ user._id }}';
+                const requestData = { userId: userId };
+                // console.log(userId);
+                const response = await fetch('/getUserStats/{{ user._id }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user stats');
+                }
+                const userStats = await response.json();
+                // Update the UI with the user stats
+                return userStats
+            } catch (error) {
+                console.error('Error fetching user stats:', error);
+            }
+        }
+
+        async function getUser() {
+            try {
+                // const requestData = {
+                //     userId: userId,
+                //     otherVariable: otherVariable
+                // };
+
+                const userId = '{{ user._id }}';
+                const requestData = { userId: userId };
+                // console.log(userId);
+                const response = await fetch('/getUser/{{ user._id }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user object');
+                }
+                const user = await response.json();
+                // console.log(response.body)
+                // document.getElementById('homo').textContent = "Om" + response.body;
+                // Update the UI with the user stats
+                return user
+            } catch (error) {
+                console.error('Error fetching user stats:', error);
+            }
+        }
+
+        async function getFriendRequests(receiverId) {
+            try {
+                const response = await fetch('/get-reqs-for-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ receiver_id: receiverId })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch friend requests');
+                }
+                const friendRequests = await response.json();
+                return friendRequests;
+            } catch (error) {
+                console.error('Error fetching friend requests:', error);
+            }
+        }
+
+        async function updateStats() {
+            let userStats = getUserStats();
+            // console.log(getUser());
+            let user = await getUser();
+
+            document.getElementById('homo').textContent = "Om " + user.password;
+            // console.log(user);
+            // user.then((data) => {
+            //     console.log(data)
+            // })
+            // console.log(user.username);
+
+            const friendsContainer = document.getElementById('container-friends-list');
+            friendsContainer.innerHTML = '';
+
+            // Iterate over the user's friends and create friend elements
+            user.friends.forEach(friend => {
+                const friendElement = document.createElement('div');
+                friendElement.classList.add('friend');
+                friendElement.innerHTML = `
+            <div class="friend-username">${friend}</div>`;
+                friendsContainer.appendChild(friendElement);
+            });
+
+            userStats.then((stats) => {
+                document.getElementById('streaks-stat').textContent = stats[0].streaks;
+                document.getElementById('gems-stat').textContent = stats[0].gems;
+                document.getElementById('hearts-stat').textContent = stats[0].hearts;
+                // console.log(stats[0].gems);
+
+            })
+
+            // Updating Notifications
+            const friendRequests = await getFriendRequests(user._id);
+            console.log(friendRequests);
+            const notificationsContainer = document.querySelector('.notification-friend-reqs');
+            notificationsContainer.innerHTML = ''; // Clear previous notifications
+            friendRequests.forEach(request => {
+                const notificationElement = document.createElement('div');
+                notificationElement.classList.add('notification');
+                notificationElement.innerHTML = `
+            <div class="notification-from">${request.sender}</div>
+            <div class="notification-action" id="notification-actions">
+                <div class="notification-type">${request.type}</div>
+                <button class="notification-action-btn accept" onclick="acceptFriendRequest('${request._id}')">Accept</button>
+                <button class="notification-action-btn reject" onclick="rejectFriendRequest('${request._id}')">Reject</button>
+            </div>`;
+                notificationsContainer.appendChild(notificationElement);
+            });
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            updateStats();
+            setInterval(updateStats, 10000);
+        });
     </script>
 </body>
 

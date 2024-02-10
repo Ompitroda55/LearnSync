@@ -6,6 +6,20 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
+class User:
+    def __init__(self, userId):
+        self.userId = userId
+        user = db.users.find_one({"_id" : ObjectId(userId)})
+        self._user_data = {
+            '_id': str(user['_id']),
+            'username': user['username'],
+            'password': user['password'],
+            'stats': [{'streaks': user['stats'][0]['streaks'], 'gems': user['stats'][0]['gems'], 'hearts': user['stats'][0]['hearts']}],
+            'groups': user['groups'],
+            'friends': user['friends']
+        }
+
+
 # MongoDB Stuff goes here
 uri = "mongodb+srv://admin:admin@learnsynccluster.el71bgq.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, server_api=ServerApi('1'))
@@ -52,7 +66,7 @@ def createRequest(from_user, to_user, type):
         "status": "pending"
     }
     new_request = collection.insert_one(new_request)
-    print(new_request)
+    # print(new_request)
     return new_request
 
 @app.route('/check-username-availability', methods=['POST'])
@@ -81,7 +95,7 @@ def checkCredentials():
     collection = db["users"]
     username = request.form.get('username')
     password = request.form.get('password')
-    print("User password : " + password, username)
+    # print("User password : " + password, username)
     user = collection.find_one({'username': username})
     # print(user['password'])
     if user:
@@ -121,8 +135,8 @@ def fetch_flashcard_by_id(flashcard_id):
     filter = {'_id': ObjectId(flashcard_id)}
     update = {'$set': {'times_opened': times_opened}}
     collection.update_one(filter, update)
-    print(times_opened)
-    print(type(flashcard))
+    # print(times_opened)
+    # print(type(flashcard))
     return flashcard
 
 # Function to fetch object of user from its object_id
@@ -130,17 +144,23 @@ def fetch_user_by_id(user_id):
     collection = db["users"]
     user_object_id = ObjectId(user_id)
     user = collection.find_one({"_id": user_object_id})
-    print(type(user))
+    # print(type(user))
     return user
 
-def get_requests_for_receiver(receiver_id):
+@app.route('/get-reqs-for-user', methods = ['POST'])
+def get_requests_for_receiver():
+    receiver_id = request.get_json()
+    receiver_id = receiver_id.get('receiver_id')
     collection = db["requests"]
     receiver_object_id = ObjectId(receiver_id)
     receiver = fetch_user_by_id(receiver_object_id)
-    print(receiver, "It is receiver")
+    # print(receiver, "It is receiver")
     requests = list(collection.find({"receiver": receiver['username'], "status": "pending"}))
-    print(requests)
-    return requests
+    # print(requests)
+    for req in requests:
+        req['_id'] = str(req['_id'])
+    print(jsonify(requests))
+    return jsonify(requests)
 
 
 def get_requests_sender_or_receiver(object_id):
@@ -177,12 +197,12 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        print(username, password)
+        # print(username, password)
         user = collection.find_one({'username': username})
-        requests = get_requests_for_receiver(str(user['_id']))
+        # requests = get_requests_for_receiver(str(user['_id']))
         # print(requests)
-        print(user)
-        return render_template('dashboard.html', user=user, requests=requests)
+        # print(user)
+        return render_template('dashboard.html', user=user)
     else:
         return render_template('home_alt.html')
 
@@ -194,7 +214,7 @@ def login():
 # Code For FlashCard Goes Here
 # 
 @app.route('/insert-flash-card', methods=['POST'])
-def createFlashCard():
+def insertFlashCard():
     data = []
     name = request.form['name']
     subject = request.form['subject']
@@ -202,7 +222,7 @@ def createFlashCard():
     answers = request.form.getlist('answer[]')
     for i in range(len(min(questions,answers))):
         data.append((questions[i], answers[i]))
-    print(data)
+    # print(data)
     createFlashCard(name, subject, data)
     return redirect(url_for('flashCardApp'))
 
@@ -221,7 +241,7 @@ def signup():
         user = createUser(username, password)
         user_id = str(user.inserted_id)
         user = fetch_user_by_id(user_id)
-        print(user)
+        # print(user)
         return render_template('home_alt.html')
     else:
         return render_template('signup.html')
@@ -242,7 +262,7 @@ def flashCardApp():
     collection = db["flashcards"]
     flashcards = collection.find({})
 
-    print(flashcards)
+    # print(flashcards)
     return render_template('flash_cards.html', id=id, flashcards=flashcards)
 
 # Function for opening a particular flashcard
@@ -264,8 +284,8 @@ def view_flashcard(flashcard_id):
 def addFriend(user_id):
     user = fetch_user_by_id(user_id)
     friend_username = request.form['friend-username']
-    print(friend_username)
-    print(user['username'] + "Is the user name")
+    # print(friend_username)
+    # print(user['username'] + "Is the user name")
     # result = db["users"].update_one({"_id": ObjectId(user_id)}, {"$push": {"friends": friend_username}})
     # print(result)
     if friend_username in user['friends']:
@@ -325,21 +345,44 @@ def fetch_user_stats(user_id):
     # Query the users collection to get the user's stats
     users_collection = db["users"]
     user = users_collection.find_one({"_id": ObjectId(user_id)})
-
+    # print(user)
     # Check if the user exists
     if user:
         # Extract and return the user stats
         user_stats = user.get("stats", {})
+        # print(user_stats)
         return user_stats
     else:
         # Return None if the user is not found
         return None
 
-@app.route('/getUserStats', method=['POST'])
-def getUserStats():
-    user_stats = fetch_user_stats()
+@app.route('/getUserStats/<userId>', methods=['POST'])
+def getUserStats(userId):
+    # print(request)
+    # user_id = request.form.get('userId')
+    user_id = userId
+    user_stats = fetch_user_stats(user_id)
+    # print(user_id,"Turueueddkdkdkdkue")
     return jsonify(user_stats)
 
+@app.route('/getUser/<userId>', methods = ['POST'])
+def getUser(userId):
+    request_data = request.get_json()
+    # user_id = request_data.get('userId')
+    # print(request_data)
+    user = db.users.find_one({"_id" : ObjectId(userId)})
+    user_data = {
+    '_id': str(user['_id']),
+    'username': user['username'],
+    'password': 'protected',
+    'stats': [{'streaks': user['stats'][0]['streaks'], 'gems': user['stats'][0]['gems'], 'hearts': user['stats'][0]['hearts']}],
+    'groups': user['groups'],
+    'friends': user['friends']
+}
+    user['_id'] = str(user['_id'])
+    print((user_data))
+    # return user
+    return jsonify(user_data)
 
 
 

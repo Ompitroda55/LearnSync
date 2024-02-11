@@ -17,6 +17,9 @@
     --macaw: #1cb0f6;
     --macaw-mask: #d6f1ffbd;
     --cardinal: #ff4b4b;
+    --cardinal-light: #ff2020;
+
+    --cardinal-mask: #a82a2a;
     --bee: #ffc800;             /* Secondary Colour */
     --fox: #ff9600;
     --beetle: #ce82ff;
@@ -40,6 +43,7 @@
     --heading-font-size: 3rem;
     --sub-heading-font-size: 1.5rem;
     --default-font-size: 1.15rem; /* Default */
+    --font-for-flash-card : 1rem;
     --less-imp-font-size: 0.8rem;
 
     /* Links Basic Config */
@@ -116,7 +120,7 @@
     padding: 10px;
     border-radius: var(--link-radius);
     box-shadow: 0px 6px 1px var(--feather-green-mask);
-    transition: background-color.2s ease-in-out;
+    transition : background-color.2s ease-in-out;
     /* border: 3px solid var(--swan); */
     width: 100%;
     text-align: center;
@@ -172,6 +176,33 @@
 .link-tertiary:hover {
     background-color: var(--snow);
     color: var(--eel);
+}
+
+.close-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: var(--cardinal);
+    box-shadow: 0px 6px 1px var(--cardinal-mask);
+}
+
+.close-button:hover {
+    background-color: var(--cardinal-light);
+}
+
+input {
+    padding: 10px 0;
+    text-align: left;
+    color: var(--macaw);
+    background-color: var(--snow);
+    font-family: var(--main-font);
+    border-radius: var(--link-radius);
+    box-shadow: 0px 6px 1px var(--hare);
+    border: 1px solid var(--swan);
+    /* width: 100%; */
+    padding: 10px;
+    font-size: var(--normal-font-size);
+    margin-bottom: 10px;
 }
 
 .container-default {

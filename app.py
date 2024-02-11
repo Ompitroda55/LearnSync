@@ -10,7 +10,7 @@ class User:
     def __init__(self, userId):
         self.userId = userId
         user = db.users.find_one({"_id" : ObjectId(userId)})
-        self._user_data = {
+        self.user_data = {
             '_id': str(user['_id']),
             'username': user['username'],
             'password': user['password'],
@@ -19,7 +19,7 @@ class User:
             'friends': user['friends']
         }
 
-
+user_object = None
 # MongoDB Stuff goes here
 uri = "mongodb+srv://admin:admin@learnsynccluster.el71bgq.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, server_api=ServerApi('1'))
@@ -107,12 +107,14 @@ def checkCredentials():
     else:
         return jsonify({'message': 'Username not available'}), 400
 
-def createFlashCard(name, category, flashcard_data):
+def createFlashCard(name, category, hashtags_list, flashcard_data, user_name):
     collection = db["flashcards"]
+
     new_flashcard_pack = {
         "name" : name,
         "category" : category,
-        # "created_by": ObjectId("your_user_object_id"),  # Replace with actual ObjectId of the user
+        "hashtags" :hashtags_list,
+        "created_by": user_name, 
         "created_at": datetime.utcnow().strftime('%Y-%m-%d'),
         "times_opened": 0,
         "flashcard_data": flashcard_data
@@ -202,6 +204,7 @@ def login():
         # requests = get_requests_for_receiver(str(user['_id']))
         # print(requests)
         # print(user)
+        # user_object = User(user['_id'])
         return render_template('dashboard.html', user=user)
     else:
         return render_template('home_alt.html')
@@ -213,18 +216,29 @@ def login():
 # 
 # Code For FlashCard Goes Here
 # 
-@app.route('/insert-flash-card', methods=['POST'])
-def insertFlashCard():
+@app.route('/insert-flash-card/<user_id>', methods=['POST'])
+def insertFlashCard(user_id):
     data = []
+    user = fetch_user_by_id(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    user_name = user['username']
     name = request.form['name']
+    hashtags = request.form['tags']
+    hashtags_list = [f"#{tag.strip()}" if not tag.startswith("#") else tag.strip() for tag in hashtags.split()]
     subject = request.form['subject']
     questions = request.form.getlist('question[]')
     answers = request.form.getlist('answer[]')
+    
     for i in range(len(min(questions,answers))):
         data.append((questions[i], answers[i]))
-    # print(data)
-    createFlashCard(name, subject, data)
-    return redirect(url_for('flashCardApp'))
+
+    flashcard_id = createFlashCard(name, subject, hashtags_list, data, user_name)
+    if flashcard_id:
+        return jsonify({'message': 'Flashcard created successfully', 'flashcard_id': str(flashcard_id)}), 200
+    else:
+        return jsonify({'message': 'Failed to create flashcard'}), 500
 
 
 
@@ -255,15 +269,20 @@ def signup():
 #
 
 # Main windows of FlashCard section of app
-@app.route('/flash_card')
-def flashCardApp():
+@app.route('/flash_card/<user_id>',methods=['GET'])
+def flashCardApp(user_id):
     categories = ["Literature", "Mathematics", "Science", "History", "Geography", "Computer Science", "Art", "Music", "Health", "Business", "Test Preparation", "Miscellaneous"]
 
     collection = db["flashcards"]
-    flashcards = collection.find({})
+    flashcards_cursor = collection.find({})
+    flashcards = list(flashcards_cursor)
+    print(flashcards)
+    for flashcard in flashcards:
+        flashcard['_id'] = str(flashcard['_id'])
 
     # print(flashcards)
-    return render_template('flash_cards.html', id=id, flashcards=flashcards)
+    base_url = request.url_root
+    return render_template('flash_cards.html', user_id = user_id, flashcards=flashcards, base_url=base_url)
 
 # Function for opening a particular flashcard
 @app.route('/flashcard/<flashcard_id>')
@@ -271,7 +290,56 @@ def view_flashcard(flashcard_id):
     flashcard = fetch_flashcard_by_id(flashcard_id)
     return render_template('view_flashcard.html', flashcard=flashcard)
 
+@app.route('/fetch-all-flashcards', methods=['POST'])
+def fetchall_flashcards():
+    collection = db["flashcards"]
+    flashcards_cursor = collection.find({})
+    flashcards = list(flashcards_cursor)
+    print(flashcards)
+    for flashcard in flashcards:
+        flashcard['_id'] = str(flashcard['_id'])
 
+    return jsonify(flashcards)
+
+@app.route('/fetch-user-flashcards', methods=['POST'])
+def fetchUserFlashcards():
+    user_id = request.json.get('user_id')
+    collection = db["flashcards"]
+    # Search for the keyword in the name or category fields using a case-insensitive regular expression
+    query = {
+        "$or": [
+            # {"name": {"$regex": keyword, "$options": "i"}},
+            # {"category": {"$regex": keyword, "$options": "i"}}
+        ]
+    }
+    # Fetch all flashcards that match the query
+    cursor = collection.find(query)
+    # Convert ObjectId to string and format the results
+    flashcards = [flashcard for flashcard in cursor]
+    for flashcard in flashcards:
+        flashcard['_id'] = str(flashcard['_id'])
+    return jsonify(flashcards)
+
+@app.route('/search_flashcards', methods=['POST'])
+def search_flashcards():
+    keyword = request.json.get('keyword')
+    collection = db["flashcards"]
+    # Search for the keyword in the name or category fields using a case-insensitive regular expression
+    query = {
+        "$or": [
+            # {"name": {"$regex": keyword, "$options": "i"}},
+            # {"category": {"$regex": keyword, "$options": "i"}},
+            # {"flashcard_data": {"$elemMatch": {"$elemMatch": {"$regex": keyword, "$options": "i"}}}},
+            {"hashtags": {"$regex": keyword, "$options": "i"}}
+        ]
+    }
+    # Fetch all flashcards that match the query
+    cursor = collection.find(query)
+    # Convert ObjectId to string and format the results
+    flashcards = [flashcard for flashcard in cursor]
+    for flashcard in flashcards:
+        flashcard['_id'] = str(flashcard['_id'])
+    return jsonify(flashcards)
 
 
 

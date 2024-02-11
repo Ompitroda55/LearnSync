@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="../static/css/style-updated.css">
     <link rel="stylesheet" href="../static/css/style-flash-cards.css">
 </head>
+
 <body>
     <header>
         <nav>
@@ -14,60 +16,265 @@
                 <div class="heading">FlashCards</div>
                 <div></div>
             </div>
-            <div class="search-bar">
-                <form class="form-search-bar" action="">
-
-                </form>
-            </div>
-            <div class="category-bar">
-                <div class="category-container">
-                    <img class="category-symbol" src="../static/resources/images/flashcardapp/category.png" alt="">
-                    <div class="category-name less-simple-text">Literature</div>
-                </div>
-            </div>
         </nav>
     </header>
     <main>
         <div class="user-created-flashcards">
-            
+            <div class="heading">Your Flash Cards:</div>
         </div>
         <div class="flash-card-catalog-container">
-            {% for flashcard in flashcards %}
-            <a href="/flashcard/{{ flashcard._id }}" class="flash-card-container container-default">
-                <img src="../static/resources/images/flashcardapp/category.png" alt="" class="card-img">
-                <div class="card-topic">{{ flashcard.name }}</div>
-                <div class="card-category">{{ flashcard.category }}</div>
-                <div class="card-creator">{{ flashcard.created_at }}</div>
-            </a>
-            {% endfor %}
-        </div>
-        <div class="container-default">
-            <div class="heading">Create Flash Cards</div>
-            <form action="/insert-flash-card" method="post" id="flashCardForm">
-                <div id="card-info-fields">
-                    <input type="text" class="name" name="name" placeholder="Name">
-                    <input type="text" class="subject" name="subject" placeholder="Subject">
-                </div>
-                <div id="questionFields">
-                    <input type="text" class="question" name="question[]" placeholder="Question">
-                    <input type="text" class="answer" name="answer[]" placeholder="Answer">
-                </div>
-                <a class="link-primary" href="#" id="addFields">Add Question</a>
-                <button class="link-tertiary" type="submit">Submit</button>
-            </form>
+
+
         </div>
     </main>
+    <div class="flashcard-creator" id="flashcard-creator">
+        <div class="link-primary close-button" id="close-button">Close</div>
+        <div class="heading">FlashCards Creator</div>
+        <form action="/insert-flash-card/{{ user_id }}" method="post" id="flashCard-Form">
+            <div id="card-info-fields">
+                <input type="text" class="name" name="name" placeholder="Name" required>
+                <input type="text" class="subject" name="subject" placeholder="Subject" required>
+                <input type="text" class="tags" name="tags" placeholder="Enter #tag's seperated by space">
+            </div>
+            <div id="questionFields-container">
+                <!-- <input type="text" class="question" name="question[]" placeholder="Question">
+                <input type="text" class="answer" name="answer[]" placeholder="Answer"> -->
+            </div>
+            <div class="flashcard-form-btns">
+                <a class="link-secondary" id="submitForm">Submit</a>
+                <a class="link-primary" href="#" id="addFields">Add Question</a>
+            </div>
+        </form>
+    </div>
+    <button id="open-creator">+</button>
     <script>
-        document.getElementById('addFields').addEventListener('click', function(e) {
+        let questionCounter = 1;
+
+        document.getElementById('addFields').addEventListener('click', function (e) {
             e.preventDefault();
-            var questionFields = document.getElementById('questionFields');
+
+            var questionFields = document.getElementById('questionFields-container');
+            // questionFields.style.display = 'flex';
             var newQuestionField = document.createElement('div');
+            // newQuestionField.style.display = 'flex';
+            // newQuestionField.className = "questionFields";
             newQuestionField.innerHTML = `
-                <input type="text" class="question" name="question[]" placeholder="Question">
-                <input type="text" class="answer" name="answer[]" placeholder="Answer">
+            <div class="questionFields">
+                <input type="text" class="question" name="question[]" placeholder="Keyword ${questionCounter}" >
+                <input type="text" class="answer" name="answer[]" placeholder="Description ${questionCounter}" >
+            </div>
             `;
             questionFields.appendChild(newQuestionField);
+            questionCounter++;
+        });
+
+        document.getElementById('open-creator').addEventListener('click', function () {
+            var flashcardCreator = document.getElementById('flashcard-creator');
+            flashcardCreator.style.display = 'flex';
+            flashcardCreator.style.left = '50%';
+            flashcardCreator.style.top = '50%';
+            flashcardCreator.style.transform = 'translate(-50%, -50%)';
+        });
+
+        document.getElementById('close-button').addEventListener('click', function (e) {
+            e.preventDefault();
+            var flashcardCreator = document.getElementById('flashcard-creator');
+            flashcardCreator.style.display = 'none';
+        });
+
+    </script>
+    <script>
+        // Search FlashCards on Keyword
+        async function searchFlashcards(keyword) {
+            const url = '/search_flashcards';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ keyword: keyword })
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error:', error);
+                return null;
+            }
+        }
+
+        // Fetch all flashcards
+        // Function to fetch all flashcards from the server
+        async function fetchAllFlashcards() {
+            const url = '/fetch-all-flashcards';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            try {
+                const response = await fetch(url, options);
+                return await response.json();
+            } catch (error) {
+                console.error('Error:', error);
+                return null;
+            }
+        }
+
+        const BASE_URL = "{{ base_url }}";
+
+        // Function to create HTML elements for a single flashcard
+        // Function to create HTML elements for a single flashcard
+        function createFlashcardElement(flashcard) {
+            const flashcardLink = document.createElement('a');
+            flashcardLink.setAttribute('href', `/flashcard/${flashcard._id}`);
+            
+            // Generate a random number between 0 and 20 to select a random background image
+            const randomImageNumber = Math.floor(Math.random() * 16); // 21 is exclusive upper bound
+            const randomImageName = `Designer${randomImageNumber}.jpeg`; // Assuming the images have .jpg extension
+            console.log(randomImageName);
+            // Set the background image using inline CSS
+            // flashcardLink.style.backgroundImage = `url('../static/resources/images/flashcardapp/flashcard_backgrounds/${randomImageName}')`;
+            // flashcardLink.style.backgroundImage = `url('../static/resources/images/flashcardapp/flashcard_backgrounds/Designer4.jpeg')`;
+            flashcardLink.classList.add('flash-card-container', 'container-default');
+            flashcardLink.style.backgroundImage = `url('${BASE_URL}/static/resources/images/flashcardapp/flashcard_backgrounds/${randomImageName}')`;
+            
+            const flashcardBackground = document.createElement('div');
+            flashcardBackground.classList.add('flash-card-background');
+            // flashcardBackground.style.backgroundImage = `url('../static/resources/images/flashcardapp/flashcard_backgrounds/${randomImageName}')`;
+
+            const flashcardDetails = document.createElement('div');
+            flashcardDetails.classList.add('flash-card-details');
+
+            // const cardName = document.createElement('div');
+            // cardName.classList.add('card-name');
+            // cardName.textContent = Name;
+            // cardTopic.appendChild(cardName);
+            
+            const cardTopic = document.createElement('div');
+            cardTopic.classList.add('card-topic');
+            cardTopic.textContent = flashcard.name;
+            
+            const cardTopicLegend = document.createElement('div');
+            cardTopicLegend.classList.add('card-topic-legend');
+            cardTopicLegend.textContent = "Topic"; // Set whatever content you want here
+            cardTopic.appendChild(cardTopicLegend);
+
+            const cardCategory = document.createElement('div');
+            cardCategory.classList.add('card-category');
+            cardCategory.textContent = flashcard.category;
+
+            const cardCategoryLegend = document.createElement('div');
+            cardCategoryLegend.classList.add('card-category-legend');
+            cardCategoryLegend.textContent = "Subject"; // Set whatever content you want here
+            cardCategory.appendChild(cardCategoryLegend);
+
+            const cardCreator = document.createElement('div');
+            cardCreator.classList.add('card-creator');
+            cardCreator.textContent = flashcard.created_by;
+
+            const cardCreatorLegend = document.createElement('div');
+            cardCreatorLegend.classList.add('card-creator-legend');
+            cardCreatorLegend.textContent = "Creator"; // Set whatever content you want here
+            cardCreator.appendChild(cardCreatorLegend);
+
+            const cardHashtags = document.createElement('div');
+            cardHashtags.classList.add('card-hashtags');
+
+            flashcard.hashtags.forEach(tag => {
+                const hashtag = document.createElement('div');
+                hashtag.setAttribute('id', 'card-hashtag');
+                hashtag.textContent = tag;
+                cardHashtags.appendChild(hashtag);
+            });
+
+            flashcardDetails.appendChild(cardTopic);
+            flashcardDetails.appendChild(cardCategory);
+            flashcardDetails.appendChild(cardCreator);
+            flashcardDetails.appendChild(cardHashtags);
+
+            flashcardLink.appendChild(flashcardBackground);
+            flashcardLink.appendChild(flashcardDetails);
+
+            return flashcardLink;
+        }
+
+
+        // Function to display all fetched flashcards
+        function displayAllFlashcards(flashcards) {
+            const flashcardContainer = document.querySelector('.flash-card-catalog-container');
+            flashcardContainer.innerHTML = ''; // Clear existing content
+
+            if (flashcards) {
+                flashcards.forEach(flashcard => {
+                    const flashcardElement = createFlashcardElement(flashcard);
+                    flashcardContainer.appendChild(flashcardElement);
+                });
+            } else {
+                // Handle error case
+                flashcardContainer.textContent = 'Failed to fetch flashcards.';
+            }
+        }
+
+        // Function to handle the response from fetchall_flashcards and display the flashcards
+        async function handleFetchAllFlashcards() {
+            const flashcards = await fetchAllFlashcards();
+            displayAllFlashcards(flashcards);
+        }
+
+        // Call the function to fetch and display all flashcards when the page loads
+        document.addEventListener('DOMContentLoaded', handleFetchAllFlashcards);
+
+    </script>
+    <script>
+        // Function to insert a flashcard
+        async function insertFlashcard(formData) {
+            const url = `/insert-flash-card/{{ user_id }}`;
+            const options = {
+                method: 'POST',
+                body: formData
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error:', error);
+                return null;
+            }
+        }
+
+        // Event listener for link click
+        document.getElementById('submitForm').addEventListener('click', async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(document.getElementById('flashCard-Form'));
+            const response = await insertFlashcard(formData);
+
+            if (response) {
+                if (response.flashcard_id) {
+                    // Flashcard created successfully
+                    alert('Flashcard created successfully with ID: ' + response.flashcard_id);
+                    var flashcardCreator = document.getElementById('flashcard-creator');
+                    flashcardCreator.style.display = 'none';
+                    handleFetchAllFlashcards();
+                } else {
+                    // Error occurred while creating flashcard
+                    alert('Failed to create flashcard: ' + response.message);
+                }
+            } else {
+                // Error occurred while sending request
+                alert('Failed to send request to create flashcard.');
+            }
         });
     </script>
+
+
 </body>
+
 </html>

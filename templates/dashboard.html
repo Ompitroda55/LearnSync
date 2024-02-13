@@ -74,8 +74,8 @@
         </nav>
         <main-content-container>
             <content-container>
-                <div class="heading">Welcome back! {{ user['username'] }}</div>
                 <div class="container-home" id="container-home">
+                    <div class="title-dashboard">Dashboard</div>
                     <div class="container-default home-pomodoro-timer">
                         <div class="container-pomodoro-timer">
                             <div class="heading">Pomodoro Timer</div>
@@ -84,9 +84,9 @@
                                 <div id="time-sec">00</div>
                             </div>
                             <div id="pomo-btns">
-                                <button id="start" class="pomo-btn">Start</button>
-                                <button id="stop" class="pomo-btn">Stop</button>
-                                <button id="reset" class="pomo-btn">Reset</button>
+                                <a id="start" class="link-primary-btn">Start</a>
+                                <a id="stop" class="link-secondary-btn">Stop</a>
+                                <a id="reset" class="link-tertiary-btn">Reset</a>
                             </div>
                         </div>
                         <div class="container-pomodoro-selector">
@@ -106,38 +106,40 @@
                             </form>
                         </div>
                     </div>
-                    <div class="container-social">
-                        <div class="container-friends container-default">
-                            <div class="heading">Friends</div>
-                            <div class="container-add-friend">
-                                <form action="/add-friend/{{ user._id }}" method="post" id="friend-form">
-                                    <input type="text" placeholder="Friend's Username" name="friend-username"
-                                        id="friend-username">
-                                    <button type="submit" id="add-friend-btn">Add</button>
-                                </form>
-                            </div>
-                            <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div>
-                            <div class="container-friends-list" id="container-friends-list">
-
-                            </div>
+                    <div class="container-friends container-default">
+                        <div class="heading">Friends</div>
+                        <div class="container-add-friend">
+                            <form action="/add-friend/{{ user._id }}" method="post" id="friend-form">
+                                <input type="text" placeholder="Friend's Username" name="friend-username"
+                                    id="friend-username">
+                                <button type="submit" class="link-primary" id="add-friend-btn">Add</button>
+                            </form>
                         </div>
-                        <div class="container-groups container-default">
-                            <div class="heading">Groups</div>
+                        <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div>
+                        <div class="container-friends-list" id="container-friends-list">
+
                         </div>
                     </div>
-                    <div class="container-preferences container-default">
-                        <div class="heading">User Preferences</div>
-                        <form action="/update-daily-task" method="post" id="flashCardForm">
-                            <div id="taskFields">
-                                <input type="text" class="task" name="task[]" placeholder="task">
-                            </div>
-                            <a class="link-primary" href="#" id="addFields">Add Task</a>
-                            <button class="link-tertiary" type="submit" id="update-task-btn">Submit</button>
-                        </form>
-                    </div>
-                    <script>
+                    <div class="container-daily-tasks container-default">
 
-                    </script>
+                    </div>
+                    <div class="container-groups container-default">
+                        <div class="heading">Groups</div>
+                    </div>
+                </div>
+                <div class="container-preferences">
+                    <div class="title-dashboard">User Preferences</div>
+                    <form action="/update-daily-task" method="post" id="flashCardForm">
+                        <div id="taskFields">
+                            <input type="text" class="task" name="task[]" placeholder="task">
+                        </div>
+                        <a class="link-primary-btn" href="#" id="addFields">Add Task</a>
+                        <a class="link-secondary-btn" id="update-task-btn">Submit</a>
+                    </form>
+                </div>
+                <script>
+
+                </script>
                 </div>
                 <!-- <div class="container-leaderboard" id="container-leaderboard">
                     <div class="header-leaderboard container-default">
@@ -167,22 +169,62 @@
                         <stat class="stat-value sub-heading" id="hearts-stat"></stat>
                     </div>
                 </div>
-                <div class="notification-container container-default">
-                    <div class="sub-heading">Notifications</div>
-                    <div class="notification-friend-reqs">
-                        <div class="normal-text">Friend Req's</div>
-                        {% for request in requests %}
-                        <div class="notification ">
-                            <div class="notification-from">{{ request.sender }}</div>
-                            <div class="notification-action" id="notification-actions">
-                                <div class="notification-type">{{ request.type }}</div>
-                                <button class="notification-action-btn accept"
-                                    onclick="acceptFriendRequest('{{ request._id }}')">Accept</button>
-                                <button class="notification-action-btn reject"
-                                    onclick="rejectFriendRequest('{{ request._id }}')">Reject</button>
+
+                <div class="daily-tasks-container container-default">
+                    <div class="secondary-heading">Your Daily Tasks</div>
+                    <div class="daily-tasks-show">
+                        <!-- <div class="daily-task">
+                            <div class="daily-task-difficulty">#Important</div>
+                            <div class="daily-task-actions">
+                                <input type="checkbox" name="" id="">
+                            </div>
+                            <div class="daily-task-description">
+                                Task1 taski si njimprot 
                             </div>
                         </div>
-                        {% endfor %}
+                        <div class="daily-task">
+                            <div class="daily-task-difficulty">#Important</div>
+                            <div class="daily-task-actions">
+                                <input type="checkbox" name="" id="">
+                            </div>
+                            <div class="daily-task-description">
+                                Task1 taski si njimprot 
+                            </div>
+                        </div>
+
+                        <div class="daily-task">
+                            <div class="daily-task-difficulty">#Important</div>
+                            <div class="daily-task-actions">
+                                <input type="checkbox" name="" id="">
+                            </div>
+                            <div class="daily-task-description">
+                                Task1 taski si njimprot 
+                            </div>
+                        </div>
+                        <div class="daily-task">
+                            <div class="daily-task-difficulty">#Important</div>
+                            <div class="daily-task-actions">
+                                <input type="checkbox" name="" id="">
+                            </div>
+                            <div class="daily-task-description">
+                                Task1 taski si njimprot 
+                            </div>
+                        </div>
+                        <div class="daily-task">
+                            <div class="daily-task-difficulty">#Important</div>
+                            <div class="daily-task-actions">
+                                <input type="checkbox" name="" id="">
+                            </div>
+                            <div class="daily-task-description">
+                                Task1 taski si njimprot 
+                            </div>
+                        </div> -->
+                        
+                    </div>
+                </div>
+                <div class="notification-container container-default">
+                    <div class="secondary-heading">Notifications</div>
+                    <div class="notification-friend-reqs">
                     </div>
                 </div>
                 <div class="heading" id="homo"></div>
@@ -404,15 +446,15 @@
                 //     otherVariable: otherVariable
                 // };
 
-                const userId = '{{ user._id }}';
-                const requestData = { userId: userId };
+                // const userId = '{{ user._id }}';
+                // const requestData = { userId: userId };
                 // console.log(userId);
-                const response = await fetch('/getUserStats/{{ user._id }}', {
+                const response = await fetch('/getUserStats', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestData)
+                    }
+                    // body: JSON.stringify(requestData)
                 });
                 if (!response.ok) {
                     throw new Error('Failed to fetch user stats');
@@ -476,6 +518,7 @@
 
         async function updateStats() {
             let userStats = getUserStats();
+            console.log(userStats);
             // console.log(getUser());
             let user = await getUser();
 
@@ -515,11 +558,12 @@
                 const notificationElement = document.createElement('div');
                 notificationElement.classList.add('notification');
                 notificationElement.innerHTML = `
-            <div class="notification-from">${request.sender}</div>
-            <div class="notification-action" id="notification-actions">
+            <div class="notification-from">${request.sender}
                 <div class="notification-type">${request.type}</div>
-                <button class="notification-action-btn accept" onclick="acceptFriendRequest('${request._id}')">Accept</button>
-                <button class="notification-action-btn reject" onclick="rejectFriendRequest('${request._id}')">Reject</button>
+                </div>
+                <div class="notification-action" id="notification-actions">
+                    <button class="notification-action-btn accept" onclick="acceptFriendRequest('${request._id}')"><span class="material-symbols-outlined">check</span></button>
+                    <button class="notification-action-btn reject" onclick="rejectFriendRequest('${request._id}')"><span class="material-symbols-outlined">close</span></button>
             </div>`;
                 notificationsContainer.appendChild(notificationElement);
             });

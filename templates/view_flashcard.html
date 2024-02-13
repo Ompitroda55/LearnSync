@@ -12,10 +12,15 @@
     <main>
         <div class="flash-cards-container">
             {% for data in flashcard['flashcard_data'] %}
-            <div class="card">
+            <!-- <div class="card">
                 <div class="heading">{{ data[0] }}</div>
                 <span class="info">i</span>
                 <div class="answer">{{ data[1] }}</div>
+            </div> -->
+            <div class="flash-card">
+                <div class="keyword">{{ data[0] }}</div>
+                <span class="info">i</span>
+                <div class="desc">{{ data[1]}}</div>
             </div>
             {% endfor %}
         </div>

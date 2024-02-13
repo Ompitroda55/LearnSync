@@ -3,8 +3,9 @@
 }
 
 .card {
-    display: grid;
+    display: flex;
     place-items: center;
+
     position: relative;
     min-height: 250px;
     max-width: 400px;
@@ -38,8 +39,13 @@
     opacity: 0;
 }
 
+.card .heading {
+    width: 100%;
+    background-color: black;
+}
+
 .card .answer {
-    display: grid;
+    display: flex;
     place-items: center;
     position: absolute;
     top: 0;
@@ -59,6 +65,7 @@
 .card .answer p {
     color: #033F52;
     font-size: 1.5rem;
+    background-color: yellow;
 }
 
 .card .info:hover+.answer {
@@ -69,5 +76,36 @@
 
 .flash-cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(fit-content, 1fr));;
+    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));;
+}
+
+.card .heading,
+.card .answer {
+    max-width: 100%; /* Limit the maximum width to prevent overflowing */
+    word-wrap: break-word; /* Allow long words to break and wrap onto the next line */
+    overflow-wrap: break-word; /* Alternative property for word wrapping */
+}
+
+/* 
+    Code for flashcard
+*/
+.flash-card {
+    background-color: var(--mask-green);
+    display: flex;
+    min-height: 10svh;
+    width: fit-content;
+    position: relative;
+}
+
+.keyword {
+    /* z-index: -1; */
+    height: 100%;
+    width: 100%;
+    background-color: pink;
+    padding: 64px;
+}
+
+.desc {
+    position: absolute;
 }

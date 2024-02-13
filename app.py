@@ -2,9 +2,13 @@ from datetime import datetime
 from bson.objectid import ObjectId
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, session, url_for
+import secrets
 
 app = Flask(__name__)
+
+app.secret_key = secrets.token_hex(24)
+
 
 class User:
     def __init__(self, userId):
@@ -45,7 +49,12 @@ def createUser(username, password):
         ], 
         "groups": [],
         "friends": [],
-        "dailytasks": []
+        "dailytasks": [
+            {
+                "task":"Daily Quest",
+                "priority":1
+            }
+        ]
     }
 
     new_user = collection.insert_one(new_user)
@@ -63,7 +72,8 @@ def createRequest(from_user, to_user, type):
         "sender": from_user,
         "receiver": to_user,
         "type" : request_types[type],
-        "status": "pending"
+        "status": "pending",
+        "timestamp" : datetime.now()
     }
     new_request = collection.insert_one(new_request)
     # print(new_request)
@@ -158,10 +168,11 @@ def get_requests_for_receiver():
     receiver = fetch_user_by_id(receiver_object_id)
     # print(receiver, "It is receiver")
     requests = list(collection.find({"receiver": receiver['username'], "status": "pending"}))
+    #  requests = list(collection.find({"receiver": receiver['username'], "status": "pending"}).sort([("timestamp_field", -1)]))
     # print(requests)
     for req in requests:
         req['_id'] = str(req['_id'])
-    print(jsonify(requests))
+    # print(jsonify(requests))
     return jsonify(requests)
 
 
@@ -198,9 +209,10 @@ def login():
     collection = db["users"]
     if request.method == 'POST':
         username = request.form.get('username')
-        password = request.form.get('password')
         # print(username, password)
         user = collection.find_one({'username': username})
+        session['username'] = user['username']
+        session['user_id'] = str(user['_id'])
         # requests = get_requests_for_receiver(str(user['_id']))
         # print(requests)
         # print(user)
@@ -216,14 +228,10 @@ def login():
 # 
 # Code For FlashCard Goes Here
 # 
-@app.route('/insert-flash-card/<user_id>', methods=['POST'])
-def insertFlashCard(user_id):
+@app.route('/insert-flash-card/', methods=['POST'])
+def insertFlashCard():
     data = []
-    user = fetch_user_by_id(user_id)
-    if not user:
-        return jsonify({'message': 'User not found'}), 404
-
-    user_name = user['username']
+    username = session.get('username')
     name = request.form['name']
     hashtags = request.form['tags']
     hashtags_list = [f"#{tag.strip()}" if not tag.startswith("#") else tag.strip() for tag in hashtags.split()]
@@ -234,7 +242,7 @@ def insertFlashCard(user_id):
     for i in range(len(min(questions,answers))):
         data.append((questions[i], answers[i]))
 
-    flashcard_id = createFlashCard(name, subject, hashtags_list, data, user_name)
+    flashcard_id = createFlashCard(name, subject, hashtags_list, data, username)
     if flashcard_id:
         return jsonify({'message': 'Flashcard created successfully', 'flashcard_id': str(flashcard_id)}), 200
     else:
@@ -253,8 +261,8 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         user = createUser(username, password)
-        user_id = str(user.inserted_id)
-        user = fetch_user_by_id(user_id)
+        # user_id = str(user.inserted_id)
+        # user = fetch_user_by_id(user_id)
         # print(user)
         return render_template('home_alt.html')
     else:
@@ -276,7 +284,7 @@ def flashCardApp(user_id):
     collection = db["flashcards"]
     flashcards_cursor = collection.find({})
     flashcards = list(flashcards_cursor)
-    print(flashcards)
+    # print(flashcards)
     for flashcard in flashcards:
         flashcard['_id'] = str(flashcard['_id'])
 
@@ -295,22 +303,21 @@ def fetchall_flashcards():
     collection = db["flashcards"]
     flashcards_cursor = collection.find({})
     flashcards = list(flashcards_cursor)
-    print(flashcards)
+    # print(flashcards)
     for flashcard in flashcards:
         flashcard['_id'] = str(flashcard['_id'])
 
     return jsonify(flashcards)
 
-@app.route('/fetch-user-flashcards', methods=['POST'])
-def fetchUserFlashcards():
-    user_id = request.json.get('user_id')
+@app.route('/fetch-user-flashcards/<user_id>', methods=['POST'])
+def fetchUserFlashcards(user_id):
+    # user_id = request.json.get('user_id')
     collection = db["flashcards"]
+    user = fetch_user_by_id(user_id)
+    user_name = user['username']
     # Search for the keyword in the name or category fields using a case-insensitive regular expression
     query = {
-        "$or": [
-            # {"name": {"$regex": keyword, "$options": "i"}},
-            # {"category": {"$regex": keyword, "$options": "i"}}
-        ]
+        "created_by": {"$regex": user_name, "$options": "i"}
     }
     # Fetch all flashcards that match the query
     cursor = collection.find(query)
@@ -318,6 +325,7 @@ def fetchUserFlashcards():
     flashcards = [flashcard for flashcard in cursor]
     for flashcard in flashcards:
         flashcard['_id'] = str(flashcard['_id'])
+    # print(flashcards)
     return jsonify(flashcards)
 
 @app.route('/search_flashcards', methods=['POST'])
@@ -424,12 +432,15 @@ def fetch_user_stats(user_id):
         # Return None if the user is not found
         return None
 
-@app.route('/getUserStats/<userId>', methods=['POST'])
-def getUserStats(userId):
+@app.route('/getUserStats', methods=['POST'])
+def getUserStats():
+    userId = session.get('user_id')
+    print(userId)
     # print(request)
     # user_id = request.form.get('userId')
     user_id = userId
     user_stats = fetch_user_stats(user_id)
+    print(user_stats, "user stats")
     # print(user_id,"Turueueddkdkdkdkue")
     return jsonify(user_stats)
 
@@ -448,12 +459,15 @@ def getUser(userId):
     'friends': user['friends']
 }
     user['_id'] = str(user['_id'])
-    print((user_data))
+    # print((user_data))
     # return user
     return jsonify(user_data)
 
-
-
+#
+#
+#   Everything for groups goes here
+#
+#
 
 
 # 

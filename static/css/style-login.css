@@ -73,13 +73,13 @@ login-overlay > * {
     color: var(--snow);
 }
 
-#close-login {
+/* #close-login {
     position: absolute;
     top: 2svh;
     left: 2svw;
     color: var(--hare) !important;
     background-color: var(--cardinal);
-}
+} */
 
 .form-step {
     display: none;

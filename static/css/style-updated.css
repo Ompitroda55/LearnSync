@@ -15,12 +15,14 @@
 
     /* Secondary Colours */
     --macaw: #1cb0f6;
-    --macaw-mask: #d6f1ffbd;
+    --macaw-mask: #35bcffbd;
+    --macaw-mask-light: #d2f0ffbd;
     --cardinal: #ff4b4b;
     --cardinal-light: #ff2020;
 
     --cardinal-mask: #a82a2a;
     --bee: #ffc800;             /* Secondary Colour */
+    --bee-mask : #ffe176;       /* Masking colour for bee (gold) */
     --fox: #ff9600;
     --beetle: #ce82ff;
     --humpback: #2b70c9;
@@ -48,8 +50,16 @@
 
     /* Links Basic Config */
     --link-radius: 18px;
+    --btn-radius: 8px;
     --border-radius: 16px;
-    --default-border-width: 3px;
+    --default-border-width: 2px;
+
+    /* Colors for Task Difficulty */
+    --diff-lvl-1: #ff7777;
+    --diff-lvl-2: #ffc97d;
+    --diff-lvl-3: #00ff91bd;
+    /* Colors for Task Difficulty */
+
 }
 
 * body {
@@ -82,7 +92,7 @@
 
 .heading {
     font-family: var(--logo-font);
-    font-size: var(--heading-font-size);
+    font-size: var(--logo-font-size);
     font-weight: 800;
     /* color: var(--eel); */
     line-height: 1.5em;
@@ -95,8 +105,17 @@
     font-size: var(--sub-heading-font-size);
     font-weight: 600;
     text-align: center;
-    /* color: var(--eel); */
+    color: var(--eel);
     line-height: 1.5em;
+}
+
+.secondary-heading {
+    font-family: var(--main-font);
+    font-size: var(--sub-heading-font-size);
+    font-weight: 600;
+    text-align: left;
+    color: var(--eel);
+    line-height: 2.5em;
 }
 
 .simple-text {
@@ -134,26 +153,94 @@
 
 }
 
-.link-secondary {
+.link-primary-btn {
     text-decoration: none;
-    padding: 10px;
-    text-align: center;
-    color: var(--macaw);
-    background-color: var(--snow);
+    background-color: var(--feather-green);
+    color: var(--snow);
     font-family: var(--main-font);
-    border-radius: var(--link-radius);
-    box-shadow: 0px 6px 1px var(--hare);
+    padding: 5px;
+    border-radius: var(--btn-radius);
+    box-shadow: 0px 6px 1px var(--feather-green-mask);
+    transition : background-color.2s ease-in-out;
     /* border: 3px solid var(--swan); */
-    transition: background-color .3s ease-in-out;
-    width: 100%;
-    font-size: var(--sub-heading-font-size);
-    max-width: fit-content;
-    min-width: 10svw;
+    /* width: 100%; */
+    text-align: center;
+    font-size: var(--font-for-flash-card);
+    /* max-width: fit-content; */
+    width: fit-content;
+    /* min-width: 10svw; */
 }
 
-.link-secondary:hover {
+.link-primary-btn:hover {
+    background-color: var(--mask-green);
+}
+
+.link-secondary-btn {
+    text-decoration: none;
+    background-color: var(--feather-green);
+    color: var(--snow);
+    font-family: var(--main-font);
+    padding: 5px;
+    border-radius: var(--btn-radius);
+    box-shadow: 0px 6px 1px var(--feather-green-mask);
+    transition : background-color.2s ease-in-out;
+    /* border: 3px solid var(--swan); */
+    /* width: 100%; */
+    text-align: center;
+    font-size: var(--font-for-flash-card);
+    /* max-width: fit-content; */
+    width: fit-content;
+    /* min-width: 10svw; */
+}
+
+.link-primary-btn:hover {
+    background-color: var(--mask-green);
+}
+
+.link-secondary-btn {
+    text-decoration: none;
     background-color: var(--macaw);
     color: var(--snow);
+    font-family: var(--main-font);
+    padding: 5px;
+    border-radius: var(--btn-radius);
+    box-shadow: 0px 6px 1px var(--humpback);
+    transition : background-color.2s ease-in-out;
+    /* border: 3px solid var(--swan); */
+    /* width: 100%; */
+    text-align: center;
+    font-size: var(--font-for-flash-card);
+    /* max-width: fit-content; */
+    width: fit-content;
+    /* min-width: 10svw; */
+}
+
+.link-secondary-btn:hover {
+    background-color: var(--macaw-mask);
+    color: var(--snow);
+}
+
+.link-tertiary-btn {
+    text-decoration: none;
+    background-color: var(--bee);
+    color: var(--snow);
+    font-family: var(--main-font);
+    padding: 5px;
+    border-radius: var(--btn-radius);
+    box-shadow: 0px 6px 1px var(--fox);
+    transition : background-color.2s ease-in-out;
+    /* border: 3px solid var(--swan); */
+    /* width: 100%; */
+    text-align: center;
+    font-size: var(--font-for-flash-card);
+    /* max-width: fit-content; */
+    width: fit-content;
+    /* min-width: 10svw; */
+    color: var(--eel);
+}
+
+.link-tertiary-btn:hover {
+    background-color: var(--bee-mask);
 }
 
 .link-tertiary {
@@ -190,20 +277,7 @@
     background-color: var(--cardinal-light);
 }
 
-input {
-    padding: 10px 0;
-    text-align: left;
-    color: var(--macaw);
-    background-color: var(--snow);
-    font-family: var(--main-font);
-    border-radius: var(--link-radius);
-    box-shadow: 0px 6px 1px var(--hare);
-    border: 1px solid var(--swan);
-    /* width: 100%; */
-    padding: 10px;
-    font-size: var(--normal-font-size);
-    margin-bottom: 10px;
-}
+
 
 .container-default {
     background-color: var(--snow);

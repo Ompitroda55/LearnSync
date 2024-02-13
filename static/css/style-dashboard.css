@@ -69,6 +69,7 @@ nav {
 
 .content-container {
     height: 300vh;
+    background-color: yellow;
 }
 
 .logo {
@@ -76,14 +77,14 @@ nav {
 }
 
 .active {
-    background-color: var(--macaw-mask);
+    background-color: var(--macaw-mask-light);
     color: white;
 }
 
 .active li {
     border-radius: var(--border-radius);
     border: var(--default-border-width) solid var(--macaw);
-    background-color: var(--macaw-mask);
+    background-color: var(--macaw-mask-light);
     color: var(--macaw);
 }
 
@@ -138,16 +139,39 @@ content-container {
     height: 300svh;
     padding: 15px;
     /* background-color: red; */
+
 }
 
 .container-home {
+    /* display: flex;
+    flex-direction: column; */
+    
+    display: grid;
+    grid-template-areas:
+        "title title"
+        "pomodoro pomodoro"
+        "daily-tasks daily-tasks"
+        "friends friends"
+        "groups groups";
+    grid-gap: 10px;
+    /* background-color: red; */
+    /* gap: 15px; */
+}
+
+.title-dashboard {
+    grid-area: title;
     display: flex;
     flex-direction: column;
-    /* background-color: red; */
-    gap: 15px;
+    align-items: center;
+    justify-content: center;
+
+    font-size: var(--logo-font-size);
+    font-style: var(--main-font);
+    color: var(--hare);
 }
 
 .home-pomodoro-timer {
+    grid-area: pomodoro;
     color: var(--eel) !important;
     height: fit-content;
     display: flex;
@@ -196,21 +220,14 @@ content-container {
     padding: 10px;
 }
 
-.container-pomodoro-selector {}
+/* .container-pomodoro-selector {} */
 
 
 /* CSS For Social Container */
-.container-social {
-    display: flex;
-    width: 100%;
-    gap: 15px;
-    flex-direction: row;
-    text-align: center;
-}
-
 /* Code for Friends panel */
 
 .container-friends {
+    grid-area: friends;
     flex: 1;
     max-height: 50svh;
 }
@@ -227,20 +244,42 @@ content-container {
 
 #friend-form {
     all: unset;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+#add-friend-btn {
+    all: unset;
+    background-color: var(--feather-green);
+    border-radius: var(--border-radius);
+    padding: 5px;
+    color: var(--snow);
+}
+
+#friend-username {
+    width: fit-content;
 }
 
 /* Code for Groups panel */
 
 .container-groups {
     flex: 1;
+    grid-area: groups;
+
+}
+
+.container-daily-tasks {
+    grid-area: daily-tasks;
 }
 
 
 extras-container {
     display: flex;
     flex-direction: column;
-    height: 120svh;
-    padding: 15px;
+    /* height: 120svh; */
+    gap: 15px;
+    padding-right: 15px;
     /* background-color: yellow; */
     bottom: 0;
     position: sticky;
@@ -266,17 +305,8 @@ extras-container {
     position: relative;
 }
 
-.stat-data {
-    display: none;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    z-index: 1;
-
-}
-
 .stat-value {
-    font-size: 1svw;
+    font-size: var(--font-for-flash-card);
 }
 
 .stat:hover {
@@ -290,7 +320,7 @@ extras-container {
 }
 
 .stat-icon {
-    height: 1.5svw;
+    height: 32px;
 }
 
 /* Everything for Flash Cards goes here... */
@@ -336,34 +366,57 @@ extras-container {
 }
 
 .notification-friend-reqs {
-    background-color: var(--foot-green);
+    /* background-color: var(--foot-green); */
     padding: 5px;
+    max-height: 20svh;
+    min-height: fit-content;
+    overflow-y: auto;
 }
+
 
 .notification {
     background-color: var(--snow);
     border-radius: var(--border-radius);
-    padding: 5px;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
-    flex-direction: column;
+    flex-direction: row;
+    margin-bottom: 5px;
+    background-color: var(--polar);
 }
 
 .notification-action {
-    display: none;
-    /* other styles */
-    transition: display 1s ease; /* Smooth transition effect */
-}
-
-.notification-action.show {
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
 }
 
-.notification-action-btn-accept, .notification-action-btn-reject {
+.notification-action-btn {
     all: unset;
-    
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    color: var(--snow);
+    border-radius: 100%;
+    height: fit-content;
+}
+
+.material-symbols-outlined {
+    font-size: var(--font-for-flash-card);
+}
+
+.accept {
+    background-color: var(--feather-green);
+}
+
+.reject {
+    background-color: var(--cardinal);
+}
+
+.notification-type {
+    font-size: var(--less-imp-font-size);
+    color: var(--wolf);
 }
 
 
@@ -384,4 +437,64 @@ extras-container {
 
 .degree{
     color: var(--feather-green);
+}
+
+/* 
+    All CSS for tasks
+*/
+.daily-tasks-container {
+    display: flex;
+    flex-direction: column;
+    color: var(--eel);
+
+}
+
+.daily-task-show {
+    display: flex;
+    flex-direction: column;
+    height: 20vh;
+    background-color: black;
+    overflow-y: auto;
+}
+
+.daily-task {
+    background-color: var(--snow);
+    border-radius: var(--border-radius);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-bottom: 15px;
+    background-color: var(--polar);
+    position: relative;
+}
+
+.daily-task-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.daily-task-difficulty {
+    position: absolute;
+    top: -20%;
+    right: 5%; 
+    display: flex;
+    font-size: 8px;
+    text-transform: uppercase;
+    font-weight: 1200;
+    border-radius: var(--border-radius);
+    background-color: var(--diff-lvl-3);
+    padding: 2px;
+    letter-spacing: 1px;
+    align-items: center;
+}
+
+.daily-task-description {
+    display: flex;
+    max-width: 80%;
+    flex-direction: column;
+    align-items: flex-end;
+    overflow: auto;
+    text-align: right;
 }

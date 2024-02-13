@@ -21,16 +21,31 @@
     <main>
         <div class="user-created-flashcards">
             <div class="heading">Your Flash Cards:</div>
+            <div class="user-flash-card-catalog-container">
+
+
+            </div>
         </div>
-        <div class="flash-card-catalog-container">
+        <div class="all-created-flashcards">
+            <div class="nav-all-flashcards">
+                <div class="heading">Flash Cards</div>
+                <form action="">
+                    <input type="search" name="" id="">
+                    <button type="submit" id="fc-search-btn"></button>
+                </form>
+                
+            </div>
 
-
+            <div class="flash-card-catalog-container">
+    
+    
+            </div>
         </div>
     </main>
     <div class="flashcard-creator" id="flashcard-creator">
         <div class="link-primary close-button" id="close-button">Close</div>
         <div class="heading">FlashCards Creator</div>
-        <form action="/insert-flash-card/{{ user_id }}" method="post" id="flashCard-Form">
+        <form action="/insert-flash-card" method="post" id="flashCard-Form">
             <div id="card-info-fields">
                 <input type="text" class="name" name="name" placeholder="Name" required>
                 <input type="text" class="subject" name="subject" placeholder="Subject" required>
@@ -134,7 +149,7 @@
             flashcardLink.setAttribute('href', `/flashcard/${flashcard._id}`);
             
             // Generate a random number between 0 and 20 to select a random background image
-            const randomImageNumber = Math.floor(Math.random() * 16); // 21 is exclusive upper bound
+            const randomImageNumber = Math.floor(Math.random() * 19); // 21 is exclusive upper bound
             const randomImageName = `Designer${randomImageNumber}.jpeg`; // Assuming the images have .jpg extension
             console.log(randomImageName);
             // Set the background image using inline CSS
@@ -227,13 +242,29 @@
         }
 
         // Call the function to fetch and display all flashcards when the page loads
-        document.addEventListener('DOMContentLoaded', handleFetchAllFlashcards);
 
-    </script>
-    <script>
+
         // Function to insert a flashcard
+        async function fetchUserFlashcards() {
+            const url = '/fetch-user-flashcards/{{ user_id }}';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            try {
+                const response = await fetch(url, options);
+                return await response.json();
+            } catch (error) {
+                console.error('Error:', error);
+                return null;
+            }
+        }
+
         async function insertFlashcard(formData) {
-            const url = `/insert-flash-card/{{ user_id }}`;
+            const url = `/insert-flash-card`;
             const options = {
                 method: 'POST',
                 body: formData
@@ -272,6 +303,29 @@
                 alert('Failed to send request to create flashcard.');
             }
         });
+
+        function displayUserFlashcards(flashcards) {
+            const flashcardContainer = document.querySelector('.user-flash-card-catalog-container');
+            flashcardContainer.innerHTML = ''; // Clear existing content
+
+            if (flashcards) {
+                flashcards.forEach(flashcard => {
+                    const flashcardElement = createFlashcardElement(flashcard);
+                    flashcardContainer.appendChild(flashcardElement);
+                });
+            } else {
+                // Handle error case
+                flashcardContainer.textContent = 'Failed to fetch flashcards.';
+            }
+        }
+
+        async function handleFetchUserFlashcards() {
+            const flashcards = await fetchUserFlashcards();
+            displayUserFlashcards(flashcards);
+        }
+
+        document.addEventListener('DOMContentLoaded', handleFetchAllFlashcards);
+        document.addEventListener('DOMContentLoaded', handleFetchUserFlashcards);
     </script>
 
 

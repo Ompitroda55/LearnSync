@@ -45,11 +45,20 @@ main {
 
 /* Flash card container */
 
-.flash-card-catalog-container {
+.user-created-flashcards {
+    padding: 15px;
+}
+
+.all-created-flashcards {
+    padding: 15px;
+}
+
+
+.flash-card-catalog-container, .user-flash-card-catalog-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 15px;
-    margin: 15px;
+    /* margin: 15px; */
     justify-items: center;
     /* background-color: black; */
 }
@@ -182,10 +191,11 @@ main {
 
 #card-hashtag {
     background-color: var(--polar);
-    border-radius: var(--border-radius);
-    font-weight: 600;
+    border-radius: var(--btn-radius);
+    /* font-weight: 600; */
+    color: var(--eel);
     /* height: 20px; */
-    padding: 5px ;
+    padding: 3px ;
 }
 
 .card-hashtags::-webkit-scrollbar {
@@ -325,4 +335,10 @@ input {
     position: absolute;
     top: 20px;
     left: 20px;
+}
+
+.nav-all-flashcards {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

@@ -129,17 +129,24 @@
                 </div>
                 <div class="container-preferences">
                     <div class="title-dashboard">User Preferences</div>
-                    <form action="/update-daily-task" method="post" id="flashCardForm">
-                        <div id="taskFields">
-                            <input type="text" class="task" name="task[]" placeholder="task">
-                        </div>
-                        <a class="link-primary-btn" href="#" id="addFields">Add Task</a>
-                        <a class="link-secondary-btn" id="update-task-btn">Submit</a>
-                    </form>
+                    <div class="user-daily-tasks container-default">
+                        <form action="/update-daily-task" method="post" id="flashCardForm">
+                            <div id="taskFields">
+                                <input type="text" class="task" name="task[]" placeholder="task">
+                            </div>
+                            <a class="link-primary-btn" href="#" id="addFields">Add Task</a>
+                            <a class="link-secondary-btn" id="update-task-btn">Submit</a>
+                        </form>
+                    </div>
+                    <div class="user-pomodoro-sequences container-default">
+                        <form action="" method="post" id="user-pomodoro-form">
+                            <div class="user-pomodoro-form-sequence">
+                                <span class="secondary-heading">sequences</span>
+                                <input type="text" name="" id="">
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <script>
-
-                </script>
                 </div>
                 <!-- <div class="container-leaderboard" id="container-leaderboard">
                     <div class="header-leaderboard container-default">
@@ -219,7 +226,7 @@
                                 Task1 taski si njimprot 
                             </div>
                         </div> -->
-                        
+
                     </div>
                 </div>
                 <div class="notification-container container-default">
@@ -245,12 +252,41 @@
             event.currentTarget.classList.add('active');
         }
 
+
         // Script for Pomodoro
         const timeDisplayMin = document.getElementById('time-min');
         const timeDisplaySec = document.getElementById('time-sec');
         const startButton = document.getElementById('start');
         const stopButton = document.getElementById('stop');
         const resetButton = document.getElementById('reset');
+        let user_sequences;
+
+        async function initializeUser() {
+            try {
+                let user = await getUser(); // Assuming getUser is an asynchronous function
+
+                // Your code that uses the user object goes here
+                // For example:
+                userSequences = user.pomodoro_sequences;
+                console.log("user sequences", userSequences);
+                // userSequences = [
+                //     [25, 5, 25, 5, 25, 30],
+                //     [60, 10, 60, 10, 60, 30],
+                //     [55, 15, 45, 10, 30, 60]
+                // ]
+                // console.log(userSequences[1] + "Thsi si is is is isi si ");
+                
+                return userSequences;
+                
+                // Now you can use the user object and its properties
+                // Start your timer or perform any other operations based on the user data
+            } catch (error) {
+                console.error('Error initializing user:', error);
+            }
+        }
+        
+        user_sequences = initializeUser();
+        document.getElementById('homo').textContent = "Seq()" + user_sequences[0];
 
         let isWorkTime = true;
         let secondsLeft;
@@ -518,11 +554,10 @@
 
         async function updateStats() {
             let userStats = getUserStats();
-            console.log(userStats);
+            // console.log(userStats);
             // console.log(getUser());
             let user = await getUser();
 
-            document.getElementById('homo').textContent = "Om " + user.password;
             // console.log(user);
             // user.then((data) => {
             //     console.log(data)
@@ -551,7 +586,7 @@
 
             // Updating Notifications
             const friendRequests = await getFriendRequests(user._id);
-            console.log(friendRequests);
+            // console.log(friendRequests);
             const notificationsContainer = document.querySelector('.notification-friend-reqs');
             notificationsContainer.innerHTML = ''; // Clear previous notifications
             friendRequests.forEach(request => {

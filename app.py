@@ -1,4 +1,5 @@
 from datetime import datetime
+import bcrypt
 from bson.objectid import ObjectId
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -37,9 +38,12 @@ db = client["LearnSyncDatabase"]
 def createUser(username, password):
     collection = db["users"]
     
+    # Hash the password
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
     new_user = {
         "username": username,
-        "password": password,
+        "password": hashed_password,
         "stats": [
             {
                 "streaks":0,
@@ -54,6 +58,11 @@ def createUser(username, password):
                 "task":"Daily Quest",
                 "priority":1
             }
+        ],
+        "pomodoro_sequences":[
+            [25,5,25,5,25,30],
+            [60,10,60,10,60,30],
+            [75,15,45,10,30,60]
         ]
     }
 
@@ -109,10 +118,15 @@ def checkCredentials():
     user = collection.find_one({'username': username})
     # print(user['password'])
     if user:
-        if password == user['password']:
+        hashed_password = user['password']
+        if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
             return jsonify({'message': 'Valid Creds'}), 200
         else:
             return jsonify({'message': 'Incorrect Password'}), 400
+        # if password == user['password']:
+        #     return jsonify({'message': 'Valid Creds'}), 200
+        # else:
+        #     return jsonify({'message': 'Incorrect Password'}), 400
   
     else:
         return jsonify({'message': 'Username not available'}), 400
@@ -456,12 +470,15 @@ def getUser(userId):
     'password': 'protected',
     'stats': [{'streaks': user['stats'][0]['streaks'], 'gems': user['stats'][0]['gems'], 'hearts': user['stats'][0]['hearts']}],
     'groups': user['groups'],
-    'friends': user['friends']
+    'friends': user['friends'],
+    'pomodoro_sequences': user['pomodoro_sequences']
 }
     user['_id'] = str(user['_id'])
     # print((user_data))
     # return user
-    return jsonify(user_data)
+    print(user)
+    user['password'] = user['password'].decode('utf-8')
+    return jsonify(user)
 
 #
 #
@@ -474,4 +491,4 @@ def getUser(userId):
 # Main() function of app
 # 
 if __name__ == '__main__':
-    app.run(debug=True, port=8888)
+    app.run(debug=False, port=8888)

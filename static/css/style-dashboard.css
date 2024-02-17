@@ -176,6 +176,7 @@ content-container {
     height: fit-content;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .container-pomodoro-timer {
@@ -220,8 +221,25 @@ content-container {
     padding: 10px;
 }
 
-/* .container-pomodoro-selector {} */
+.container-pomodoro-selector {
+    display: flex;
+    flex-direction: column;
+    /* background-color: yellow; */
+    justify-content: center;
+    align-items: flex-start;
+}
 
+.pomodoro-selector {
+    margin-bottom: 10px;
+    background-color: var(--macaw);
+    border-radius: var(--border-radius);
+    padding: 5px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
 
 /* CSS For Social Container */
 /* Code for Friends panel */
@@ -281,8 +299,8 @@ extras-container {
     gap: 15px;
     padding-right: 15px;
     /* background-color: yellow; */
-    bottom: 0;
-    position: sticky;
+    /* position: fixed; */
+    /* bottom: 0; */
 }
 
 .stats-container {
@@ -484,7 +502,7 @@ extras-container {
     text-transform: uppercase;
     font-weight: 1200;
     border-radius: var(--border-radius);
-    background-color: var(--diff-lvl-3);
+    background-color: var(--diff-lvl-2);
     padding: 2px;
     letter-spacing: 1px;
     align-items: center;

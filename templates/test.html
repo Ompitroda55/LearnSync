@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timer Sound Test</title>
+</head>
+<body>
+
+<audio id="timer-sound">
+    <source src="../static/resources/sounds/pomodoro_timer/sound_1.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<button id="playButton">Play Timer Sound</button>
+
+<script>
+const playButton = document.getElementById('playButton');
+const timerSound = document.getElementById('timer-sound');
+
+playButton.addEventListener('click', function() {
+    timerSound.play();
+});
+</script>
+
+</body>
+</html>

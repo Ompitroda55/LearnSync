@@ -89,22 +89,24 @@
                                 <a id="reset" class="link-tertiary-btn">Reset</a>
                             </div>
                         </div>
-                        <div class="container-pomodoro-selector">
-                            <form>
-                                <label>
-                                    <input type="radio" name="time_opt" data-option="0" value="1" checked>
-                                    Time N-N
-                                </label>
-                                <label>
-                                    <input type="radio" name="time_opt" data-option="1" value="2">
-                                    Time N-N
-                                </label>
-                                <label>
-                                    <input type="radio" name="time_opt" data-option="2" value="3">
-                                    Time N-N
-                                </label>
-                            </form>
-                        </div>
+                        <form class="container-pomodoro-selector">
+                            <div class="pomodoro-selector">
+                                <input type="radio" name="time_opt" data-option="0" value="1" checked>
+                                Timer N-N
+                            </div>
+                            <div class="pomodoro-selector">
+                                <input type="radio" name="time_opt" data-option="1" value="2">
+                                Time N-N
+                            </div>
+                            <div class="pomodoro-selector">
+                                <input type="radio" name="time_opt" data-option="2" value="3">
+                                Time N-N
+                            </div>
+                        </form>
+                        <audio id="timer-sound">
+                            <source src="../static/resources/sounds/pomodoro_timer/sound_1.mp3" type="audio/mp3">
+                            Your browser does not support the audio element.
+                        </audio>
                     </div>
                     <div class="container-friends container-default">
                         <div class="heading">Friends</div>
@@ -180,13 +182,13 @@
                 <div class="daily-tasks-container container-default">
                     <div class="secondary-heading">Your Daily Tasks</div>
                     <div class="daily-tasks-show">
-                        <!-- <div class="daily-task">
+                        <div class="daily-task">
                             <div class="daily-task-difficulty">#Important</div>
                             <div class="daily-task-actions">
                                 <input type="checkbox" name="" id="">
                             </div>
                             <div class="daily-task-description">
-                                Task1 taski si njimprot 
+                                Task1 taski si njimprot
                             </div>
                         </div>
                         <div class="daily-task">
@@ -195,17 +197,17 @@
                                 <input type="checkbox" name="" id="">
                             </div>
                             <div class="daily-task-description">
-                                Task1 taski si njimprot 
+                                Task1 taski si njimprot
                             </div>
                         </div>
 
                         <div class="daily-task">
-                            <div class="daily-task-difficulty">#Important</div>
+                            <div class="daily-task-difficulty">No No nO</div>
                             <div class="daily-task-actions">
                                 <input type="checkbox" name="" id="">
                             </div>
                             <div class="daily-task-description">
-                                Task1 taski si njimprot 
+                                Task1 taski si njimprot
                             </div>
                         </div>
                         <div class="daily-task">
@@ -214,7 +216,7 @@
                                 <input type="checkbox" name="" id="">
                             </div>
                             <div class="daily-task-description">
-                                Task1 taski si njimprot 
+                                Task1 taski si njimprot
                             </div>
                         </div>
                         <div class="daily-task">
@@ -223,9 +225,9 @@
                                 <input type="checkbox" name="" id="">
                             </div>
                             <div class="daily-task-description">
-                                Task1 taski si njimprot 
+                                Task1 taski si njimprot
                             </div>
-                        </div> -->
+                        </div>
 
                     </div>
                 </div>
@@ -261,37 +263,96 @@
         const resetButton = document.getElementById('reset');
         let user_sequences;
 
-        async function initializeUser() {
+        async function initializeUserSequences() {
             try {
                 let user = await getUser(); // Assuming getUser is an asynchronous function
 
                 // Your code that uses the user object goes here
                 // For example:
                 userSequences = user.pomodoro_sequences;
-                console.log("user sequences", userSequences);
+                // console.log("user sequences", userSequences);
                 // userSequences = [
                 //     [25, 5, 25, 5, 25, 30],
                 //     [60, 10, 60, 10, 60, 30],
                 //     [55, 15, 45, 10, 30, 60]
                 // ]
                 // console.log(userSequences[1] + "Thsi si is is is isi si ");
-                
+
                 return userSequences;
-                
+
                 // Now you can use the user object and its properties
                 // Start your timer or perform any other operations based on the user data
             } catch (error) {
                 console.error('Error initializing user:', error);
             }
         }
-        
-        user_sequences = initializeUser();
-        document.getElementById('homo').textContent = "Seq()" + user_sequences[0];
+
+
+
+        // user_sequences.then(result => {
+        //     // Iterate over each array in the result
+        //     result.forEach((sequence, index) => {
+        //         console.log(`Sequence ${index + 1}:`, sequence);
+        //         // Access elements of each sequence array
+        //         sequence.forEach((element, subIndex) => {
+        //             console.log(`Element ${subIndex + 1}:`, element);
+        //         }); 
+        //     });
+        // });
+        // console.log("user sequences", user_sequences);
 
         let isWorkTime = true;
         let secondsLeft;
         let timerInterval;
+        let sequencesLength;
+        let timeSequence;
+        let sequenceIndex = 0;
 
+        function updateSequences() {
+            user_sequences = initializeUserSequences();
+            user_sequences.then(result => {
+                sequencesLength = result.length;
+                user_sequences = result;
+                // document.getElementById('homo').textContent = result[1][sequenceIndex];
+                generatePomodoroSelectors();
+            });
+        }
+
+        
+        function generatePomodoroSelectors() {
+            const pomodoroSelectorContainer = document.querySelector('.container-pomodoro-selector');
+            
+            // Clear any existing pomodoro selector elements
+            pomodoroSelectorContainer.innerHTML = '';
+            
+            // Loop through the number of sequences and generate radio buttons
+            for (let i = 0; i < sequencesLength; i++) {
+                const sequenceIndex = i;
+                const pomodoroSelectorDiv = document.createElement('div');
+                pomodoroSelectorDiv.classList.add('pomodoro-selector');
+                pomodoroSelectorDiv.innerHTML = `
+                <input type="radio" name="time_opt" data-option="${sequenceIndex}" value="${sequenceIndex + 1}">
+                Timer ${sequenceIndex + 1} - ${user_sequences[sequenceIndex].join('-')}
+                `;
+                
+                // Add event listener to set the time sequence when a radio button is clicked
+                const radioButton = pomodoroSelectorDiv.querySelector('input[type="radio"]');
+                radioButton.addEventListener('click', function () {
+                    const selectedOption = parseInt(this.dataset.option);
+                    timeSequence = user_sequences[selectedOption];
+                    timeDisplayMin.textContent = `${timeSequence[0].toString().padStart(2, '0')}`;
+                    // timeDisplaySec.textContent = `${seconds.toString().padStart(2, '0')}`;
+                    console.log('Selected time sequence:', timeSequence);
+                });
+                
+                pomodoroSelectorContainer.appendChild(pomodoroSelectorDiv);
+            }
+        }
+        
+        // Call the function to generate pomodoro selectors when the page loads
+        
+        
+        updateSequences();
         function updateTime() {
             const minutes = Math.floor(secondsLeft / 60);
             const seconds = secondsLeft % 60;
@@ -299,27 +360,66 @@
             timeDisplaySec.textContent = `${seconds.toString().padStart(2, '0')}`;
         }
 
+        // function startTimer() {
+        //     startButton.disabled = true;
+        //     stopButton.disabled = false;
+        //     resetButton.disabled = false;
+        //     const startTime = new Date().getTime();
+        //     const endTime = startTime + (secondsLeft * 1000);
+        //     localStorage.setItem('endTime', endTime);
+        //     timerInterval = setInterval(() => {
+        //         const now = new Date().getTime();
+        //         secondsLeft = Math.round((endTime - now) / 1000);
+        //         updateTime();
+        //         if (secondsLeft <= 0) {
+        //             clearInterval(timerInterval);
+        //             if (isWorkTime) {
+        //                 secondsLeft = 300; // 5 minutes break
+        //                 isWorkTime = false;
+        //             } else {
+        //                 secondsLeft = 1500; // 25 minutes work time
+        //                 isWorkTime = true;
+        //             }
+        //             localStorage.removeItem('endTime');
+        //             startButton.disabled = false;
+        //             stopButton.disabled = true;
+        //         }
+        //     }, 1000);
+        // }
+
         function startTimer() {
             startButton.disabled = true;
             stopButton.disabled = false;
             resetButton.disabled = false;
             const startTime = new Date().getTime();
-            const endTime = startTime + (secondsLeft * 1000);
+            // sequenceIndex = 0; // Initialize index for the time sequence
+            const endTime = startTime + (timeSequence[sequenceIndex] * 60 * 1000); // Use the first value in the sequence
             localStorage.setItem('endTime', endTime);
             timerInterval = setInterval(() => {
                 const now = new Date().getTime();
                 secondsLeft = Math.round((endTime - now) / 1000);
                 updateTime();
+
+                if (secondsLeft <= 0) {
+                    const timerSound = document.getElementById('timer-sound');
+                    timerSound.play();
+                    console.log('timerSound played!');
+                }
+
                 if (secondsLeft <= 0) {
                     clearInterval(timerInterval);
-                    if (isWorkTime) {
-                        secondsLeft = 300; // 5 minutes break
-                        isWorkTime = false;
-                    } else {
-                        secondsLeft = 1500; // 25 minutes work time
-                        isWorkTime = true;
+                    // Move to the next value in the time sequence
+                    sequenceIndex++;
+                    timeDisplayMin.textContent = `${timeSequence[sequenceIndex].toString().padStart(2, '0')}`;
+
+                    // Check if we have reached the end of the sequence
+                    if (sequenceIndex >= timeSequence.length) {
+                        // Reset index to start from the beginning of the sequence
+                        sequenceIndex = 0;
                     }
-                    localStorage.removeItem('endTime');
+                    // Calculate endTime using the next value in the sequence
+                    endTime = now + (timeSequence[sequenceIndex] * 1000);
+                    localStorage.setItem('endTime', endTime);
                     startButton.disabled = false;
                     stopButton.disabled = true;
                 }
@@ -331,10 +431,15 @@
             startButton.disabled = false;
             stopButton.disabled = true;
         }
+        
         function resetTimer() {
             clearInterval(timerInterval);
             isWorkTime = true;
-            secondsLeft = 1500; // Reset to 25 minutes work time
+            const endTime = startTime + (timeSequence[sequenceIndex] * 60 * 1000);
+            sequenceIndex = 0;
+            const now = new Date().getTime();
+            secondsLeft = Math.round((endTime - now) / 1000);
+            // secondsLeft = 1500; // Reset to 25 minutes work time
             updateTime();
             localStorage.removeItem('endTime');
             startButton.disabled = false;
@@ -471,6 +576,9 @@
             var newTaskField = document.createElement('div');
             newTaskField.innerHTML = `
                         <input type="text" class="task" name="task[]" placeholder="Question">
+                        <input type="radio" value="Tomohawh">TOTO</input>
+                        <input type="radio" value="Mahaw">MAHAW</input>
+
                     `;
             taskFields.appendChild(newTaskField);
         });

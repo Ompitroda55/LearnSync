@@ -56,13 +56,14 @@ def createUser(username, password):
         "dailytasks": [
             {
                 "task":"Daily Quest",
-                "priority":1
+                "priority":1,
+                "completed":0
             }
         ],
         "pomodoro_sequences":[
-            [25,5,25,5,25,30],
-            [60,10,60,10,60,30],
-            [75,15,45,10,30,60]
+            [25.0,5.0,25.0,5.0,25.0,30.0],
+            [60.0,10.0,60.0,10.0,60.0,30.0],
+            [75.0,15.0,45.0,10.0,30.0,60.0]
         ]
     }
 
@@ -472,7 +473,8 @@ def getUser(userId):
     'groups': user['groups'],
     'friends': user['friends'],
     'pomodoro_sequences': user['pomodoro_sequences']
-}
+    }
+
     user['_id'] = str(user['_id'])
     # print((user_data))
     # return user
@@ -491,4 +493,4 @@ def getUser(userId):
 # Main() function of app
 # 
 if __name__ == '__main__':
-    app.run(debug=False, port=8888)
+    app.run(debug=True, port=8888)

@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&family=Satisfy&family=Varela+Round&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0');
 :root {
 
     /* Core Colours */
@@ -153,29 +153,9 @@
 
 }
 
+
+
 .link-primary-btn {
-    text-decoration: none;
-    background-color: var(--feather-green);
-    color: var(--snow);
-    font-family: var(--main-font);
-    padding: 5px;
-    border-radius: var(--btn-radius);
-    box-shadow: 0px 6px 1px var(--feather-green-mask);
-    transition : background-color.2s ease-in-out;
-    /* border: 3px solid var(--swan); */
-    /* width: 100%; */
-    text-align: center;
-    font-size: var(--font-for-flash-card);
-    /* max-width: fit-content; */
-    width: fit-content;
-    /* min-width: 10svw; */
-}
-
-.link-primary-btn:hover {
-    background-color: var(--mask-green);
-}
-
-.link-secondary-btn {
     text-decoration: none;
     background-color: var(--feather-green);
     color: var(--snow);
@@ -241,6 +221,10 @@
 
 .link-tertiary-btn:hover {
     background-color: var(--bee-mask);
+}
+
+.link-primary-btn, .link-secondary-btn, .link-tertiary-btn :hover{
+    cursor: pointer;
 }
 
 .link-tertiary {

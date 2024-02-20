@@ -57,7 +57,8 @@ def createUser(username, password):
             {
                 "task":"Daily Quest",
                 "priority":1,
-                "completed":0
+                "completed":0,
+                "lastupdate":datetime.now()
             }
         ],
         "pomodoro_sequences":[

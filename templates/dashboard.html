@@ -144,8 +144,10 @@
                         <form action="" method="post" id="user-pomodoro-form">
                             <div class="user-pomodoro-form-sequence">
                                 <span class="secondary-heading">sequences</span>
-                                <input type="text" name="" id="">
+                                <input type="text" name="" id="" required>
                             </div>
+                            <a class="link-primary-btn" href="#" id="addSequence">Add Sequence</a>
+                            <a class="link-secondary-btn" id="update-sequence-btn">Update</a>
                         </form>
                     </div>
                 </div>
@@ -266,10 +268,11 @@
         async function initializeUserSequences() {
             try {
                 let user = await getUser(); // Assuming getUser is an asynchronous function
-
+                // console.log(user.username);
                 // Your code that uses the user object goes here
                 // For example:
                 userSequences = user.pomodoro_sequences;
+                console.log("user sequences", userSequences);
                 // console.log("user sequences", userSequences);
                 // userSequences = [
                 //     [25, 5, 25, 5, 25, 30],
@@ -277,7 +280,6 @@
                 //     [55, 15, 45, 10, 30, 60]
                 // ]
                 // console.log(userSequences[1] + "Thsi si is is is isi si ");
-
                 return userSequences;
 
                 // Now you can use the user object and its properties
@@ -305,26 +307,110 @@
         let secondsLeft;
         let timerInterval;
         let sequencesLength;
-        let timeSequence;
+        let timeSequence = [25, 5];
         let sequenceIndex = 0;
 
-        function updateSequences() {
-            user_sequences = initializeUserSequences();
-            user_sequences.then(result => {
-                sequencesLength = result.length;
-                user_sequences = result;
-                // document.getElementById('homo').textContent = result[1][sequenceIndex];
-                generatePomodoroSelectors();
+        async function updateSequences() {
+            user_sequences = await initializeUserSequences();
+            sequencesLength = user_sequences.length;
+            // console.log("sequences length", sequencesLength);
+            // console.log(user_sequences[0]);
+            // user_sequences.then(result => {
+            //     user_sequences = result;
+            //     // document.getElementById('homo').textContent = result[1][sequenceIndex];
+            // });
+            generateSequenceFields();
+            generatePomodoroSelectors();
+        }
+
+        // function updateSequences() {
+        //     try {
+        //         user_sequences = initializeUserSequences();
+        //         sequencesLength = user_sequences.length;
+        //         // user_sequences = result;
+        //         // user_sequences.then(result => {
+        //         //     sequencesLength = result.length;
+        //         //     // document.getElementById('homo').textContent = result[1][sequenceIndex];
+
+        //         //     // generateSequenceFields();
+        //         // });
+        //         generatePomodoroSelectors();
+        //         generateSequenceFields();
+        //     } catch (error) {
+        //         console.error('Error updating sequences:', error);
+        //     }
+        // }
+
+        function generateSequenceFields() {
+            const container = document.querySelector('.user-pomodoro-form-sequence');
+            container.innerHTML = ''; // Clear existing fields
+
+            // Loop through the user_sequences and generate input fields
+            user_sequences.forEach((sequence, index) => {
+                const sequenceInput = document.createElement('input');
+                sequenceInput.type = 'text';
+                sequenceInput.name = `sequence[]`; // Set unique name for each input field
+                sequenceInput.value = sequence.join(', '); // Populate input field with sequence data
+                container.appendChild(sequenceInput); // Append input field to container
             });
         }
 
-        
+        const addSequenceLink = document.getElementById('addSequence');
+        addSequenceLink.addEventListener('click', function (event) {
+            event.preventDefault();
+            const container = document.querySelector('.user-pomodoro-form-sequence');
+            const sequenceInput = document.createElement('input');
+            sequenceInput.type = 'text';
+            sequenceInput.name = `sequence[]`; // Set unique name for each input field
+            container.appendChild(sequenceInput); // Append input field to container
+        });
+
+        async function updateUserSequence(formData) {
+            const url = `/update-user-sequences`;
+            const options = {
+                method: 'POST',
+                body: formData
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error:', error);
+                return null;
+            }
+        }
+
+        // Add event listener to "Update" link to send POST request to /update-user-sequences
+        // const updateSequenceBtn = document.getElementById('update-sequence-btn');
+        document.getElementById('update-sequence-btn').addEventListener('click', async function (event) {
+            event.preventDefault();
+            const formData = new FormData(document.getElementById('user-pomodoro-form'));
+            const response = await updateUserSequence(formData);
+            console.log(formData, "This is form data");
+
+            // Convert FormData to object
+            // const sequences = {};
+            // for (const [key, value] of formData.entries()) {
+            //     sequences[key] = value.split(',').map(Number); // Convert string to array of numbers
+            // }
+
+            // console.log(sequences);
+
+            // Send POST request to /update-user-sequences
+            
+        });
+        // 
+        // 
+        // 
+
         function generatePomodoroSelectors() {
             const pomodoroSelectorContainer = document.querySelector('.container-pomodoro-selector');
-            
+
             // Clear any existing pomodoro selector elements
             pomodoroSelectorContainer.innerHTML = '';
-            
+
             // Loop through the number of sequences and generate radio buttons
             for (let i = 0; i < sequencesLength; i++) {
                 const sequenceIndex = i;
@@ -334,7 +420,7 @@
                 <input type="radio" name="time_opt" data-option="${sequenceIndex}" value="${sequenceIndex + 1}">
                 Timer ${sequenceIndex + 1} - ${user_sequences[sequenceIndex].join('-')}
                 `;
-                
+
                 // Add event listener to set the time sequence when a radio button is clicked
                 const radioButton = pomodoroSelectorDiv.querySelector('input[type="radio"]');
                 radioButton.addEventListener('click', function () {
@@ -344,15 +430,20 @@
                     // timeDisplaySec.textContent = `${seconds.toString().padStart(2, '0')}`;
                     console.log('Selected time sequence:', timeSequence);
                 });
-                
+
                 pomodoroSelectorContainer.appendChild(pomodoroSelectorDiv);
             }
+            const firstRadioButton = pomodoroSelectorContainer.querySelector('input[type="radio"]');
+            if (firstRadioButton) {
+                firstRadioButton.checked = true;
+                timeSequence = user_sequences[0]; // Set the time sequence to the first one
+                timeDisplayMin.textContent = `${timeSequence[0].toString().padStart(2, '0')}`;
+            }
         }
-        
+
         // Call the function to generate pomodoro selectors when the page loads
-        
-        
         updateSequences();
+
         function updateTime() {
             const minutes = Math.floor(secondsLeft / 60);
             const seconds = secondsLeft % 60;
@@ -391,9 +482,9 @@
             startButton.disabled = true;
             stopButton.disabled = false;
             resetButton.disabled = false;
-            const startTime = new Date().getTime();
+            let startTime = new Date().getTime();
             // sequenceIndex = 0; // Initialize index for the time sequence
-            const endTime = startTime + (timeSequence[sequenceIndex] * 60 * 1000); // Use the first value in the sequence
+            let endTime = startTime + (timeSequence[sequenceIndex] * 60 * 1000); // Use the first value in the sequence
             localStorage.setItem('endTime', endTime);
             timerInterval = setInterval(() => {
                 const now = new Date().getTime();
@@ -431,20 +522,34 @@
             startButton.disabled = false;
             stopButton.disabled = true;
         }
-        
+
+        // function resetTimer() {
+        //     clearInterval(timerInterval);
+        //     isWorkTime = true;
+        //     const endTime = startTime + (timeSequence[sequenceIndex] * 60 * 1000);
+        //     sequenceIndex = 0;
+        //     const now = new Date().getTime();
+        //     secondsLeft = Math.round((endTime - now) / 1000);
+        //     // secondsLeft = 1500; // Reset to 25 minutes work time
+        //     updateTime();
+        //     localStorage.removeItem('endTime');
+        //     startButton.disabled = false;
+        //     stopButton.disabled = true;
+        // }
+
         function resetTimer() {
             clearInterval(timerInterval);
             isWorkTime = true;
-            const endTime = startTime + (timeSequence[sequenceIndex] * 60 * 1000);
-            sequenceIndex = 0;
+            sequenceIndex = 0; // Reset the sequence index to 0
+            const endTime = new Date().getTime() + (timeSequence[sequenceIndex] * 60 * 1000);
             const now = new Date().getTime();
             secondsLeft = Math.round((endTime - now) / 1000);
-            // secondsLeft = 1500; // Reset to 25 minutes work time
             updateTime();
             localStorage.removeItem('endTime');
             startButton.disabled = false;
             stopButton.disabled = true;
         }
+
 
         // Check if there's a saved end time in localStorage
         const savedEndTime = localStorage.getItem('endTime');
@@ -714,7 +819,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             updateStats();
-            setInterval(updateStats, 10000);
+            // setInterval(updateStats, 10000);
         });
     </script>
 </body>

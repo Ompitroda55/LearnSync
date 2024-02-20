@@ -482,6 +482,36 @@ def getUser(userId):
     user['password'] = user['password'].decode('utf-8')
     return jsonify(user)
 
+
+#
+#
+# Pomodoro Timer Code Goes Here
+#
+#
+@app.route('/update-user-sequences', methods=['POST'])
+def update_sequences():
+    # Get the updated sequences data from the request
+    sequences = request.form.getlist('sequence[]')
+    sequences = [[float(num) for num in seq.split(',')] for seq in sequences]
+
+    # Assuming you have a collection named 'users' in your database
+    collection = db["users"]
+
+    # Get the current user's ID from the session
+    user_id = session.get('user_id')
+
+    # Update the sequences data for the current user in the database
+    result = collection.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$set": {"pomodoro_sequences": sequences}}
+    )
+
+    if result.modified_count == 1:
+        return jsonify({'message': 'Sequences updated successfully'}), 200
+    else:
+        return jsonify({'message': 'No documents were modified. User not found or sequences unchanged.'}), 404
+
+
 #
 #
 #   Everything for groups goes here

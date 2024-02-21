@@ -150,11 +150,19 @@ content-container {
     grid-template-areas:
         "title title"
         "pomodoro pomodoro"
-        "friends groups"
         "daily-tasks daily-tasks";
     grid-gap: 10px;
     /* background-color: red; */
     /* gap: 15px; */
+}
+
+.container-profile {
+    display: grid;
+    grid-template-areas:
+        "title title"
+        "friends friends"
+        "groups groups";
+    grid-gap: 10px;
 }
 
 .title-dashboard {
@@ -322,32 +330,40 @@ content-container {
 .container-friends {
     grid-area: friends;
     flex: 1;
-    max-height: 50svh;
 }
 
-.container-add-friend,
-#friend-form {
-    display: flex;
-    padding: 5px;
-    justify-content: space-around;
-    background-color: var(--snow);
-    border: 3px solid var(--feather-green);
-    border-radius: var(--border-radius);
-}
-
-#friend-form {
-    all: unset;
+.friend-form {
     display: flex;
     flex-direction: row;
+    /* background-color: blue; */
+    justify-content: center;
+    text-align: left;
     gap: 5px;
 }
 
-#add-friend-btn {
-    all: unset;
-    background-color: var(--feather-green);
-    border-radius: var(--border-radius);
+.friend-form-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-height: fit-content;
+    /* background-color: yellow; */
+}
+
+.friend-form input[type="text"] {
+    text-align: left;
+    color: var(--eel);
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--snow);
+    font-family: var(--main-font);
+    border-radius: var(--btn-radius);
+    /* box-shadow: 0px 6px 1px var(--hare); */
+
     padding: 5px;
-    color: var(--snow);
+    font-size: var(--less-imp-font-size);
 }
 
 #friend-username {

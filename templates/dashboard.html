@@ -74,6 +74,7 @@
         </nav>
         <main-content-container>
             <content-container>
+
                 <div class="container-home" id="container-home">
                     <div class="title-dashboard">Dashboard</div>
                     <div class="container-default home-pomodoro-timer">
@@ -118,26 +119,6 @@
                             Your browser does not support the audio element.
                         </audio>
                     </div>
-                    <div class="container-friends container-default">
-                        <div class="heading">Friends</div>
-                        <div class="container-add-friend">
-                            <form action="/add-friend/{{ user._id }}" method="post" id="friend-form">
-                                <input type="text" placeholder="Friend's Username" name="friend-username"
-                                    id="friend-username">
-                                <button type="submit" class="link-primary" id="add-friend-btn">Add</button>
-                            </form>
-                        </div>
-                        <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div>
-                        <div class="container-friends-list" id="container-friends-list">
-
-                        </div>
-                    </div>
-                    <div class="container-daily-tasks container-default">
-
-                    </div>
-                    <div class="container-groups container-default">
-                        <div class="heading">Groups</div>
-                    </div>
                 </div>
                 <div class="container-preferences">
                     <div class="title-dashboard">User Preferences</div>
@@ -161,6 +142,33 @@
                         </form>
                     </div>
                 </div>
+                <div class="container-profile" id="container-profile">
+                    <div class="title-dashboard">Profile</div>
+                    <div class="container-friends container-default">
+                        <div class="secondary-heading">Friends</div>
+                        <form action="/add-friend/{{ user._id }}" method="post">
+                            <div class="friend-form">
+                                <div class="friend-form-input">
+                                    <input type="text" placeholder="Friend's Username" name="friend-username" id="friend-username">
+                                </div>
+                                <button type="submit" class="ui-button" id="add-friend-btn">
+                                    <span class="material-symbols-outlined">
+                                        person_add
+                                        </span>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div>
+                        <div class="container-friends-list" id="container-friends-list">
+
+                        </div>
+                    </div>
+                    <!-- <div class="container-daily-tasks container-default">
+
+                    </div> -->
+                    <div class="container-groups container-default">
+                        <div class="secondary-heading">Groups</div>
+                    </div>
                 </div>
                 <!-- <div class="container-leaderboard" id="container-leaderboard">
                     <div class="header-leaderboard container-default">

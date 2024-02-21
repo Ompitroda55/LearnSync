@@ -110,6 +110,27 @@ def createNotification(from_user, to_user, type):
     # print(new_request)
     return new_notification
 
+def createGroup(name, leader, members, completion_date):
+    members = [leader] + members
+    collection = db['groups']
+    new_group = {
+        "name": name,
+        "group_leader": leader,
+        "members": [],
+        "group_tasks": [
+            {
+                "task":"Daily Quest",
+                "priority":1,
+                "assigned_to":'All Members',
+                "completed":0,
+                "created_at":datetime.now(),
+                "completion_date": completion_date
+            }
+        ]
+    }
+    new_group = collection.insert_one(new_group)
+    return new_group
+
 @app.route('/check-username-availability', methods=['POST'])
 def check_username_available():
     collection = db["users"]

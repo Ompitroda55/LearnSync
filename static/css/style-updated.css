@@ -189,6 +189,8 @@
     /* border: 3px solid var(--swan); */
     /* width: 100%; */
     text-align: center;
+    display: flex;
+    justify-content: center;
     font-size: var(--font-for-flash-card);
     /* max-width: fit-content; */
     width: fit-content;
@@ -269,6 +271,27 @@
 .link-tertiary:hover {
     background-color: var(--snow);
     color: var(--eel);
+}
+
+.ui-button {
+    all: unset;
+    /* padding: 5px; */
+    /* max-width: fit-content; */
+    display: flex;
+    border-radius: var(--btn-radius);
+    justify-content: center;
+    align-items: center;
+    background-color: var(--feather-green);
+    font-size: var(--font-for-flash-card);
+    color: var(--snow);
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+
+}
+
+.ui-button:hover {
+    background-color: var(--mask-green);
 }
 
 .close-button {

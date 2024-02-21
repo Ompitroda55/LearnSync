@@ -77,8 +77,18 @@
                 <div class="container-home" id="container-home">
                     <div class="title-dashboard">Dashboard</div>
                     <div class="container-default home-pomodoro-timer">
+                        <a href="#" class="expand-timer">
+                            <span class="material-symbols-outlined "style="font-size:32px;">
+                                expand_content
+                                </span>
+                        </a>
+                        <a href="#" class="collapse-timer">
+                            <span class="material-symbols-outlined" style="font-size:32px;">
+                                collapse_content
+                                </span>
+                        </a>
+                        <!-- <div class="heading">Pomodoro Timer</div> -->
                         <div class="container-pomodoro-timer">
-                            <div class="heading">Pomodoro Timer</div>
                             <div id="time">
                                 <div id="time-min">25</div>:
                                 <div id="time-sec">00</div>
@@ -180,9 +190,13 @@
                         <stat class="stat-value sub-heading" id="hearts-stat"></stat>
                     </div>
                 </div>
-
-                <div class="daily-tasks-container container-default">
-                    <div class="secondary-heading">Your Daily Tasks</div>
+                <div class="notification-container container-default">
+                    <div class="secondary-heading">Notifications</div>
+                    <div class="notification-friend-reqs">
+                    </div>
+                </div>
+                <div class="daily-tasks-container  container-default">
+                    <div class="secondary-heading">Daily Tasks</div>
                     <div class="daily-tasks-show">
                         <div class="daily-task">
                             <div class="daily-task-difficulty">#Important</div>
@@ -202,7 +216,6 @@
                                 Task1 taski si njimprot
                             </div>
                         </div>
-
                         <div class="daily-task">
                             <div class="daily-task-difficulty">No No nO</div>
                             <div class="daily-task-actions">
@@ -231,11 +244,6 @@
                             </div>
                         </div>
 
-                    </div>
-                </div>
-                <div class="notification-container container-default">
-                    <div class="secondary-heading">Notifications</div>
-                    <div class="notification-friend-reqs">
                     </div>
                 </div>
                 <div class="heading" id="homo"></div>
@@ -421,9 +429,13 @@
                 const pomodoroSelectorDiv = document.createElement('div');
                 pomodoroSelectorDiv.classList.add('pomodoro-selector');
                 pomodoroSelectorDiv.innerHTML = `
-                <input type="radio" name="time_opt" data-option="${sequenceIndex}" value="${sequenceIndex + 1}">
-                Timer ${sequenceIndex + 1} - ${user_sequences[sequenceIndex].join('-')}
+                <input type="radio" name="time_opt" id="${sequenceIndex}" data-option="${sequenceIndex}" value="${sequenceIndex + 1}">
+                <label for="${sequenceIndex}">
+                    <span class="material-symbols-outlined" id="clock-icon">pace</span>
+                    ${sequenceIndex + 1}
+                    </label>
                 `;
+                // Sequence ${sequenceIndex + 1} - ${user_sequences[sequenceIndex].join('-')}
 
                 // Add event listener to set the time sequence when a radio button is clicked
                 const radioButton = pomodoroSelectorDiv.querySelector('input[type="radio"]');
@@ -632,16 +644,6 @@
             }
         });
 
-        // Script for Expanding Notifications
-        document.addEventListener('click', function (event) {
-            if (event.target.closest('.notification')) {
-                const notificationActions = event.target.closest('.notification').querySelector('.notification-action');
-                if (notificationActions) {
-                    notificationActions.classList.toggle('show');
-                }
-            }
-        });
-
         // 
         // Script for Handling Friend Requests
         // 
@@ -789,7 +791,12 @@
                 const friendElement = document.createElement('div');
                 friendElement.classList.add('friend');
                 friendElement.innerHTML = `
-            <div class="friend-username">${friend}</div>`;
+                <div class="friend-username">${friend}</div>
+                <div class="friend-actions">
+                    <button class=" send-streak" onclick="sendStreak('${friend}}')"><span class="material-symbols-outlined">bolt</span> Send Streak</button>
+                    <button class=" remove-friend" onclick="removeFriend('${friend}')"><span class="material-symbols-outlined">delete</span></button>
+                </div>
+                `;
                 friendsContainer.appendChild(friendElement);
             });
 

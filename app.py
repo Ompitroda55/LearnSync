@@ -483,7 +483,7 @@ def closeNotification(notification_id):
 
 # Function to send a removal request to a friend
 @app.route("/remove-friend/<username>", methods=['POST'])
-def remove_friend(username):
+def removeFriend(username):
     try:
         # Assuming you have a users collection in your database
         users_collection = db["users"]

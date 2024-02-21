@@ -149,12 +149,13 @@
                         <form action="/add-friend/{{ user._id }}" method="post">
                             <div class="friend-form">
                                 <div class="friend-form-input">
-                                    <input type="text" placeholder="Friend's Username" name="friend-username" id="friend-username">
+                                    <input type="text" placeholder="Friend's Username" name="friend-username"
+                                        id="friend-username">
                                 </div>
                                 <button type="submit" class="ui-button" id="add-friend-btn">
                                     <span class="material-symbols-outlined">
                                         person_add
-                                        </span>
+                                    </span>
                                 </button>
                             </div>
                         </form>
@@ -168,6 +169,18 @@
                     </div> -->
                     <div class="container-groups container-default">
                         <div class="secondary-heading">Groups</div>
+                        <form class="container-groups-create">
+                            <div class="container-groups-actions">
+                                <input type="text" placeholder="Enter Group Name" id="groupName" />
+                                <button id="create-group-btn" class="ui-button" style="width: fit-content; padding: 0 10px 0 10px;">Create Group</button>
+                            </div>
+                            <div class="container-groups-members-select">
+                                
+                            </div>
+                        </form>
+                        <script>
+
+                        </script>
                     </div>
                 </div>
                 <!-- <div class="container-leaderboard" id="container-leaderboard">
@@ -875,6 +888,7 @@
                 notificationsContainer.appendChild(notificationElement);
             });
         }
+
         async function updateStats() {
             let userStats = getUserStats();
 
@@ -914,11 +928,64 @@
 
         };
 
+
+
+
+
+        function generateFriendsList() {
+            getUser().then((user) => {
+                const container = document.querySelector('.container-groups-members-select');
+                container.innerHTML = '';
+
+                user.friends.forEach((friend) => {
+                    const friendElement = document.createElement('div');
+                    friendElement.classList.add('member-select');
+                    friendElement.innerHTML = `
+                  <input type="checkbox" name="" id="friend-${friend}" data-friend="${friend}">
+                    <label for="friend-${friend}">${friend}</label>
+                `;
+                    container.appendChild(friendElement);
+                });
+            });
+        }
+
+        const memberSelects = document.querySelectorAll('.member-select input[type="checkbox"]');
+
+        memberSelects.forEach(memberSelect => {
+            memberSelect.addEventListener('change', () => {
+                const memberSelectElement = memberSelect.closest('.member-select');
+                if (memberSelect.checked) {
+                    memberSelectElement.classList.add('checked');
+                } else {
+                    memberSelectElement.classList.remove('checked');
+                }
+            });
+        });
+
+        async function checkGroupname(name) {
+            const response = await fetch('/check-groupname-availability', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `name=${name}`
+            });
+            const data = await response.json();
+            return data.message === 'Username available';
+        }
+
+
+
+
+
         document.addEventListener('DOMContentLoaded', function () {
             updateStats();
             updateNotifications();
+            generateFriendsList('.container-groups-members-select');
+
             // setInterval(updateStats, 1000);
         });
+
     </script>
 </body>
 

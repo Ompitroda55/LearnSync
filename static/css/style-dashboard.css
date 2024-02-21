@@ -190,10 +190,12 @@ content-container {
 }
 
 .material-icons {
-    font-size: 24px; /* Adjust the font size to increase the icon size */
-  }
+    font-size: 24px;
+    /* Adjust the font size to increase the icon size */
+}
 
-.collapse-timer, .expand-timer {
+.collapse-timer,
+.expand-timer {
     text-decoration: none;
     display: flex;
     position: absolute;
@@ -214,8 +216,16 @@ content-container {
     display: none;
 }
 
-.collapse-timer, .expand-timer :hover{
+.collapse-timer,
+.expand-timer :hover {
     color: var(--eel);
+}
+
+.user-pomodoro-form-sequence {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .container-pomodoro-timer {
@@ -303,17 +313,17 @@ content-container {
 }
 
 
-.pomodoro-selector input[type="radio"]:checked + label {
+.pomodoro-selector input[type="radio"]:checked+label {
     background-color: var(--feather-green);
     color: white;
-  }
-  
-  .pomodoro-selector input[type="radio"]:checked + label:before {
+}
+
+.pomodoro-selector input[type="radio"]:checked+label:before {
     background-color: var(--feather-green);
     /* border-color: var(--feather-green); */
-  }
-  
-  .pomodoro-selector label {
+}
+
+.pomodoro-selector label {
     display: inline-flex;
     align-items: center;
     cursor: pointer;
@@ -322,7 +332,7 @@ content-container {
     /* border: var(--default-border-width) solid var(--feather-green); */
     border-radius: var(--btn-radius);
     gap: 5px;
-  }
+}
 
 /* CSS For Social Container */
 /* Code for Friends panel */
@@ -330,6 +340,65 @@ content-container {
 .container-friends {
     grid-area: friends;
     flex: 1;
+}
+
+.container-groups {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-groups-create {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    align-items: center;
+    /* background-color: black; */
+    width: 50%;
+}
+
+.container-groups-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.container-groups-members-select {
+    display: flex;
+    flex-wrap: wrap;
+    width: 300px;
+    max-height: 150px;
+    /* background-color: var(--bee-mask); */
+    overflow-y: auto;
+    justify-content: center;
+}
+
+.member-select {
+    padding: 5px;
+    margin: 3px;
+    background-color: var(--polar);
+    border-radius: var(--border-radius);
+    height: fit-content;
+    color: var(--eel);
+    font-size: var(--less-imp-font-size);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.member-select.checked {
+    background-color: var(--macaw); /* Change to desired color */
+    color: var(--snow);
+}
+
+.member-select input[type="checkbox"] {}
+
+.member-select label {}
+
+.member-select label:before {}
+
+.member-select input[type="checkbox"]:checked + label:after {
+    background-color: #66bb6a; /* Change to desired color */
 }
 
 .friend-form {
@@ -362,6 +431,20 @@ content-container {
     border-radius: var(--btn-radius);
     /* box-shadow: 0px 6px 1px var(--hare); */
 
+    padding: 5px;
+    font-size: var(--less-imp-font-size);
+}
+
+input[type="text"] {
+    text-align: left;
+    color: var(--eel);
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--snow);
+    font-family: var(--main-font);
+    border-radius: var(--btn-radius);
     padding: 5px;
     font-size: var(--less-imp-font-size);
 }
@@ -561,6 +644,7 @@ extras-container {
 .material-symbols-outlined {
     font-size: var(--font-for-flash-card);
 }
+
 .accept {
     background-color: var(--feather-green);
 }
@@ -572,6 +656,7 @@ extras-container {
 .close {
     background-color: var(--eel);
 }
+
 .notification-type {
     font-size: var(--less-imp-font-size);
     color: var(--wolf);

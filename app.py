@@ -141,6 +141,8 @@ def check_username_available():
     else:
         return jsonify({'message': 'Username available'}), 200
 
+
+
 @app.route('/check-username', methods=['POST'])
 def check_username():
     collection = db["users"]
@@ -622,6 +624,15 @@ def update_sequences():
 #
 #
 
+@app.route('/check-groupname-availability', methods=['POST'])
+def check_groupname_available():
+    collection = db["groups"]
+    name = request.form.get('name')
+    user = collection.find_one({'name': name})
+    if user:
+        return jsonify({'message': 'Username already exists'}), 409
+    else:
+        return jsonify({'message': 'Username available'}), 200
 
 # 
 # Main() function of app

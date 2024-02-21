@@ -492,7 +492,10 @@ def getUser(userId):
 def update_sequences():
     # Get the updated sequences data from the request
     sequences = request.form.getlist('sequence[]')
-    sequences = [[float(num) for num in seq.split(',')] for seq in sequences]
+    print(sequences,"Mear wala sequences hai yeh!")
+    
+    # Remove empty or zero-length arrays from sequences
+    sequences = [[float(num) for num in seq.split(',')] for seq in sequences if seq.strip()]
 
     # Assuming you have a collection named 'users' in your database
     collection = db["users"]
@@ -510,7 +513,6 @@ def update_sequences():
         return jsonify({'message': 'Sequences updated successfully'}), 200
     else:
         return jsonify({'message': 'No documents were modified. User not found or sequences unchanged.'}), 404
-
 
 #
 #

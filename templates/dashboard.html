@@ -243,6 +243,8 @@
         </main-content-container>
     </main-container>
     <script>
+
+
         // Function to toggle active class of side navigation
         function toggleActive(event) {
             // Prevent default link behavior
@@ -255,6 +257,8 @@
             // Add active class to the clicked link
             event.currentTarget.classList.add('active');
         }
+
+        
 
 
         // Script for Pomodoro
@@ -389,7 +393,7 @@
             const formData = new FormData(document.getElementById('user-pomodoro-form'));
             const response = await updateUserSequence(formData);
             console.log(formData, "This is form data");
-
+            updateSequences();
             // Convert FormData to object
             // const sequences = {};
             // for (const [key, value] of formData.entries()) {

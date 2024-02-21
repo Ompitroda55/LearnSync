@@ -78,14 +78,14 @@
                     <div class="title-dashboard">Dashboard</div>
                     <div class="container-default home-pomodoro-timer">
                         <a href="#" class="expand-timer">
-                            <span class="material-symbols-outlined "style="font-size:32px;">
+                            <span class="material-symbols-outlined " style="font-size:32px;">
                                 expand_content
-                                </span>
+                            </span>
                         </a>
                         <a href="#" class="collapse-timer">
                             <span class="material-symbols-outlined" style="font-size:32px;">
                                 collapse_content
-                                </span>
+                            </span>
                         </a>
                         <!-- <div class="heading">Pomodoro Timer</div> -->
                         <div class="container-pomodoro-timer">
@@ -192,7 +192,7 @@
                 </div>
                 <div class="notification-container container-default">
                     <div class="secondary-heading">Notifications</div>
-                    <div class="notification-friend-reqs">
+                    <div class="notification-social-reqs">
                     </div>
                 </div>
                 <div class="daily-tasks-container  container-default">
@@ -266,7 +266,7 @@
             event.currentTarget.classList.add('active');
         }
 
-        
+
 
 
         // Script for Pomodoro
@@ -276,7 +276,6 @@
         const stopButton = document.getElementById('stop');
         const resetButton = document.getElementById('reset');
         let user_sequences;
-
         async function initializeUserSequences() {
             try {
                 let user = await getUser(); // Assuming getUser is an asynchronous function
@@ -411,7 +410,7 @@
             // console.log(sequences);
 
             // Send POST request to /update-user-sequences
-            
+
         });
         // 
         // 
@@ -653,6 +652,23 @@
             });
             const data = await response.json();
             if (response.status === 200) {
+                updateNotifications();
+                updateStats();
+                // Handle success, maybe hide the notification or update UI
+                // console.log(data.message);
+            } else {
+                // Handle error, maybe show an error message
+                console.error(data.message);
+            }
+        }
+
+        async function closeNotification(notificationId) {
+            const response = await fetch(`/close-notification/${notificationId}`, {
+                method: 'POST'
+            });
+            const data = await response.json();
+            if (response.status === 200) {
+                updateNotifications();
                 // Handle success, maybe hide the notification or update UI
                 // console.log(data.message);
             } else {
@@ -676,6 +692,30 @@
                 // Handle error, maybe show an error message
                 console.error(data.message);
             }
+        }
+
+        function removeFriend(friendUsername) {
+            fetch(`/remove-friend/${friendUsername}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // Optionally, you can include additional data in the request body if needed
+                body: JSON.stringify({ friend_username: friendUsername })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        updateStats();
+
+                        // Optionally, you can update the UI to reflect that the removal request has been sent
+                        console.log('Removal request sent successfully');
+                    } else {
+                        console.error('Failed to send removal request');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
 
         // 
@@ -771,10 +811,65 @@
             }
         }
 
+        async function getNotifications(receiverId) {
+            try {
+                const response = await fetch('/get-noti-for-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ receiver_id: receiverId })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch friend requests');
+                }
+                const userNotifications = await response.json();
+                return userNotifications;
+            } catch (error) {
+                console.error('Error fetching friend requests:', error);
+            }
+        }
+        async function updateNotifications() {
+            let user = await getUser();
+            // Updating Notifications
+            const friendRequests = await getFriendRequests(user._id);
+            // console.log(friendRequests);
+            const notificationsContainer = document.querySelector('.notification-social-reqs');
+            notificationsContainer.innerHTML = ''; // Clear previous notifications
+            friendRequests.forEach(request => {
+                const notificationElement = document.createElement('div');
+                notificationElement.classList.add('notification');
+                notificationElement.innerHTML = `
+                <div class="notification-from">${request.sender}
+                    <div class="notification-type">${request.type}</div>
+                    </div>
+                    <div class="notification-action" id="notification-actions">
+                        <button class="notification-action-btn accept" onclick="acceptFriendRequest('${request._id}')"><span class="material-symbols-outlined">check</span></button>
+                        <button class="notification-action-btn reject" onclick="rejectFriendRequest('${request._id}')"><span class="material-symbols-outlined">close</span></button>
+                        </div>`;
+                notificationsContainer.appendChild(notificationElement);
+            });
+
+            const userNotifications = await getNotifications(user._id);
+            console.log(userNotifications);
+
+            userNotifications.forEach(notification => {
+                const notificationElement = document.createElement('div');
+                console.log(notification);
+                notificationElement.classList.add('notification');
+                notificationElement.innerHTML = `
+            <div class="notification-from">${notification.sender}
+                <div class="notification-type">${notification.type}</div>
+                </div>
+                <div class="notification-action" id="notification-actions">
+                    <button class="notification-action-btn close" onclick="closeNotification('${notification._id}')"><span class="material-symbols-outlined">close</span></button>
+            </div>`;
+                notificationsContainer.appendChild(notificationElement);
+            });
+        }
         async function updateStats() {
             let userStats = getUserStats();
-            // console.log(userStats);
-            // console.log(getUser());
+
             let user = await getUser();
 
             // console.log(user);
@@ -808,29 +903,13 @@
 
             })
 
-            // Updating Notifications
-            const friendRequests = await getFriendRequests(user._id);
-            // console.log(friendRequests);
-            const notificationsContainer = document.querySelector('.notification-friend-reqs');
-            notificationsContainer.innerHTML = ''; // Clear previous notifications
-            friendRequests.forEach(request => {
-                const notificationElement = document.createElement('div');
-                notificationElement.classList.add('notification');
-                notificationElement.innerHTML = `
-            <div class="notification-from">${request.sender}
-                <div class="notification-type">${request.type}</div>
-                </div>
-                <div class="notification-action" id="notification-actions">
-                    <button class="notification-action-btn accept" onclick="acceptFriendRequest('${request._id}')"><span class="material-symbols-outlined">check</span></button>
-                    <button class="notification-action-btn reject" onclick="rejectFriendRequest('${request._id}')"><span class="material-symbols-outlined">close</span></button>
-            </div>`;
-                notificationsContainer.appendChild(notificationElement);
-            });
+
         };
 
         document.addEventListener('DOMContentLoaded', function () {
             updateStats();
-            // setInterval(updateStats, 10000);
+            updateNotifications();
+            // setInterval(updateStats, 1000);
         });
     </script>
 </body>

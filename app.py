@@ -76,8 +76,9 @@ def createRequest(from_user, to_user, type):
     request_types = {
         0:'Friend Request',
         1:'Streak Request',
-        2:'Invite To Group'
-        }
+        2:'Invite to Group',
+        3:'Remove as Friend'
+    }
     collection = db['requests']
     new_request = {
         "sender": from_user,
@@ -89,6 +90,25 @@ def createRequest(from_user, to_user, type):
     new_request = collection.insert_one(new_request)
     # print(new_request)
     return new_request
+
+def createNotification(from_user, to_user, type):
+    notification_types = {
+        0:'Requested Accepted',
+        1:'Request Rejected',
+        2:'Removed you as a Friend',
+        3:'Streak Sent'
+    }
+    collection = db['notifications']
+    new_notification = {
+        "sender": from_user,
+        "receiver": to_user,
+        "type" : notification_types[type],
+        "status": "pending",
+        "timestamp" : datetime.now()
+    }
+    new_notification = collection.insert_one(new_notification)
+    # print(new_request)
+    return new_notification
 
 @app.route('/check-username-availability', methods=['POST'])
 def check_username_available():
@@ -191,6 +211,22 @@ def get_requests_for_receiver():
     # print(jsonify(requests))
     return jsonify(requests)
 
+@app.route('/get-noti-for-user', methods = ['POST'])
+def get_notification_for_receiver():
+    receiver_id = request.get_json()
+    receiver_id = receiver_id.get('receiver_id')
+    collection = db["notifications"]
+    receiver_object_id = ObjectId(receiver_id)
+    receiver = fetch_user_by_id(receiver_object_id)
+    # print(receiver, "It is receiver")
+    notifications = list(collection.find({"receiver": receiver['username'], "status": "pending"}))
+    #  requests = list(collection.find({"receiver": receiver['username'], "status": "pending"}).sort([("timestamp_field", -1)]))
+    # print(requests)
+    for req in notifications:
+        req['_id'] = str(req['_id'])
+    print(notifications)
+    # print(jsonify(requests))
+    return jsonify(notifications)
 
 def get_requests_sender_or_receiver(object_id):
     collection = db["requests"]
@@ -426,6 +462,50 @@ def reject_friend_request(request_id):
     collection.update_one({"_id": request_object_id}, {"$set": {"status": "rejected"}})
     return jsonify({'message': 'Friend request rejected successfully'}), 200
 
+@app.route("/close-notification/<notification_id>", methods=['POST'])
+def closeNotification(notification_id):
+    # Assuming you have a requests collection in your database
+    collection = db["notifications"]
+    # Find the request by its ObjectId
+    notification_object_id = ObjectId(notification_id)
+    notification_doc = collection.find_one({"_id": notification_object_id})
+    # Assuming you have a users collection in your database
+    print(notification_doc)
+    users_collection = db["users"]
+    
+    if notification_doc:
+        # Change the status of the notification to accepted
+        collection.update_one({"_id": notification_object_id}, {"$set": {"status": "viewed"}})
+        
+        return jsonify({'message': 'Notification closed successfully'}), 200
+    # else:
+    #     return jsonify({'message': 'Notification not found'}), 404
+
+# Function to send a removal request to a friend
+@app.route("/remove-friend/<username>", methods=['POST'])
+def remove_friend(username):
+    try:
+        # Assuming you have a users collection in your database
+        users_collection = db["users"]
+        
+        # Get the current user's username from the session or token
+        # For demonstration purposes, I'll assume the username is stored in a variable called current_username
+        current_username = session.get('username')
+        
+        # Remove the friend from the current user's friend list
+        users_collection.update_one({"username": current_username}, {"$pull": {"friends": username}})
+        
+        # Remove the current user from the friend's friend list
+        users_collection.update_one({"username": username}, {"$pull": {"friends": current_username}})
+        
+        createNotification(current_username, username, 2)
+
+        return jsonify({'message': 'Friend removed successfully'}), 200
+    except Exception as e:
+        return jsonify({'message': f'Failed to remove friend: {str(e)}'}), 500
+
+
+
 @app.route('/update-daily-task', methods=['POST'])
 def updateDailyTasks():
     pass
@@ -451,12 +531,12 @@ def fetch_user_stats(user_id):
 @app.route('/getUserStats', methods=['POST'])
 def getUserStats():
     userId = session.get('user_id')
-    print(userId)
+    # print(userId)
     # print(request)
     # user_id = request.form.get('userId')
     user_id = userId
     user_stats = fetch_user_stats(user_id)
-    print(user_stats, "user stats")
+    # print(user_stats, "user stats")
     # print(user_id,"Turueueddkdkdkdkue")
     return jsonify(user_stats)
 
@@ -479,7 +559,7 @@ def getUser(userId):
     user['_id'] = str(user['_id'])
     # print((user_data))
     # return user
-    print(user)
+    # print(user)
     user['password'] = user['password'].decode('utf-8')
     return jsonify(user)
 
@@ -493,7 +573,7 @@ def getUser(userId):
 def update_sequences():
     # Get the updated sequences data from the request
     sequences = request.form.getlist('sequence[]')
-    print(sequences,"Mear wala sequences hai yeh!")
+    # print(sequences,"Mear wala sequences hai yeh!")
     
     # Remove empty or zero-length arrays from sequences
     sequences = [[float(num) for num in seq.split(',')] for seq in sequences if seq.strip()]

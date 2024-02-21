@@ -504,7 +504,7 @@ extras-container {
     color: var(--eel);
 }
 
-.notification-friend-reqs {
+.notification-social-reqs {
     /* background-color: var(--foot-green); */
     padding: 5px;
     max-height: 20svh;
@@ -526,8 +526,9 @@ extras-container {
 
 .notification-action {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 5px;
 }
 
@@ -544,7 +545,6 @@ extras-container {
 .material-symbols-outlined {
     font-size: var(--font-for-flash-card);
 }
-
 .accept {
     background-color: var(--feather-green);
 }
@@ -553,6 +553,9 @@ extras-container {
     background-color: var(--cardinal);
 }
 
+.close {
+    background-color: var(--eel);
+}
 .notification-type {
     font-size: var(--less-imp-font-size);
     color: var(--wolf);

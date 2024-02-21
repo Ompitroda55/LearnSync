@@ -144,6 +144,66 @@
 
         // Function to create HTML elements for a single flashcard
         // Function to create HTML elements for a single flashcard
+        function createUserFlashCardElement(flashcard) {
+            const flashcardLink = document.createElement('a');
+            flashcardLink.setAttribute('href', `/flashcard/${flashcard._id}`);
+            flashcardLink.classList.add('user-flash-card-container', 'container-default');
+            
+            const flashcardDetails = document.createElement('div');
+            flashcardDetails.classList.add('flash-card-details');
+
+            // const cardName = document.createElement('div');
+            // cardName.classList.add('card-name');
+            // cardName.textContent = Name;
+            // cardTopic.appendChild(cardName);
+            
+            const cardTopic = document.createElement('div');
+            cardTopic.classList.add('card-topic');
+            cardTopic.textContent = flashcard.name;
+            
+            const cardTopicLegend = document.createElement('div');
+            cardTopicLegend.classList.add('card-topic-legend');
+            cardTopicLegend.textContent = "Topic"; // Set whatever content you want here
+            cardTopic.appendChild(cardTopicLegend);
+
+            const cardCategory = document.createElement('div');
+            cardCategory.classList.add('card-category');
+            cardCategory.textContent = flashcard.category;
+
+            const cardCategoryLegend = document.createElement('div');
+            cardCategoryLegend.classList.add('card-category-legend');
+            cardCategoryLegend.textContent = "Subject"; // Set whatever content you want here
+            cardCategory.appendChild(cardCategoryLegend);
+
+            const cardCreator = document.createElement('div');
+            cardCreator.classList.add('card-creator');
+            cardCreator.textContent = flashcard.created_by;
+
+            const cardCreatorLegend = document.createElement('div');
+            cardCreatorLegend.classList.add('card-creator-legend');
+            cardCreatorLegend.textContent = "Creator"; // Set whatever content you want here
+            cardCreator.appendChild(cardCreatorLegend);
+
+            const cardHashtags = document.createElement('div');
+            cardHashtags.classList.add('card-hashtags');
+
+            flashcard.hashtags.forEach(tag => {
+                const hashtag = document.createElement('div');
+                hashtag.setAttribute('id', 'card-hashtag');
+                hashtag.textContent = tag;
+                cardHashtags.appendChild(hashtag);
+            });
+
+            flashcardDetails.appendChild(cardTopic);
+            flashcardDetails.appendChild(cardCategory);
+            flashcardDetails.appendChild(cardCreator);
+            flashcardDetails.appendChild(cardHashtags);
+
+            flashcardLink.appendChild(flashcardDetails);
+
+            return flashcardLink;
+        }
+
         function createFlashcardElement(flashcard) {
             const flashcardLink = document.createElement('a');
             flashcardLink.setAttribute('href', `/flashcard/${flashcard._id}`);

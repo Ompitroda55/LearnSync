@@ -3828,3 +3828,4 @@ LearnSyncVenv/lib/python3.12/site-packages/certifi/__pycache__/__main__.cpython-
 LearnSyncVenv/lib/python3.12/site-packages/certifi/__pycache__/__init__.cpython-312.pyc
 LearnSyncVenv/lib/python3.12/site-packages/bson/__pycache__/json_util.cpython-312.pyc
 LearnSyncVenv/lib/python3.12/site-packages/__pycache__/flask_ngrok.cpython-312.pyc
+*.pyc

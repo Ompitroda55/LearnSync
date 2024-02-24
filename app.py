@@ -113,6 +113,7 @@ def createNotification(from_user, to_user, type):
 def createGroup(name, leader, members, creation_date):
     members = [leader] + members
     collection = db['groups']
+    users_collection = db['users']
     # print(name, leader, members, creation_date)
     new_group = {
         "name": name,
@@ -129,6 +130,12 @@ def createGroup(name, leader, members, creation_date):
             }
         ]
     }
+
+    for member in members:
+        users_collection.update_one(
+            {"username": member},
+            {"$push": {"groups": name}}
+        )
     new_group = collection.insert_one(new_group)
     return new_group
 
@@ -665,6 +672,23 @@ def insertNewGroup():
         return jsonify({'message': 'Group created successfully', 'group_id': str(group_id)}), 200
     else:
         return jsonify({'message': 'Failed to create group'}), 500
+    
+@app.route('/get-user-groups', methods=['POST'])
+def get_user_groups():
+    # Get the user's ID from the session
+    username = session.get('username')
+    
+    # Query the database to fetch the user's groups
+    groups_collection = db["groups"]
+    user_groups = list(groups_collection.find({"group_leader": username}))
+    
+    # Convert ObjectId to string for JSON serialization
+    for group in user_groups:
+        group['_id'] = str(group['_id'])
+    
+    # Return the user's groups as JSON
+    return jsonify(user_groups)
+
 # 
 # Main() function of app
 # 

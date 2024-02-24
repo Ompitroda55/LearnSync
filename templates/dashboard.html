@@ -50,28 +50,58 @@
                         Preferences
                     </li>
                 </a>
-                <a href="#" class="nav-list-item-link " popovertarget="more-info"
+                <a href="#" class="nav-list-item-link " id="more-info-container"
                     onclick="toggleActive(event, 'container-home')">
                     <li class="nav-list-item" id="nav-list-more-menu">
                         <img src="../static/resources/images/dashboard/more-icon.png" alt="" srcset=""
                             class="nav-list-icon">
                         More
+                        <!-- Floating Menu -->
+                        <div id="more-info" class="more-content-container container-default">
+                            <a href="" class="more-content-links general-links">
+                                Reach us out
+                            </a>
+                            <a href="" class="more-content-links general-links">
+                                Help
+                            </a>
+                            <hr>
+                            <a href="" class="more-content-links general-links">
+                                Signout
+                            </a>
+                        </div>
                     </li>
                 </a>
             </ul>
-            <!-- <div popover id="more-info" class="more-content-container container-default">
-                <a href="" class="more-content-links general-links">
-                    Empty
-                </a>
-                <a href="" class="more-content-links general-links">
-                    Help
-                </a>
-                <hr>
-                <a href="" class="more-content-links general-links">
-                    Signout
-                </a>
-            </div> -->
         </nav>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const moreButton = document.getElementById('nav-list-more-menu');
+                const floatingMenu = document.getElementById('more-info');
+
+                // Function to open/close the floating menu
+                function toggleFloatingMenu() {
+                    floatingMenu.classList.toggle('show');
+                }
+
+                // Event listener for clicking the "More" button
+                moreButton.addEventListener('click', function (event) {
+                    event.stopPropagation(); // Prevents the click event from reaching the document and closing the menu immediately
+                    toggleFloatingMenu();
+                });
+
+                // Event listener for clicking outside the floating menu to close it
+                document.addEventListener('click', function (event) {
+                    const target = event.target;
+                    const isClickInsideMenu = floatingMenu.contains(target);
+                    const isClickOnMoreButton = target.id === 'nav-list-more-menu';
+
+                    if (!isClickInsideMenu && !isClickOnMoreButton) {
+                        floatingMenu.classList.remove('show');
+                    }
+                });
+            });
+
+        </script>
         <main-content-container>
             <content-container>
 
@@ -172,10 +202,11 @@
                         <form class="container-groups-create">
                             <div class="container-groups-actions">
                                 <input type="text" placeholder="Enter Group Name" id="groupName" />
-                                <button id="create-group-btn" class="ui-button" style="width: fit-content; padding: 0 10px 0 10px;">Create Group</button>
+                                <button id="create-group-btn" class="ui-button"
+                                    style="width: fit-content; padding: 0 10px 0 10px;">Create Group</button>
                             </div>
                             <div class="container-groups-members-select">
-                                
+
                             </div>
                         </form>
                         <script>

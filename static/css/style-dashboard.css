@@ -88,10 +88,6 @@ nav {
     color: var(--macaw);
 }
 
-#nav-list-more-menu {
-    position: relative;
-}
-
 .container-default,
 .nav-list-item-link {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
@@ -105,24 +101,29 @@ nav {
     /* Move the box upward slightly */
 }
 
+#nav-list-more-menu {
+    position: relative;
+}
+
+#more-info-container {
+    position: relative;
+}
+
 .more-content-container {
-    /* position: absolute; */
-    display: flex;
+    position: absolute;
+    display: none;
     flex-direction: column;
     background-color: yellow;
     box-sizing: border-box;
     min-width: fit-content;
-    top: 100%;
-    left: 100%;
+    top: 0%;
+    left: 0;
+    z-index: 999;
 }
 
-.more-content-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5svh;
-    /* margin: 0; */
-    padding: 0;
+
+.show {
+    display: flex; /* Show the menu when the 'show' class is added */
 }
 
 main-content-container {
@@ -391,11 +392,11 @@ content-container {
     color: var(--snow);
 }
 
-.member-select input[type="checkbox"] {}
+/* .member-select input[type="checkbox"] {}
 
 .member-select label {}
 
-.member-select label:before {}
+.member-select label:before {} */
 
 .member-select input[type="checkbox"]:checked + label:after {
     background-color: #66bb6a; /* Change to desired color */

@@ -3,7 +3,7 @@ import bcrypt
 from bson.objectid import ObjectId
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from flask import Flask, jsonify, render_template, request, redirect, session, url_for
+from flask import Flask, json, jsonify, render_template, request, redirect, session, url_for
 import secrets
 
 app = Flask(__name__)
@@ -110,13 +110,14 @@ def createNotification(from_user, to_user, type):
     # print(new_request)
     return new_notification
 
-def createGroup(name, leader, members, completion_date):
+def createGroup(name, leader, members, creation_date):
     members = [leader] + members
     collection = db['groups']
+    # print(name, leader, members, creation_date)
     new_group = {
         "name": name,
         "group_leader": leader,
-        "members": [],
+        "members": members,
         "group_tasks": [
             {
                 "task":"Daily Quest",
@@ -124,7 +125,7 @@ def createGroup(name, leader, members, completion_date):
                 "assigned_to":'All Members',
                 "completed":0,
                 "created_at":datetime.now(),
-                "completion_date": completion_date
+                "completion_date": creation_date
             }
         ]
     }
@@ -152,6 +153,7 @@ def check_username():
         return jsonify({'message': 'Username available'}), 200
     else:
         return jsonify({'message': 'Username do not exist'}), 409
+
 
 # Function for checing if user credentials are valid or not.
 @app.route('/check-credentials', methods=['POST'])
@@ -247,7 +249,7 @@ def get_notification_for_receiver():
     # print(requests)
     for req in notifications:
         req['_id'] = str(req['_id'])
-    print(notifications)
+    # print(notifications)
     # print(jsonify(requests))
     return jsonify(notifications)
 
@@ -288,6 +290,7 @@ def login():
         user = collection.find_one({'username': username})
         session['username'] = user['username']
         session['user_id'] = str(user['_id'])
+        # print(session.get('username'))
         # requests = get_requests_for_receiver(str(user['_id']))
         # print(requests)
         # print(user)
@@ -493,7 +496,7 @@ def closeNotification(notification_id):
     notification_object_id = ObjectId(notification_id)
     notification_doc = collection.find_one({"_id": notification_object_id})
     # Assuming you have a users collection in your database
-    print(notification_doc)
+    # print(notification_doc)
     users_collection = db["users"]
     
     if notification_doc:
@@ -625,6 +628,19 @@ def update_sequences():
 #
 
 @app.route('/check-groupname-availability', methods=['POST'])
+def checkGroupnameAvailability():
+    collection = db["groups"]
+    groupname = request.form.get('groupname')
+    # print(groupname)
+    group = collection.find_one({'name': groupname})
+    if group:
+        # print("Group name already exists.")
+        return jsonify({'message': 'Groupname is not available'}), 409
+    else:
+        # print("Group name is available.")
+        return jsonify({'message': 'Groupname available'}), 200
+
+@app.route('/check-groupname-availability', methods=['POST'])
 def check_groupname_available():
     collection = db["groups"]
     name = request.form.get('name')
@@ -633,7 +649,22 @@ def check_groupname_available():
         return jsonify({'message': 'Username already exists'}), 409
     else:
         return jsonify({'message': 'Username available'}), 200
+    
+@app.route('/create-group', methods=['POST'])
+def insertNewGroup():
+    # print(request.form)
+    groupname = request.form.get('groupname')
+    selected_friends = request.form.get('selectedFriends')
+    selected_friends = json.loads(selected_friends)
+    # print(selected_friends)
+    user = session.get('username')
+    # print(groupname,user,selected_friends)
+    group_id = createGroup(groupname, user, selected_friends, datetime.now())
 
+    if group_id:
+        return jsonify({'message': 'Group created successfully', 'group_id': str(group_id)}), 200
+    else:
+        return jsonify({'message': 'Failed to create group'}), 500
 # 
 # Main() function of app
 # 

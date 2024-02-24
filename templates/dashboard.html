@@ -209,9 +209,7 @@
 
                             </div>
                         </form>
-                        <script>
-
-                        </script>
+                        
                     </div>
                 </div>
                 <!-- <div class="container-leaderboard" id="container-leaderboard">
@@ -993,17 +991,72 @@
             });
         });
 
-        async function checkGroupname(name) {
+
+        async function checkGroupname(groupname) {
             const response = await fetch('/check-groupname-availability', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: `name=${name}`
+                body: `groupname=${groupname}`
             });
             const data = await response.json();
-            return data.message === 'Username available';
+            return data.message === 'Groupname available';
         }
+
+        async function createGroup(formData) {
+            try {
+                const response = await fetch('/create-group', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to create group');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error creating group:', error);
+                return { message: 'Error creating group' }; // Return an error message
+            }
+        }
+
+        document.getElementById('create-group-btn').addEventListener('click', async function (event) {
+            event.preventDefault();
+
+            // Get the group name from the input field
+            const groupNameInput = document.getElementById('groupName');
+            const groupName = groupNameInput.value.trim();
+            // alert(groupName);
+
+            // Call the checkGroupName function to ensure the group name is available
+            const validatedGroupName = await checkGroupname(groupName);
+
+            // If the validated group name is available
+            if (validatedGroupName) {
+                // Collect data from the ticked checkboxes
+                const selectedFriends = [];
+                const checkboxes = document.querySelectorAll('.member-select input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        selectedFriends.push(checkbox.dataset.friend);
+                    }
+                });
+
+                // Prepare data to send to Flask function createGroup
+                const formData = new FormData();
+                formData.append('groupname', groupName);
+                formData.append('selectedFriends', JSON.stringify(selectedFriends));
+                // alert(formData);
+                // Send data to Flask function createGroup
+                const response = await createGroup(formData);
+
+                // Show response from Flask
+                alert(response.message); // You can replace this with any other UI update logic
+            } else {
+                alert('Groupname not available');
+            }
+        });
 
 
 

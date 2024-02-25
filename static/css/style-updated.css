@@ -118,6 +118,15 @@
     line-height: 2.5em;
 }
 
+.tertiary-heading {
+    font-family: var(--main-font);
+    font-size: var(--sub-heading-font-size);
+    font-weight: 600;
+    text-align: left;
+    color: var(--eel);
+    /* line-height: 2.5em; */
+}
+
 .simple-text {
     font-family: var(--main-font);
     color: var(--eel);

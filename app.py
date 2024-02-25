@@ -3,7 +3,7 @@ import bcrypt
 from bson.objectid import ObjectId
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from flask import Flask, jsonify, render_template, request, redirect, session, url_for
+from flask import Flask, json, jsonify, render_template, request, redirect, session, url_for
 import secrets
 
 app = Flask(__name__)
@@ -96,7 +96,9 @@ def createNotification(from_user, to_user, type):
         0:'Requested Accepted',
         1:'Request Rejected',
         2:'Removed you as a Friend',
-        3:'Streak Sent'
+        3:'Streak Sent',
+        4:'Added you to Group',
+        5:'New Task Added to Group'
     }
     collection = db['notifications']
     new_notification = {
@@ -110,24 +112,23 @@ def createNotification(from_user, to_user, type):
     # print(new_request)
     return new_notification
 
-def createGroup(name, leader, members, completion_date):
+def createGroup(name, leader, members, creation_date):
     members = [leader] + members
     collection = db['groups']
+    users_collection = db['users']
+    # print(name, leader, members, creation_date)
     new_group = {
         "name": name,
         "group_leader": leader,
-        "members": [],
-        "group_tasks": [
-            {
-                "task":"Daily Quest",
-                "priority":1,
-                "assigned_to":'All Members',
-                "completed":0,
-                "created_at":datetime.now(),
-                "completion_date": completion_date
-            }
-        ]
+        "members": members,
     }
+
+    for member in members:
+        users_collection.update_one(
+            {"username": member},
+            {"$push": {"groups": name}}
+        )
+        createNotification(leader, member, 4)
     new_group = collection.insert_one(new_group)
     return new_group
 
@@ -152,6 +153,7 @@ def check_username():
         return jsonify({'message': 'Username available'}), 200
     else:
         return jsonify({'message': 'Username do not exist'}), 409
+
 
 # Function for checing if user credentials are valid or not.
 @app.route('/check-credentials', methods=['POST'])
@@ -234,21 +236,17 @@ def get_requests_for_receiver():
     # print(jsonify(requests))
     return jsonify(requests)
 
-@app.route('/get-noti-for-user', methods = ['POST'])
+@app.route('/get-noti-for-user', methods=['POST'])
 def get_notification_for_receiver():
     receiver_id = request.get_json()
     receiver_id = receiver_id.get('receiver_id')
     collection = db["notifications"]
     receiver_object_id = ObjectId(receiver_id)
     receiver = fetch_user_by_id(receiver_object_id)
-    # print(receiver, "It is receiver")
-    notifications = list(collection.find({"receiver": receiver['username'], "status": "pending"}))
-    #  requests = list(collection.find({"receiver": receiver['username'], "status": "pending"}).sort([("timestamp_field", -1)]))
-    # print(requests)
+    notifications = list(collection.find({"receiver": receiver['username'], "status": "pending"}).sort("timestamp", -1))
+    notifications.sort(key=lambda x: x['timestamp'], reverse=True)
     for req in notifications:
         req['_id'] = str(req['_id'])
-    print(notifications)
-    # print(jsonify(requests))
     return jsonify(notifications)
 
 def get_requests_sender_or_receiver(object_id):
@@ -288,6 +286,7 @@ def login():
         user = collection.find_one({'username': username})
         session['username'] = user['username']
         session['user_id'] = str(user['_id'])
+        # print(session.get('username'))
         # requests = get_requests_for_receiver(str(user['_id']))
         # print(requests)
         # print(user)
@@ -493,7 +492,7 @@ def closeNotification(notification_id):
     notification_object_id = ObjectId(notification_id)
     notification_doc = collection.find_one({"_id": notification_object_id})
     # Assuming you have a users collection in your database
-    print(notification_doc)
+    # print(notification_doc)
     users_collection = db["users"]
     
     if notification_doc:
@@ -625,6 +624,19 @@ def update_sequences():
 #
 
 @app.route('/check-groupname-availability', methods=['POST'])
+def checkGroupnameAvailability():
+    collection = db["groups"]
+    groupname = request.form.get('groupname')
+    # print(groupname)
+    group = collection.find_one({'name': groupname})
+    if group:
+        # print("Group name already exists.")
+        return jsonify({'message': 'Groupname is not available'}), 409
+    else:
+        # print("Group name is available.")
+        return jsonify({'message': 'Groupname available'}), 200
+
+@app.route('/check-groupname-availability', methods=['POST'])
 def check_groupname_available():
     collection = db["groups"]
     name = request.form.get('name')
@@ -634,6 +646,7 @@ def check_groupname_available():
     else:
         return jsonify({'message': 'Username available'}), 200
     
+
 
 @app.route('/updateDailyTasks', methods=['POST'])
 def update_daily_tasks():
@@ -669,6 +682,108 @@ def update_daily_tasks():
         return jsonify({'success': True, 'message': 'Tasks added successfully'}), 200
     else:
         return jsonify({'success': False, 'error': 'Failed to add tasks'}), 500
+
+@app.route('/create-group', methods=['POST'])
+def insertNewGroup():
+    # print(request.form)
+    groupname = request.form.get('groupname')
+    selected_friends = request.form.get('selectedFriends')
+    selected_friends = json.loads(selected_friends)
+    # print(selected_friends)
+
+    user = session.get('username')
+    print(user)
+    group_id = createGroup(groupname, user, selected_friends, datetime.now())
+
+    if group_id:
+        return jsonify({'message': 'Group created successfully', 'group_id': str(group_id)}), 200
+    else:
+        return jsonify({'message': 'Failed to create group'}), 500
+    
+@app.route('/get-user-groups', methods=['POST'])
+def get_user_groups():#
+    username = session.get('username')
+    groups_collection = db["groups"]
+    user_groups = list(groups_collection.find({"group_leader": username}))
+    for group in user_groups:
+        group['_id'] = str(group['_id'])
+    return jsonify(user_groups)
+
+def createTask(group_Id, group_name, task_name, task_completion_date):
+    try:
+        # Connect to the tasks collection in the database
+        tasks_collection = db["tasks"]
+        
+        # Create a new task document
+        new_task = {
+            "group_id": group_Id,
+            "group_name": group_name,
+            "task_name": task_name,
+            "task_completion_date": task_completion_date,
+            "creation_date": datetime.now(),
+            "is_completed": False
+        }
+        
+        # Insert the task into the tasks collection
+        result = tasks_collection.insert_one(new_task)
+        
+        if result.inserted_id:
+            return True, result.inserted_id
+        else:
+            return False, None
+    except Exception as e:
+        return False, None
+
+# Route for creating a group task
+@app.route('/create-group-task', methods=['POST'])
+def create_group_task():
+    try:
+        # Extract data from the request
+        group_id = request.form.get('group_Id')
+        group_name = request.form.get('group_name')
+        task_name = request.form.get('task_name')
+        task_completion_date = request.form.get('task_completion_date')
+        
+        # Call the createTask function to insert the task into the database
+        success, task_id = createTask(ObjectId(group_id), group_name, task_name, task_completion_date)
+        
+        if success:
+                group_members = get_group_members(group_id)
+                for member in group_members:
+                    createNotification(group_name, member,5)
+                return jsonify({'message': 'Task created succesfully'}), 200
+        else:
+            return jsonify({'message': 'Failed to create task'}), 500
+    except Exception as e:
+        return jsonify({'message': f'An error occurred: {str(e)}'}), 500
+
+def get_group_members(group_id):
+    # Assuming you have a groups collection in your database
+    groups_collection = db["groups"]
+    group = groups_collection.find_one({"_id": ObjectId(group_id)})
+    if group:
+        return group.get('members', [])
+    else:
+        return []
+
+@app.route('/get-group-tasks', methods=['POST'])
+def get_group_tasks():
+    try:
+        group_id = request.json.get('group_id')
+        tasks_collection = db["tasks"]
+        current_date = datetime.now()
+        group_tasks = list(tasks_collection.find({"group_id": ObjectId(group_id)}).sort("task_completion_date", 1))
+        closest_tasks = [task for task in group_tasks if task["task_completion_date"] >= current_date]
+        
+        for task in closest_tasks:
+            task['_id'] = str(task['_id'])
+        
+        return jsonify(closest_tasks), 200
+    except Exception as e:
+        print(f'An error occurred: {str(e)}')
+        return jsonify({'message': 'Failed to fetch tasks for the group'}), 500
+
+
 
 # 
 # Main() function of app

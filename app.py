@@ -672,7 +672,7 @@ def get_user_groups():#
         group['_id'] = str(group['_id'])
     return jsonify(user_groups)
 
-def createTask(group_Id, group_name, task_name, task_completion_date):
+def createTask(group_Id, group_name, task_name, task_completion_date, group_members):
     try:
         # Connect to the tasks collection in the database
         tasks_collection = db["tasks"]
@@ -684,10 +684,9 @@ def createTask(group_Id, group_name, task_name, task_completion_date):
             "task_name": task_name,
             "task_completion_date": task_completion_date,
             "creation_date": datetime.now(),
-            "is_completed": False
+            "members_status": {member: "pending" for member in group_members}
         }
         
-        # Insert the task into the tasks collection
         result = tasks_collection.insert_one(new_task)
         
         if result.inserted_id:
@@ -697,7 +696,7 @@ def createTask(group_Id, group_name, task_name, task_completion_date):
     except Exception as e:
         return False, None
 
-# Route for creating a group task
+
 @app.route('/create-group-task', methods=['POST'])
 def create_group_task():
     try:
@@ -707,18 +706,43 @@ def create_group_task():
         task_name = request.form.get('task_name')
         task_completion_date = request.form.get('task_completion_date')
         
+        # Fetch the members of the group
+        group_members = get_group_members(group_id)
+        
         # Call the createTask function to insert the task into the database
-        success, task_id = createTask(ObjectId(group_id), group_name, task_name, task_completion_date)
+        success, task_id = createTask(ObjectId(group_id), group_name, task_name, task_completion_date, group_members)
         
         if success:
-                group_members = get_group_members(group_id)
-                for member in group_members:
-                    createNotification(group_name, member,5)
-                return jsonify({'message': 'Task created succesfully'}), 200
+            for member in group_members:
+                createNotification(group_name, member, 5)  # Notify each member about the new task
+            return jsonify({'message': 'Task created successfully'}), 200
         else:
             return jsonify({'message': 'Failed to create task'}), 500
     except Exception as e:
         return jsonify({'message': f'An error occurred: {str(e)}'}), 500
+
+def changeTaskStatus(task_id, member_name, new_status):
+    try:
+        # Connect to the tasks collection in the database
+        tasks_collection = db["tasks"]
+        
+        # Find the task by its ObjectId
+        task_object_id = ObjectId(task_id)
+        task = tasks_collection.find_one({"_id": task_object_id})
+        
+        # Update the status of the specified member for the task
+        task["members_status"][member_name] = new_status
+        
+        # Update the task document in the database
+        result = tasks_collection.update_one({"_id": task_object_id}, {"$set": {"members_status": task["members_status"]}})
+        
+        if result.modified_count == 1:
+            return True
+        else:
+            return False
+    except Exception as e:
+        return False
+
 
 def get_group_members(group_id):
     # Assuming you have a groups collection in your database
@@ -745,7 +769,6 @@ def get_group_tasks():
     except Exception as e:
         print(f'An error occurred: {str(e)}')
         return jsonify({'message': 'Failed to fetch tasks for the group'}), 500
-
 
 # 
 # Main() function of app

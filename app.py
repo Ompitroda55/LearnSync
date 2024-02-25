@@ -284,6 +284,7 @@ def login():
         username = request.form.get('username')
         # print(username, password)
         user = collection.find_one({'username': username})
+        print(user ,"jfasifjladsjljfladsjlfjasjdkjfkasdjf")
         session['username'] = user['username']
         session['user_id'] = str(user['_id'])
         # print(session.get('username'))
@@ -646,23 +647,14 @@ def check_groupname_available():
     else:
         return jsonify({'message': 'Username available'}), 200
     
-
-
-from flask import jsonify
-
 @app.route('/updateDailyTasks', methods=['POST'])
 def update_daily_tasks():
     try:
         collection = db['users']
         
-        # Retrieve user ID from request parameters
-        user_id = request.form.get('user_id')
-        
-        # Check if user ID is provided
-        if not user_id:
-            return jsonify({'success': False, 'error': 'User ID not provided'}), 400
-        
-        # Retrieve task data from request parameters
+        # Retrieve username from session
+        # username = session.get('username')
+        username = 'om'
         tasks_data = request.form.getlist('task[]')
         
         # Check if tasks data is provided
@@ -678,7 +670,7 @@ def update_daily_tasks():
         } for task in tasks_data]
         
         # Update user's dailytasks array with new tasks
-        result = collection.update_one({'_id': ObjectId(user_id)}, {'$push': {'dailytasks': {'$each': tasks}}}, upsert=True)
+        result = collection.update_one({'username': username}, {'$push': {'dailytasks': {'$each': tasks}}}, upsert=True)
         
         # Check if tasks were successfully added
         if result.modified_count > 0 or result.upserted_id is not None:
@@ -688,6 +680,7 @@ def update_daily_tasks():
     
     except Exception as e:
         return jsonify({'success': False, 'error': f'An error occurred: {str(e)}'}), 500
+
 
 @app.route('/create-group', methods=['POST'])
 def insertNewGroup():

@@ -96,7 +96,9 @@ def createNotification(from_user, to_user, type):
         0:'Requested Accepted',
         1:'Request Rejected',
         2:'Removed you as a Friend',
-        3:'Streak Sent'
+        3:'Streak Sent',
+        4:'Added you to Group',
+        5:'New Task Added to Group'
     }
     collection = db['notifications']
     new_notification = {
@@ -119,24 +121,14 @@ def createGroup(name, leader, members, creation_date):
         "name": name,
         "group_leader": leader,
         "members": members,
-        "group_tasks": [
-            {
-                "task":"Daily Quest",
-                "priority":1,
-                "assigned_to":'All Members',
-                "completed":0,
-                "created_at":datetime.now(),
-                "completion_date": creation_date
-            }
-        ]
     }
+
     for member in members:
-        createRequest(leader, member, 2)
-    # for member in members:
-    #     users_collection.update_one(
-    #         {"username": member},
-    #         {"$push": {"groups": name}}
-    #     )
+        users_collection.update_one(
+            {"username": member},
+            {"$push": {"groups": name}}
+        )
+        createNotification(leader, member, 4)
     new_group = collection.insert_one(new_group)
     return new_group
 
@@ -244,21 +236,17 @@ def get_requests_for_receiver():
     # print(jsonify(requests))
     return jsonify(requests)
 
-@app.route('/get-noti-for-user', methods = ['POST'])
+@app.route('/get-noti-for-user', methods=['POST'])
 def get_notification_for_receiver():
     receiver_id = request.get_json()
     receiver_id = receiver_id.get('receiver_id')
     collection = db["notifications"]
     receiver_object_id = ObjectId(receiver_id)
     receiver = fetch_user_by_id(receiver_object_id)
-    # print(receiver, "It is receiver")
-    notifications = list(collection.find({"receiver": receiver['username'], "status": "pending"}))
-    #  requests = list(collection.find({"receiver": receiver['username'], "status": "pending"}).sort([("timestamp_field", -1)]))
-    # print(requests)
+    notifications = list(collection.find({"receiver": receiver['username'], "status": "pending"}).sort("timestamp", -1))
+    notifications.sort(key=lambda x: x['timestamp'], reverse=True)
     for req in notifications:
         req['_id'] = str(req['_id'])
-    # print(notifications)
-    # print(jsonify(requests))
     return jsonify(notifications)
 
 def get_requests_sender_or_receiver(object_id):
@@ -665,8 +653,9 @@ def insertNewGroup():
     selected_friends = request.form.get('selectedFriends')
     selected_friends = json.loads(selected_friends)
     # print(selected_friends)
+
     user = session.get('username')
-    # print(groupname,user,selected_friends)
+    print(user)
     group_id = createGroup(groupname, user, selected_friends, datetime.now())
 
     if group_id:
@@ -682,6 +671,81 @@ def get_user_groups():#
     for group in user_groups:
         group['_id'] = str(group['_id'])
     return jsonify(user_groups)
+
+def createTask(group_Id, group_name, task_name, task_completion_date):
+    try:
+        # Connect to the tasks collection in the database
+        tasks_collection = db["tasks"]
+        
+        # Create a new task document
+        new_task = {
+            "group_id": group_Id,
+            "group_name": group_name,
+            "task_name": task_name,
+            "task_completion_date": task_completion_date,
+            "creation_date": datetime.now(),
+            "is_completed": False
+        }
+        
+        # Insert the task into the tasks collection
+        result = tasks_collection.insert_one(new_task)
+        
+        if result.inserted_id:
+            return True, result.inserted_id
+        else:
+            return False, None
+    except Exception as e:
+        return False, None
+
+# Route for creating a group task
+@app.route('/create-group-task', methods=['POST'])
+def create_group_task():
+    try:
+        # Extract data from the request
+        group_id = request.form.get('group_Id')
+        group_name = request.form.get('group_name')
+        task_name = request.form.get('task_name')
+        task_completion_date = request.form.get('task_completion_date')
+        
+        # Call the createTask function to insert the task into the database
+        success, task_id = createTask(ObjectId(group_id), group_name, task_name, task_completion_date)
+        
+        if success:
+                group_members = get_group_members(group_id)
+                for member in group_members:
+                    createNotification(group_name, member,5)
+                return jsonify({'message': 'Task created succesfully'}), 200
+        else:
+            return jsonify({'message': 'Failed to create task'}), 500
+    except Exception as e:
+        return jsonify({'message': f'An error occurred: {str(e)}'}), 500
+
+def get_group_members(group_id):
+    # Assuming you have a groups collection in your database
+    groups_collection = db["groups"]
+    group = groups_collection.find_one({"_id": ObjectId(group_id)})
+    if group:
+        return group.get('members', [])
+    else:
+        return []
+
+@app.route('/get-group-tasks', methods=['POST'])
+def get_group_tasks():
+    try:
+        group_id = request.json.get('group_id')
+        tasks_collection = db["tasks"]
+        current_date = datetime.now()
+        group_tasks = list(tasks_collection.find({"group_id": ObjectId(group_id)}).sort("task_completion_date", 1))
+        closest_tasks = [task for task in group_tasks if task["task_completion_date"] >= current_date]
+        
+        for task in closest_tasks:
+            task['_id'] = str(task['_id'])
+        
+        return jsonify(closest_tasks), 200
+    except Exception as e:
+        print(f'An error occurred: {str(e)}')
+        return jsonify({'message': 'Failed to fetch tasks for the group'}), 500
+
 
 # 
 # Main() function of app

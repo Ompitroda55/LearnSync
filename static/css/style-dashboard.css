@@ -7,19 +7,6 @@ main-container {
     grid-template-columns: auto 1fr;
 }
 
-#group-tasks-show-table {
-    border-collapse: collapse;
-    width: 100%;
-    border-spacing: 0 10px;
-}
-
-tr {
-    font-size: var(--less-imp-font-size);
-}
-
-td {
-    margin-bottom: 5px;
-}
 
 nav {
     box-sizing: border-box;
@@ -422,6 +409,20 @@ content-container {
     color: var(--snow);
 }
 
+
+.groups-list-item {
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    justify-content: space-between;
+    background-color: var(--polar);
+    border-radius: var(--border-radius);
+    height: fit-content;
+    color: var(--eel);
+    font-size: var(--less-imp-font-size);
+}
+
 .container-groups-left {
     /* background-color: yellow; */
     /* flex: 1; */
@@ -438,6 +439,12 @@ content-container {
 .group-view-tasks {
     display: flex;
     flex-direction: column;
+}
+
+.tasks-show-table-row {
+    background-color: var(--macaw);
+    margin-bottom: 5px;
+    padding: 3px;
 }
 
 .view-tasks-create {
@@ -467,11 +474,59 @@ content-container {
     right: var(--default-border-width);
 }
 
-.container-group-view {
+.container-groups-right {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(24px); 
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.container-user-groups-list {
     display: flex;
+    flex-direction: row;
+    /* background-color: red; */
+    align-items: center;
+    gap: 3px;
+    width: 676px;
+    overflow-x: auto;
+    
+}
+
+.groups-list-item .simple-text {
+    text-wrap: nowrap;
+}
+
+#group-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    aspect-ratio: 1;
+}
+
+.container-group-view {
+
+    display: flex;
+    position: relative;
     flex-direction: column;
     overflow-y: auto;
-    width: 100%;
+    overflow-x: hidden;
+    gap: 10px;
+    width: fit-content;
+    max-width: 600px;
+    height: fit-content;
+    background-color: white;
+    padding: 10px;
+    border-radius: var(--border-radius);
+    border: var(--default-border-width) solid var(--swan);
 
 }
 
@@ -480,6 +535,108 @@ content-container {
     flex-direction: column;
 }
 
+.group-tasks-show-table {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    /* padding: 10px; */
+    /* height: 150px; */
+    max-height: 200px;
+    overflow-y: auto;
+    gap: 5px;
+    /* background-color: orange; */
+
+}
+
+.tasks-show-table-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+    gap: 5px;
+    /* margin-bottom: 5px; */
+    border-radius: var(--border-radius);
+    background-color: var(--polar);
+}
+
+.task-table-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-info-date {
+    font-size: var(--less-imp-font-size);
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.created_at {
+    background-color: var(--macaw);
+    color: var(--snow);
+    font-weight: 600;
+    padding: 3px;
+    border-radius: var(--link-radius);
+}
+
+.completion_at {
+    background-color: var(--cardinal);
+    color: var(--snow);
+    font-weight: 600;
+    padding: 3px;
+    border-radius: var(--link-radius);
+}
+
+.days_remaining {
+    background-color: var(--bee);
+    color: var(--snow);
+    font-weight: 600;
+    padding: 3px;
+    border-radius: var(--link-radius);
+}
+
+.task-table-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    align-items: center;
+}
+
+.group-view-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10fpx;
+
+
+}
+
+.group-view-content .ui-button {
+    width: fit-content;
+    padding: 0 3px 0 3px;
+    border-radius: var(--link-radius);
+    padding: 3px;
+    height: fit-content;
+}
+
+.container-members-add .ui-button {
+    background-color: var(--macaw);
+    font-size: var(--less-imp-font-size);
+
+}
+
+.container-members-remove .ui-button {
+    background-color: var(--bee);
+    font-size: var(--less-imp-font-size);
+}
+
+.container-members-add, .container-members-remove {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    text-wrap: nowrap;
+    overflow-x: auto;
+    /* flex-wrap: wrap; */
+    gap: 3px;
+}
 
 /* .member-select input[type="checkbox"] {}
 

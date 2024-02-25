@@ -162,6 +162,49 @@
                             <button class="link-secondary-btn" type="submit" id="update-task-btn">Submit</button>
                         </form>
                     </div>
+                    <script>
+                        // Add task input field
+                        document.getElementById('addTask').addEventListener('click', function() {
+                            var taskFields = document.getElementById('taskFields');
+                            var input = document.createElement('input');
+                            input.type = 'text';
+                            input.className = 'task';
+                            input.name = 'task[]';
+                            input.placeholder = 'Task';
+                            taskFields.appendChild(input);
+                        });
+                    
+                        // Submit tasks
+                        document.getElementById('submitTasks').addEventListener('click', function() {
+                            var form = document.getElementById('taskForm');
+                            var formData = new FormData(form);
+                    
+                            fetch('/updateDailyTasks', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log(data);
+                                // Handle response data as needed
+                                if (data.success) {
+                                    alert('Tasks added successfully');
+                                    // Redirect or perform any other action upon success
+                                } else {
+                                    alert('Failed to add tasks: ' + data.error);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('There was a problem with the fetch operation:', error);
+                                // Handle error
+                            });
+                        });
+                    </script>
                     <div class="user-pomodoro-sequences container-default">
                         <form action="" method="post" id="user-pomodoro-form">
                             <div class="user-pomodoro-form-sequence">

@@ -123,12 +123,13 @@
                 <div class="container-preferences">
                     <div class="title-dashboard">User Preferences</div>
                     <div class="user-daily-tasks container-default">
-                        <form action="/update-daily-task" method="post" id="flashCardForm">
+                        <form action="/update-daily-task" method="post" id="flashCardForm" id="todoForm">
                             <div id="taskFields">
-                                <input type="text" class="task" name="task[]" placeholder="task">
+                                <input type="text" class="task" name="task[]" placeholder="Task">
                             </div>
                             <a class="link-primary-btn" href="#" id="addFields">Add Task</a>
-                            <a class="link-secondary-btn" id="update-task-btn">Submit</a>
+                            <!--<a class="link-secondary-btn" id="update-task-btn">Submit</a> -->
+                            <button class="link-secondary-btn" type="submit" id="update-task-btn">Submit</button>
                         </form>
                     </div>
                     <div class="user-pomodoro-sequences container-default">

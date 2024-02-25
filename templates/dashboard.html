@@ -198,43 +198,119 @@
 
                     </div> -->
                     <div class="container-groups container-default">
-                        <div class="secondary-heading">Groups</div>
-                        <form class="container-groups-create">
-                            <div class="container-groups-actions">
-                                <input type="text" placeholder="Enter Group Name" id="groupName" />
-                                <button id="create-group-btn" class="ui-button"
-                                    style="width: fit-content; padding: 0 10px 0 10px;">Create Group</button>
-                            </div>
-                            <div class="container-groups-members-select">
+                        <div class="container-groups-left">
+                            <div class="secondary-heading">Groups</div>
+                            <form class="container-groups-create">
+                                <div class="container-groups-actions">
+                                    <input type="text" placeholder="Name" id="groupName" />
+                                    <button id="create-group-btn" class="ui-button"
+                                        style="width: fit-content; padding: 0 10px 0 10px;">
+                                        Create &nbsp; <span class="material-symbols-rounded">
+                                            diversity_1
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="container-groups-members-select">
 
-                            </div>
-                        </form>
-                        <div class="container-user-groups">
-                            <div class="container-user-groups-list">
-                                <table>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Pin</th>
-                                        <th>View</th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            {Group Name}
-                                        </td>
-                                        <td>
-                                            <a href="">
-                                            Pin Group
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="">View</a>
-                                        </td>
-                                    </tr>
-                                </table>
+                                </div>
+                            </form>
+                            <div class="container-user-groups">
+                                <div class="container-user-groups-list">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                {Group Name}
+                                            </td>
+                                            <td>
+                                                <a href="">View</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                {Group Name}
+                                            </td>
+                                            <td>
+                                                <a href="">View</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                {Group Name}
+                                            </td>
+                                            <td>
+                                                <a href="">View</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <div class="container-group-view">
-                            <!-- Group Viewing content goes here -->
+                        <div class="container-groups-right">
+                            <div class="container-group-view">
+                                <div class="group-view-header">
+                                    <span class="tertiary-heading">group.name</span>
+                                    <span class="less-imp-text">Created by group.leader</span>
+                                </div>
+                                <div class="group-view-tasks">
+                                    <div class="view-tasks-create">
+                                        <input type="text" placeholder="Create task..." />
+                                        <input type="date" id="date-task-completion" name="date" min="" max="" required>
+                                        <button id="create-task-btn" class="ui-button">
+                                            <span class="material-symbols-rounded">
+                                                add_circle
+                                                </span>
+                                        </button>
+                                    </div>
+                                    <script>
+                                        // Get current date
+                                        const currentDate = new Date();
+                                    
+                                        // Calculate one week ahead date
+                                        const oneWeekAhead = new Date();
+                                        oneWeekAhead.setDate(currentDate.getDate() + 7);
+                                    
+                                        // Format the dates as strings in YYYY-MM-DD format
+                                        const formattedCurrentDate = currentDate.toISOString().split('T')[0];
+                                        const formattedOneWeekAhead = oneWeekAhead.toISOString().split('T')[0];
+                                    
+                                        // Set min and max attributes of the date input field
+                                        document.getElementById("date-task-completion").setAttribute("min", formattedCurrentDate);
+                                        document.getElementById("date-task-completion").setAttribute("max", formattedOneWeekAhead);
+                                    </script>
+                                    <div class="view-tasks-show">
+                                        <table id="group-tasks-show-table">
+                                            <div class="tasks-show-table-row">
+                                                <tr>
+                                                    <td>{task}</td>
+                                                    <td>{created_at}</td>
+                                                    <td>{completion_date}</td>
+                                                    <td class="task-action-cell">
+                                                        <a href="" id="delete-task" class="ui-button" style="background-color: var(--cardinal);">
+                                                            <span class="material-symbols-rounded ">
+                                                                delete
+                                                            </span>
+                                                        </a>
+                                                        <a href="" id="update-task" class="ui-button" style="background-color: var(--macaw);">
+                                                            <span class="material-symbols-rounded ">
+                                                                update
+                                                            </span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </div>
+                                            
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="group-view-content"></div>
+                                <div class="group-view-actions">
+                                    <button class="ui-button" style="background-color: var(--cardinal); width: fit-content; padding: 3px;">
+                                        Remove Group&nbsp;<span class="material-symbols-rounded">
+                                            delete
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1042,7 +1118,7 @@
                 return data;
             } catch (error) {
                 console.error('Error creating group:', error);
-                return { message: 'Error creating group' }; 
+                return { message: 'Error creating group' };
             }
         }
 
@@ -1066,27 +1142,92 @@
                 formData.append('selectedFriends', JSON.stringify(selectedFriends));
                 const response = await createGroup(formData);
 
-                alert(response.message); 
+                alert(response.message);
             } else {
                 alert('Groupname not available');
             }
         });
 
         async function getUserGroups() {
-    try {
-        const response = await fetch('/get-user-groups', {
-            method: 'POST'
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch user groups');
+            try {
+                const response = await fetch('/get-user-groups', {
+                    method: 'POST'
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user groups');
+                }
+                const groups = await response.json();
+                return groups;
+            } catch (error) {
+                console.error('Error fetching user groups:', error);
+                return null;
+            }
         }
-        const groups = await response.json();
-        return groups;
-    } catch (error) {
-        console.error('Error fetching user groups:', error);
-        return null;
-    }
-}
+
+        async function generateUserGroupsList() {
+            // Get user groups data
+            const groups = await getUserGroups();
+
+            // Reference to the container element
+            const container = document.querySelector('.container-user-groups-list table');
+
+            // Clear previous content
+            // container.innerHTML = '';
+
+            // Iterate over the groups data and generate HTML elements
+            groups.forEach(group => {
+                // Create table row element
+                const row = document.createElement('tr');
+
+                // Create table data element for group name
+                const groupNameCell = document.createElement('td');
+                groupNameCell.textContent = group.name; // Assuming the group object has a 'name' property
+                row.appendChild(groupNameCell);
+
+                // Create table data element for view link
+                const viewLinkCell = document.createElement('td');
+                const viewLink = document.createElement('a');
+
+                // Create span element for the view link
+                const viewSpan = document.createElement('span');
+                viewLink.classList.add('material-symbols-rounded');
+                viewLink.textContent = 'preview';
+
+                // Set custom data attribute to hold group object
+                // viewLink.appendChild(viewSpan);
+                viewLink.dataset.groupObject = JSON.stringify(group);
+                viewLink.addEventListener('click', openGroupView);
+
+                // Append the view link to the view link cell
+                viewLinkCell.appendChild(viewLink);
+
+                // Append the view link cell to the table row
+                row.appendChild(viewLinkCell);
+
+                // Append the table row to the container
+                container.appendChild(row);
+            });
+        }
+
+        // Function to open group view container
+        function openGroupView(event) {
+            event.preventDefault();
+            // Get group object from custom data attribute
+            const groupObject = JSON.parse(event.target.dataset.groupObject);
+            // Select and open group view container
+            const groupViewContainer = document.querySelector('.container-group-view');
+            // Clear previous content
+            // groupViewContainer.innerHTML = '';
+            // Iterate over group object properties and display them
+            // for (const property in groupObject) {
+            //     if (Object.hasOwnProperty.call(groupObject, property)) {
+            //         const propertyElement = document.createElement('div');
+            //         propertyElement.textContent = `${property}: ${groupObject[property]}`;
+            //         groupViewContainer.appendChild(propertyElement);
+            //     }
+            // }
+            groupViewContainer.style.display = 'flex';
+        }
 
 
 
@@ -1094,7 +1235,7 @@
             updateStats();
             updateNotifications();
             generateFriendsList('.container-groups-members-select');
-
+            generateUserGroupsList();
             // setInterval(updateStats, 1000);
         });
 

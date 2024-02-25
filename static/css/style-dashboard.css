@@ -1,8 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0");
+
 main-container {
     width: 100%;
     /* background-color: aquamarine; */
     display: grid;
     grid-template-columns: auto 1fr;
+}
+
+#group-tasks-show-table {
+    border-collapse: collapse;
+    width: 100%;
+    border-spacing: 0 10px;
+}
+
+tr {
+    font-size: var(--less-imp-font-size);
+}
+
+td {
+    margin-bottom: 5px;
 }
 
 nav {
@@ -63,7 +79,7 @@ nav {
 }
 
 .nav-list-icon {
-    height: 64px;
+    height: 42px;
     width: auto;
 }
 
@@ -345,16 +361,24 @@ content-container {
 
 .container-groups {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    /* background-color: #66bb6a; */
+}
+
+.task-action-cell {
+    display: flex;
+    gap: 3px;
+    flex-direction: row;
 }
 
 .container-groups-create {
     display: flex;
     flex-direction: column;
     gap: 0px;
-    align-items: center;
-    /* background-color: black; */
-    width: 50%;
+    align-items: left;
+    /* background-color: orange; */
+
+    /* width: 50%; */
 }
 
 .container-groups-actions {
@@ -363,6 +387,7 @@ content-container {
     gap: 10px;
     align-items: center;
     justify-content: space-evenly;
+    width: fit-content;
 }
 
 .container-groups-members-select {
@@ -391,6 +416,70 @@ content-container {
     background-color: var(--macaw); /* Change to desired color */
     color: var(--snow);
 }
+
+.member-select:hover {
+    background-color: var(--macaw); /* Change to desired color */
+    color: var(--snow);
+}
+
+.container-groups-left {
+    /* background-color: yellow; */
+    /* flex: 1; */
+    display: flex;
+    flex-direction: column;
+
+}
+
+.container-groups-right {
+    /* background-color: blue; */
+    flex: 1;
+
+}
+.group-view-tasks {
+    display: flex;
+    flex-direction: column;
+}
+
+.view-tasks-create {
+    /* background-color: orange; */
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+}
+
+.view-tasks-create input[type='date'] {
+    border-radius: var(--btn-radius);
+    border: var(--default-border-width) solid var(--feather-green);
+    border-radius: var(--btn-radius);
+    padding: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    font-size: var(--less-imp-font-size);
+}
+
+.view-tasks-create button {
+    /* position: absolute; */
+    aspect-ratio: 1;
+    right: var(--default-border-width);
+}
+
+.container-group-view {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    width: 100%;
+
+}
+
+.group-view-header {
+    display: flex;
+    flex-direction: column;
+}
+
 
 /* .member-select input[type="checkbox"] {}
 

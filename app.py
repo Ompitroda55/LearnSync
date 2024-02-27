@@ -647,20 +647,21 @@ def check_groupname_available():
     else:
         return jsonify({'message': 'Username available'}), 200
     
-@app.route('/updateDailyTasks', methods=['POST'])
-def update_daily_tasks():
+@app.route('/update-daily-task', methods=['POST'])
+def update_daily_task():
+    collection = db["users"]
     try:
-        collection = db['users']
-        
-        # Retrieve username from session
-        # username = session.get('username')
-        username = 'om'
+        # Retrieve user ID from session or request data
+        user_id = session.get('user_id')  # Assuming user ID is stored in the session
+        # user_id = request.form.get('user_id')  # Assuming user ID is sent in the request data
+
+        # Retrieve task data from request parameters
         tasks_data = request.form.getlist('task[]')
-        
+
         # Check if tasks data is provided
         if not tasks_data:
             return jsonify({'success': False, 'error': 'No tasks provided'}), 400
-        
+
         # Construct list of task objects
         tasks = [{
             'task': task,
@@ -668,16 +669,16 @@ def update_daily_tasks():
             'completed': False,
             'lastupdate': datetime.utcnow()
         } for task in tasks_data]
-        
+
         # Update user's dailytasks array with new tasks
-        result = collection.update_one({'username': username}, {'$push': {'dailytasks': {'$each': tasks}}}, upsert=True)
-        
+        result = collection.update_one({'_id': ObjectId(user_id)}, {'$push': {'dailytasks': {'$each': tasks}}}, upsert=True)
+
         # Check if tasks were successfully added
         if result.modified_count > 0 or result.upserted_id is not None:
             return jsonify({'success': True, 'message': 'Tasks added successfully'}), 200
         else:
             return jsonify({'success': False, 'error': 'Failed to add tasks'}), 500
-    
+
     except Exception as e:
         return jsonify({'success': False, 'error': f'An error occurred: {str(e)}'}), 500
 

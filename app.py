@@ -700,13 +700,32 @@ def insertNewGroup():
         return jsonify({'message': 'Failed to create group'}), 500
     
 @app.route('/get-user-groups', methods=['POST'])
-def get_user_groups():#
+def getUserGroups():#
     username = session.get('username')
     groups_collection = db["groups"]
     user_groups = list(groups_collection.find({"group_leader": username}))
     for group in user_groups:
         group['_id'] = str(group['_id'])
     return jsonify(user_groups)
+
+@app.route("/get-friends-list", methods=["POST"])
+def getUserFriends():
+    try:
+        collection = db["users"]
+        
+        user_object_id = ObjectId(session.get('user_id'))
+        user = collection.find_one({"_id": user_object_id})
+        
+        if user:
+            friends = user.get("friends", [])
+            
+            return friends
+        else:
+            return None
+    except Exception as e:
+        print(f'An error occurred: {str(e)}')
+        return None
+
 
 def createTask(group_Id, group_name, task_name, task_completion_date, group_members):
     try:
@@ -743,7 +762,7 @@ def create_group_task():
         task_completion_date = request.form.get('task_completion_date')
         
         # Fetch the members of the group
-        group_members = get_group_members(group_id)
+        group_members = getGroupMembers(group_id)
         
         # Call the createTask function to insert the task into the database
         success, task_id = createTask(ObjectId(group_id), group_name, task_name, task_completion_date, group_members)
@@ -780,7 +799,7 @@ def changeTaskStatus(task_id, member_name, new_status):
         return False
 
 
-def get_group_members(group_id):
+def getGroupMembers(group_id):
     # Assuming you have a groups collection in your database
     groups_collection = db["groups"]
     group = groups_collection.find_one({"_id": ObjectId(group_id)})
@@ -796,17 +815,44 @@ def get_group_tasks():
         tasks_collection = db["tasks"]
         current_date = datetime.now()
         group_tasks = list(tasks_collection.find({"group_id": ObjectId(group_id)}).sort("task_completion_date", 1))
+        
+        # Convert task_completion_date strings to datetime objects
+        for task in group_tasks:
+            task["task_completion_date"] = datetime.strptime(task["task_completion_date"], "%Y-%m-%d")
+        
         closest_tasks = [task for task in group_tasks if task["task_completion_date"] >= current_date]
         
         for task in closest_tasks:
             task['_id'] = str(task['_id'])
+            task['group_id'] = str(task['group_id'])
+            print(task)
         
         return jsonify(closest_tasks), 200
     except Exception as e:
         print(f'An error occurred: {str(e)}')
         return jsonify({'message': 'Failed to fetch tasks for the group'}), 500
 
-
+@app.route('/delete-group-task', methods=['POST'])
+def delete_group_task():
+    try:
+        # Extract the task ID from the request
+        task_id = request.json.get('task_id')
+        
+        # Assuming you have a tasks collection in your database
+        tasks_collection = db["tasks"]
+        
+        # Delete the task document from the database using its ID
+        result = tasks_collection.delete_one({"_id": ObjectId(task_id)})
+        
+        if result.deleted_count == 1:
+            # Task deletion successful
+            return jsonify({'success': True, 'message': 'Task deleted successfully'}), 200
+        else:
+            # Task not found or deletion unsuccessful
+            return jsonify({'success': False, 'message': 'Task not found or deletion unsuccessful'}), 404
+    except Exception as e:
+        # Handle any errors that occur during the deletion process
+        return jsonify({'success': False, 'message': f'An error occurred: {str(e)}'}), 500
 # 
 # Main() function of app
 # 

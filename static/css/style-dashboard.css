@@ -116,7 +116,7 @@ nav {
     position: absolute;
     display: none;
     flex-direction: column;
-    background-color: yellow;
+    /* background-color: yellow; */
     box-sizing: border-box;
     min-width: fit-content;
     top: 0%;
@@ -187,19 +187,21 @@ content-container {
     height: fit-content;
     display: flex;
     flex-direction: column;
-
-    justify-content: space-evenly;
+    gap: 10px;
+    justify-content: center;
     align-items: center;
     position: relative;
 }
+
+
 
 .material-icons {
     font-size: 24px;
     /* Adjust the font size to increase the icon size */
 }
 
-.collapse-timer,
-.expand-timer {
+#collapse-timer,
+#expand-timer {
     text-decoration: none;
     display: flex;
     position: absolute;
@@ -209,19 +211,19 @@ content-container {
     transition: color 1s ease-in-out;
 }
 
-.expand-timer {
+#expand-timer {
     top: 5px;
     right: 5px;
 }
 
-.collapse-timer {
+#collapse-timer {
     top: 5px;
     left: 5px;
     display: none;
 }
 
-.collapse-timer,
-.expand-timer :hover {
+#collapse-timer,
+#expand-timer :hover {
     color: var(--eel);
 }
 
@@ -230,15 +232,15 @@ content-container {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    height: fit-content;
 }
 
 .container-pomodoro-timer {
     display: flex;
-
     flex-direction: column;
     justify-content: center;
+    /* background-color: black; */
     align-items: center;
-    flex: 2;
 }
 
 #time {
@@ -249,14 +251,23 @@ content-container {
     font-size: var(--logo-font-size);
 }
 
-#time-min,
+#time-min, #time-colon,
 #time-sec {
     background-color: var(--feather-green);
     color: var(--snow);
     padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 72px;
     height: fit-content;
+    height: 128px;
+    width: 128px;
+    aspect-ratio: 1;
     border-radius: var(--border-radius);
 }
+
+
 
 #pomo-btns {
     display: flex;
@@ -276,13 +287,13 @@ content-container {
 }
 
 .container-pomodoro-selector {
-    flex: 1;
     display: flex;
     flex-direction: row;
     justify-content: center;
     /* background-color: yellow; */
     width: 300px;
     gap: 5px;
+    height: fit-content;
     overflow-x: auto;
     margin-top: 20px;
     /* background-color: yellow; */
@@ -308,7 +319,7 @@ content-container {
 }
 
 .pomodoro-selector:first-child {
-    margin-left: 40px;
+    /* margin-left: 40px; */
 }
 
 .pomodoro-selector input[type="radio"] {
@@ -319,7 +330,7 @@ content-container {
 
 .pomodoro-selector input[type="radio"]:checked+label {
     background-color: var(--feather-green);
-    color: white;
+    color: var(--snow);
 }
 
 .pomodoro-selector input[type="radio"]:checked+label:before {
@@ -337,6 +348,26 @@ content-container {
     border-radius: var(--btn-radius);
     gap: 5px;
 }
+
+.home-pomodoro-timer-full {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100svw;
+    height: 100svh;
+    z-index: 999;
+
+    background-color: var(--polar);
+}
+
+.timer-full-time {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1svw;
+    font-size: 120px;
+}
+
 
 /* CSS For Social Container */
 /* Code for Friends panel */
@@ -439,6 +470,7 @@ content-container {
 .group-view-tasks {
     display: flex;
     flex-direction: column;
+    width: fit-content;
 }
 
 .tasks-show-table-row {
@@ -519,10 +551,9 @@ content-container {
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
-    gap: 10px;
-    width: fit-content;
-    max-width: 600px;
-    height: fit-content;
+    gap: 15px;
+    width: 476px;
+    /* height: fit-content; */
     background-color: white;
     padding: 10px;
     border-radius: var(--border-radius);
@@ -538,11 +569,12 @@ content-container {
 .group-tasks-show-table {
     display: flex;
     flex-direction: column;
-    width: fit-content;
+    width: 476px;
     /* padding: 10px; */
     /* height: 150px; */
     max-height: 200px;
     overflow-y: auto;
+    overflow-x: hidden;
     gap: 5px;
     /* background-color: orange; */
 
@@ -554,23 +586,28 @@ content-container {
     justify-content: space-between;
     padding: 5px;
     gap: 5px;
+    width: 95%;
     /* margin-bottom: 5px; */
     border-radius: var(--border-radius);
     background-color: var(--polar);
+    /* background-color: orange; */
 }
 
 .task-table-info {
     display: flex;
     flex-direction: column;
+    gap: 5px;
+    padding: 3px;
 }
 
 .task-info-date {
     font-size: var(--less-imp-font-size);
     flex-wrap: wrap;
     gap: 5px;
+    padding: 3px;
 }
 .created_at {
-    background-color: var(--macaw);
+    background-color: var(--eel);
     color: var(--snow);
     font-weight: 600;
     padding: 3px;

@@ -326,7 +326,7 @@ main {
     display: flex;
     flex-direction: column;
     /* gap: 10px; */
-    max-width: fit-content;
+    width: 100%;
 }
 
 #card-info-fields {
@@ -339,6 +339,7 @@ main {
 #questionFields-container {
     overflow-y: auto;
     max-height: 300px;
+    width: 100%;
 }
 
 #questionFields-container::-webkit-scrollbar {

@@ -376,7 +376,7 @@ def view_flashcard(flashcard_id):
 @app.route('/fetch-all-flashcards', methods=['POST'])
 def fetchall_flashcards():
     collection = db["flashcards"]
-    flashcards_cursor = collection.find({})
+    flashcards_cursor = collection.find({}).sort("created_at", -1)
     flashcards = list(flashcards_cursor)
     # print(flashcards)
     for flashcard in flashcards:
@@ -395,7 +395,7 @@ def fetchUserFlashcards(user_id):
         "created_by": {"$regex": user_name, "$options": "i"}
     }
     # Fetch all flashcards that match the query
-    cursor = collection.find(query)
+    cursor = collection.find(query).sort("created_at", -1)
     # Convert ObjectId to string and format the results
     flashcards = [flashcard for flashcard in cursor]
     for flashcard in flashcards:
@@ -403,21 +403,47 @@ def fetchUserFlashcards(user_id):
     # print(flashcards)
     return jsonify(flashcards)
 
-@app.route('/search_flashcards', methods=['POST'])
-def search_flashcards():
+@app.route('/search-user-flashcards', methods=['POST'])
+def searchUserFlashcards():
     keyword = request.json.get('keyword')
     collection = db["flashcards"]
+    username = session.get('username')
     # Search for the keyword in the name or category fields using a case-insensitive regular expression
     query = {
-        "$or": [
-            # {"name": {"$regex": keyword, "$options": "i"}},
-            # {"category": {"$regex": keyword, "$options": "i"}},
-            # {"flashcard_data": {"$elemMatch": {"$elemMatch": {"$regex": keyword, "$options": "i"}}}},
-            {"hashtags": {"$regex": keyword, "$options": "i"}}
+        "$and": [
+            {"$or": [
+                {"name": {"$regex": keyword, "$options": "i"}},
+                {"category": {"$regex": keyword, "$options": "i"}},
+                {"flashcard_data": {"$elemMatch": {"$elemMatch": {"$regex": keyword, "$options": "i"}}}},
+                {"hashtags": {"$regex": keyword, "$options": "i"}}
+            ]}, 
+        {"created_by": username}
         ]
     }
     # Fetch all flashcards that match the query
-    cursor = collection.find(query)
+    cursor = collection.find(query).sort("created_at", -1)
+    # Convert ObjectId to string and format the results
+    flashcards = [flashcard for flashcard in cursor]
+    for flashcard in flashcards:
+        flashcard['_id'] = str(flashcard['_id'])
+    return jsonify(flashcards)
+
+@app.route('/search-flashcards', methods=['POST'])
+def searchFlashcards():
+    keyword = request.json.get('keyword')
+    collection = db["flashcards"]
+    username = session.get('username')
+    # Search for the keyword in the name or category fields using a case-insensitive regular expression
+    query = {
+        "$or": [
+                {"name": {"$regex": keyword, "$options": "i"}},
+                {"category": {"$regex": keyword, "$options": "i"}},
+                {"flashcard_data": {"$elemMatch": {"$elemMatch": {"$regex": keyword, "$options": "i"}}}},
+                {"hashtags": {"$regex": keyword, "$options": "i"}}
+            ]
+    }
+    # Fetch all flashcards that match the query
+    cursor = collection.find(query).sort("created_at", -1)
     # Convert ObjectId to string and format the results
     flashcards = [flashcard for flashcard in cursor]
     for flashcard in flashcards:
@@ -425,9 +451,8 @@ def search_flashcards():
     return jsonify(flashcards)
 
 
-
 #
-# Hey Friends Functionality Goes Here...
+# Friends Functionality Goes Here...
 # 
 
 # Function for add friend fuctionality

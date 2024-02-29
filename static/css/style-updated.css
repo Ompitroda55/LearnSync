@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&family=Satisfy&family=Varela+Round&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0');
+
 :root {
 
     /* Core Colours */
@@ -8,9 +9,12 @@
     --feather-green-mask: #429700;
     --mask-green: #89e219;
     /* --mask-green: #bb38db; */
-    --foot-green: #d2ff9f; /* --used for footer */
-    --eel: #4b4b4b;
-    --snow: #ffffff;
+    --foot-green: #d2ff9f;
+    /* --used for footer */
+    /* --eel: #4b4b4b;
+    --snow: #ffffff; */
+    --eel: #ffffff;
+    --snow: #4b4b4b;
 
 
     /* Secondary Colours */
@@ -21,31 +25,42 @@
     --cardinal-light: #ff2020;
 
     --cardinal-mask: #a82a2a;
-    --bee: #ffc800;             /* Secondary Colour */
-    --bee-mask : #ffe176;       /* Masking colour for bee (gold) */
+    --bee: #ffc800;
+    /* Secondary Colour */
+    --bee-mask: #ffe176;
+    /* Masking colour for bee (gold) */
     --fox: #ff9600;
     --beetle: #ce82ff;
     --humpback: #2b70c9;
 
     /* Tints */
-    --eel: #4b4b4b; /* Black */
+    --eel: #4b4b4b;
+    /* Black */
     --wolf: #777777;
     --hare: #afafaf;
     --swan: #e5e5e5;
     --polar: #f7f7f7;
-    --snow: #ffffff; /* White */
+    --snow: #ffffff;
+    /* --eel: #ffffff;
+    --snow: #000000; */
+    /* White */
 
     /* Font Style */
-    --main-font: 'Poppins', sans-serif;     /* For text */ 
-    --cursive-font-0: 'Pacifico', cursive;  /* For highlighting text */ 
-    --cursive-font-1: 'Satisfy', cursive;   /* Alterative for highlighting text */
-    --logo-font: 'Varela Round', sans-serif;/* For LearnSync Text */
+    --main-font: 'Poppins', sans-serif;
+    /* For text */
+    --cursive-font-0: 'Pacifico', cursive;
+    /* For highlighting text */
+    --cursive-font-1: 'Satisfy', cursive;
+    /* Alterative for highlighting text */
+    --logo-font: 'Varela Round', sans-serif;
+    /* For LearnSync Text */
     /* Font Size */
     --logo-font-size: 2.5rem;
     --heading-font-size: 3rem;
     --sub-heading-font-size: 1.5rem;
-    --default-font-size: 1.15rem; /* Default */
-    --font-for-flash-card : 1rem;
+    --default-font-size: 1.15rem;
+    /* Default */
+    --font-for-flash-card: 1rem;
     --less-imp-font-size: 0.8rem;
 
     /* Links Basic Config */
@@ -69,7 +84,39 @@
     font-family: var(--main-font);
     color: var(--eel);
     font-size: var(--default-font-size);
+    background-color: var(--snow);
+}
 
+::-webkit-scrollbar {
+    width: 8px;
+    height: 4px;
+    /* width of the scrollbar */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--polar);
+    /* background color of the track */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--hare);
+    /* color of the handle */
+    border-radius: 999px;
+    /* roundness of the handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--feather-green);
+    /* color of the handle on hover */
+}
+
+/* Corner */
+::-webkit-scrollbar-corner {
+    background: var(--eel);
+    /* color of the scrollbar corner */
 }
 
 .logo {
@@ -120,7 +167,7 @@
 
 .tertiary-heading {
     font-family: var(--main-font);
-    font-size: var(--sub-heading-font-size);
+    font-size: var(--font-for-flash-card);
     font-weight: 600;
     text-align: left;
     color: var(--eel);
@@ -148,7 +195,7 @@
     padding: 10px;
     border-radius: var(--link-radius);
     box-shadow: 0px 6px 1px var(--feather-green-mask);
-    transition : background-color.2s ease-in-out;
+    transition: background-color.2s ease-in-out;
     /* border: 3px solid var(--swan); */
     width: 100%;
     text-align: center;
@@ -170,7 +217,7 @@
     padding: 10px;
     border-radius: var(--link-radius);
     box-shadow: 0px 6px 1px var(--macaw-mask-light);
-    transition : background-color.2s ease-in-out;
+    transition: background-color.2s ease-in-out;
     /* border: 3px solid var(--swan); */
     width: 100%;
     text-align: center;
@@ -194,7 +241,7 @@
     padding: 5px;
     border-radius: var(--btn-radius);
     box-shadow: 0px 6px 1px var(--feather-green-mask);
-    transition : background-color.2s ease-in-out;
+    transition: background-color.2s ease-in-out;
     /* border: 3px solid var(--swan); */
     /* width: 100%; */
     text-align: center;
@@ -218,7 +265,7 @@
     padding: 5px;
     border-radius: var(--btn-radius);
     box-shadow: 0px 6px 1px var(--humpback);
-    transition : background-color.2s ease-in-out;
+    transition: background-color.2s ease-in-out;
     /* border: 3px solid var(--swan); */
     /* width: 100%; */
     text-align: center;
@@ -241,13 +288,14 @@
     padding: 5px;
     border-radius: var(--btn-radius);
     box-shadow: 0px 6px 1px var(--fox);
-    transition : background-color.2s ease-in-out;
+    transition: background-color.2s ease-in-out;
     /* border: 3px solid var(--swan); */
     /* width: 100%; */
     text-align: center;
     font-size: var(--font-for-flash-card);
     /* max-width: fit-content; */
     width: fit-content;
+    cursor: pointer;
     /* min-width: 10svw; */
     color: var(--eel);
 }
@@ -256,7 +304,9 @@
     background-color: var(--bee-mask);
 }
 
-.link-primary-btn, .link-secondary-btn, .link-tertiary-btn :hover{
+.link-primary-btn,
+.link-secondary-btn,
+.link-tertiary-btn :hover {
     cursor: pointer;
 }
 
@@ -322,7 +372,7 @@
     border: var(--default-border-width) solid var(--swan);
     border-radius: var(--border-radius);
     padding: 15px;
-    max-width: 960px;  
+    max-width: 960px;
     background-color: var(--snow);
 }
 
@@ -349,25 +399,44 @@ hr {
     display: none;
     font-size: var(--less-imp-font-size);
     color: var(--snow);
-    max-width: 100%;  
+    max-width: 100%;
     background-color: var(--fox);
     background-color: var(--cardinal);
 }
+
+.info-btn {
+    background-color: var(--eel);
+    color: var(--snow);
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    align-items: center;
+    /* aspect-ratio: 1; */
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    padding: 2px;
+    height: fit-content;
+    width: fit-content;
+}
+
+.info-btn:hover {
+    background-color: var(--mask-green);
+}
+
+
 
 @media only screen and (max-width: 425px) {
     :root {
         --logo-font-size: 24pt;
         --heading-font-size: 16pt;
         --sub-heading-font-size: 14pt;
-        --default-font-size: 12pt; /* Default */
+        --default-font-size: 12pt;
+        /* Default */
         --less-imp-font-size: 8pt;
     }
 }
 
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
+@media only screen and (min-width: 769px) and (max-width: 1024px) {}
 
-}
-
-@media only screen and (min-width: 1025px) {
-
-}
+@media only screen and (min-width: 1025px) {}

@@ -28,6 +28,7 @@ user_object = None
 # MongoDB Stuff goes here
 uri = "mongodb+srv://admin:admin@learnsynccluster.el71bgq.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, server_api=ServerApi('1'))
+# client = MongoClient('mongodb://localhost:27017/')
 db = client["LearnSyncDatabase"]
 
 # 

@@ -12,99 +12,123 @@
 <body>
     <main-container>
         <nav>
-            <div class="logo">LearnSync</div>
+            <div class="logo" id="sidebar-logo" style="text-align: center;">LearnSync</div>
             <hr>
             <ul class="nav-list">
-                <a href="#" class="nav-list-item-link active" onclick="toggleActive(event, 'container-home')">
+                <a class="nav-list-item-link active" id="link-home" onclick="toggleActive(event, 'container-home'); ">
                     <li class="nav-list-item">
                         <img src="../static/resources/images/dashboard/home-icon.png" alt="" srcset=""
                             class="nav-list-icon">
-                        Dashboard
+                        <span class="nav-list-text">Dashboard</span>
                     </li>
                 </a>
-                <a href="#" class="nav-list-item-link" onclick="toggleActive(event, 'container-leaderboard')">
+                <a class="nav-list-item-link" id="link-leaderboards"
+                    onclick="toggleActive(event, 'container-leaderboards')">
                     <li class="nav-list-item">
                         <img src="../static/resources/images/dashboard/leaderboard-icon.png" alt="" srcset=""
                             class="nav-list-icon">
-                        Leaderboards
+                        <span class="nav-list-text">Leaderboards</span>
                     </li>
                 </a>
-                <a href="/flash_card/{{ user._id }} " class="nav-list-item-link">
+                <a href="/flash_card/{{ user._id }} " id="link-flashcards" class="nav-list-item-link" target="_blank">
                     <li class="nav-list-item">
                         <img src="../static/resources/images/dashboard/flash-card-icon.png" alt="" srcset=""
                             class="nav-list-icon">
-                        Flashcards
+                        <span class="nav-list-text">Flashcards</span>
                     </li>
                 </a>
-                <a href="#" class="nav-list-item-link" onclick="toggleActive(event, 'container-profile')">
+                <a class="nav-list-item-link" id="link-profile" onclick="toggleActive(event, 'container-profile')">
                     <li class="nav-list-item">
                         <img src="../static/resources/images/dashboard/profile-icon.png" alt="" srcset=""
                             class="nav-list-icon">
-                        Profile
+                        <span class="nav-list-text">Profile</span>
                     </li>
                 </a>
-                <a href="#" class="nav-list-item-link" onclick="toggleActive(event, 'container-preferences')">
+                <a class="nav-list-item-link" id="link-preferences"
+                    onclick="toggleActive(event, 'container-preferences')">
                     <li class="nav-list-item">
                         <img src="../static/resources/images/dashboard/settings-icon.png" alt="" srcset=""
                             class="nav-list-icon">
-                        Preferences
+                        <span class="nav-list-text">Preferences</span>
                     </li>
                 </a>
-                <a href="#" class="nav-list-item-link " id="more-info-container"
-                    onclick="toggleActive(event, 'container-home')">
+                <a class="nav-list-item-link " id="more-info-container" onclick="toggleActive(event, 'container-home')">
                     <li class="nav-list-item" id="nav-list-more-menu">
                         <img src="../static/resources/images/dashboard/more-icon.png" alt="" srcset=""
                             class="nav-list-icon">
-                        More
+                        <span class="nav-list-text">More</span>
                         <!-- Floating Menu -->
-                        <div id="more-info" class="more-content-container container-default">
-                            <a href="" class="more-content-links general-links">
-                                Reach us out
-                            </a>
-                            <a href="" class="more-content-links general-links">
-                                Help
-                            </a>
-                            <hr>
-                            <a href="" class="more-content-links general-links">
-                                Signout
-                            </a>
-                        </div>
                     </li>
                 </a>
             </ul>
+            <button id="side-bar-collapse-btn">
+                <span class="material-symbols-outlined" style="font-size: 32px;" id="side-bar-text">
+                    chevron_left
+                </span>
+            </button>
         </nav>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const moreButton = document.getElementById('nav-list-more-menu');
-                const floatingMenu = document.getElementById('more-info');
+                // Get the button element
+                const sideBarCollapseBtn = document.getElementById('side-bar-collapse-btn');
 
-                // Function to open/close the floating menu
-                function toggleFloatingMenu() {
-                    floatingMenu.classList.toggle('show');
+                // Initialize variable to track the state
+                let isExpanded = getCookie('sidebarExpanded') === 'true';
+
+                // Set initial state based on the cookie value
+                setSidebarState(isExpanded);
+
+                // Add click event listener to the button
+                sideBarCollapseBtn.addEventListener('click', function () {
+                    // Toggle the state
+                    isExpanded = !isExpanded;
+                    // Set the state in the cookie
+                    setCookie('sidebarExpanded', isExpanded, 365); // Store the state for 365 days
+                    // Update the sidebar state
+                    setSidebarState(isExpanded);
+                });
+
+                // Function to set the sidebar state based on the expanded value
+                function setSidebarState(expanded) {
+                    // Get all elements with class 'nav-list-text'
+                    const navListItems = document.querySelectorAll('.nav-list-item');
+                    // Toggle visibility of each nav-list-item
+                    navListItems.forEach(function (element) {
+                        // Toggle display style between 'flex' and 'none'
+                        element.style.display = 'flex';
+                        // Set flex direction to 'column' if expanded, 'row' otherwise
+                        element.style.flexDirection = expanded ? 'row' : 'column';
+                        // Set font size to 'small' if expanded, 'large' otherwise
+                        element.querySelector('.nav-list-text').style.fontSize = expanded ? '24px' : '14px';
+                        // Set padding
+                        element.style.padding = expanded ? '15px' : '5px';
+                    });
+                    // Toggle text content of span with id 'side-bar-text'
+                    const sideBarText = document.getElementById('side-bar-text');
+                    sideBarText.textContent = expanded ? 'chevron_left' : 'chevron_right';
+                    // Change text content of sidebar logo based on current state
+                    const sideBarLogo = document.getElementById('sidebar-logo');
+                    sideBarLogo.textContent = expanded ? 'LearnSync' : 'LS';
                 }
 
-                // Event listener for clicking the "More" button
-                moreButton.addEventListener('click', function (event) {
-                    event.stopPropagation(); // Prevents the click event from reaching the document and closing the menu immediately
-                    toggleFloatingMenu();
-                });
+                // Function to set a cookie
+                function setCookie(name, value, days) {
+                    const expires = new Date();
+                    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+                    document.cookie = name + '=' + value + ';expires=' + expires.toUTCString();
+                }
 
-                // Event listener for clicking outside the floating menu to close it
-                document.addEventListener('click', function (event) {
-                    const target = event.target;
-                    const isClickInsideMenu = floatingMenu.contains(target);
-                    const isClickOnMoreButton = target.id === 'nav-list-more-menu';
-
-                    if (!isClickInsideMenu && !isClickOnMoreButton) {
-                        floatingMenu.classList.remove('show');
-                    }
-                });
+                // Function to get a cookie
+                function getCookie(name) {
+                    const keyValue = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+                    return keyValue ? keyValue[2] : null;
+                }
             });
 
         </script>
         <main-content-container>
             <content-container>
-                <div class="container-home" id="container-home">
+                <div class="container-home" id="container-home" data-aos="fade-up" data-aos-duration="1000">
                     <div class="title-dashboard">Dashboard</div>
                     <div class="container-default home-pomodoro-timer">
                         <a id="expand-timer" onclick="expandTimer()">
@@ -117,11 +141,12 @@
                                 collapse_content
                             </span>
                         </a>
-                        
+
                         <!-- <div class="heading">Pomodoro Timer</div> -->
                         <div class="container-pomodoro-timer">
                             <div id="time">
-                                <div id="time-min">25</div>:
+                                <div id="time-min">25</div>
+                                <div id="time-colon">:</div>
                                 <div id="time-sec">00</div>
                             </div>
                             <div id="pomo-btns">
@@ -172,7 +197,8 @@
                         </script>
                     </div>
                 </div>
-                <div class="container-preferences">
+                <div class="container-preferences" id="container-preferences" data-aos="fade-up"
+                    data-aos-duration="1000">
                     <div class="title-dashboard">User Preferences</div>
                     <div class="user-daily-tasks container-default">
                         <form id="flashCardForm" id="todoForm">
@@ -184,21 +210,40 @@
                             <button class="link-secondary-btn" id="update-task-btn">Submit</button>
                         </form>
                     </div>
-
                     <div class="user-pomodoro-sequences container-default">
+                        <div id="pomo-seq-info">
+                            <div class="secondary-heading">Pomodoro Timer Sequences</div>
+                            <a href="" class="info-btn" id="pomo-seq-info-link">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">
+                                    help
+                                </span>
+                                <div id="pomo-seq-info-text" class="tool-tip">
+                                    1. Keep input field empty to remove sequence.<br>2. Odd positions represent work
+                                    time, even positions are break time, separated by commas.
+                                </div>
+                            </a>
+                        </div>
                         <form action="" method="post" id="user-pomodoro-form">
                             <div class="user-pomodoro-form-sequence">
                                 <span class="secondary-heading">sequences</span>
                                 <input type="text" name="" id="" required>
                             </div>
-                            <a class="link-primary-btn" href="#" id="addSequence">Add Sequence</a>
-                            <a class="link-secondary-btn" id="update-sequence-btn">Update</a>
+                            <div class="user-pomodoro-form-actions">
+                                <a class="ui-button" id="addSequence">
+                                    <span class="material-symbols-outlined">
+                                        add_circle
+                                    </span>&nbsp;Sequence</a>
+                                <a class="ui-button" id="update-sequence-btn">
+                                    <span class="material-symbols-outlined">
+                                        save
+                                    </span>&nbsp;Save</a>
+                            </div>
                         </form>
                     </div>
                 </div>
-                <div class="container-profile" id="container-profile">
+                <div class="container-profile" id="container-profile" data-aos="fade-up" data-aos-duration="1000">
                     <div class="title-dashboard">Profile</div>
-                    <div class="container-friends container-default">
+                    <div class="container-friends container-default" data-aos="fade-up" data-aos-duration="1000">
                         <div class="secondary-heading">Friends</div>
                         <form action="/add-friend/{{ user._id }}" method="post">
                             <div class="friend-form">
@@ -225,16 +270,16 @@
                         <div class="container-groups-left">
                             <div class="secondary-heading">Groups</div>
                             <div class="container-user-groups-list">
-                                <span class="secondary-heading" style="text-wrap: nowrap;">Your Groups</span>
+                                <span class="tertiary-heading" style="text-wrap: nowrap;">Your Groups</span>
                             </div>
                             <form class="container-groups-create">
                                 <div class="container-groups-actions">
                                     <input type="text" placeholder="Name" id="groupName" />
                                     <button id="create-group-btn" class="ui-button"
                                         style="width: fit-content; padding: 0 10px 0 10px;">
-                                        Create &nbsp; <span class="material-symbols-rounded">
+                                        <span class="material-symbols-rounded">
                                             diversity_1
-                                        </span>
+                                        </span>&nbsp;Create
                                     </button>
                                 </div>
                                 <div class="container-groups-members-select">
@@ -344,19 +389,51 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="container-leaderboard" id="container-leaderboard">
-                    <div class="header-leaderboard container-default">
-                        <div class="heading">Profile</div>
-                    </div>
-                </div> -->
-                <!-- <div class="container-profile container-default" id="container-profile">
-                    <div class="heading">Profile</div>
+                <div class="container-leaderboards" id="container-leaderboards" data-aos="fade-up"
+                    data-aos-duration="1000">
+                    <div class="title-dashboard">Leaderboards</div>
                 </div>
-                <div class="container-preferences container-default" id="container-preferences">
+                <!-- <div class="container-preferences container-default" id="container-preferences">
 
                 </div> -->
 
             </content-container>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const linkIds = ['link-home', 'link-leaderboards', 'link-profile', 'link-preferences'];
+                    const containerIds = ['container-home', 'container-leaderboards', 'container-profile', 'container-preferences'];
+                    function viewManager(position) {
+
+                        // Hide all containers
+                        containerIds.forEach(id => {
+                            document.getElementById(id).style.display = 'none';
+                        });
+                        if (position == 0 || position === 2) {
+                            document.getElementById(containerIds[position]).style.display = 'grid';
+
+                        } else {
+                            document.getElementById(containerIds[position]).style.display = 'flex';
+                        }
+                        // Show the container corresponding to the given position
+                    }
+
+                    // Call viewManager with 0 to show container-home by default
+                    viewManager(0);
+
+                    // Add event listeners to links to call viewManager with the corresponding position
+                    linkIds.forEach((id, index) => {
+                        const link = document.getElementById(id);
+                        if (link) {
+                            link.addEventListener('click', function (event) {
+                                event.preventDefault(); // Prevent default link behavior
+                                viewManager(index);
+                            });
+                        } else {
+                            console.error('Element with ID ' + id + ' not found.');
+                        }
+                    });
+                });
+            </script>
             <extras-container>
                 <div class="stats-container container-default">
                     <div class="stat">
@@ -432,6 +509,7 @@
             </extras-container>
         </main-content-container>
     </main-container>
+
     <script>
 
 
@@ -537,7 +615,10 @@
         function generateSequenceFields() {
             const container = document.querySelector('.user-pomodoro-form-sequence');
             container.innerHTML = ''; // Clear existing fields
-
+            const seq = document.createElement('div');
+            seq.textContent = 'Your Sequences :'; // Clear existing fields
+            seq.className = 'tertiary-heading';
+            container.appendChild(seq);
             // Loop through the user_sequences and generate input fields
             user_sequences.forEach((sequence, index) => {
                 const sequenceInput = document.createElement('input');
@@ -1097,7 +1178,10 @@
             getUser().then((user) => {
                 const container = document.querySelector('.container-groups-members-select');
                 container.innerHTML = '';
-
+                const span = document.createElement('span');
+                span.textContent = 'Your Friends';
+                span.classList.add('tertiary-heading');
+                container.appendChild(span);
                 user.friends.forEach((friend) => {
                     const friendElement = document.createElement('div');
                     friendElement.classList.add('member-select');
@@ -1244,36 +1328,6 @@
                 container.appendChild(groupDiv);
             });
         }
-
-        // Function to open group view container
-        // function openGroupView(group) {
-        //     // Select and open group view container
-        //     const groupViewContainer = document.querySelector('.container-groups-right');
-        //     groupViewContainer.style.display = 'flex';
-
-        //     const groupId = group._id;
-        //     const groupName = group.name;
-        //     const groupLeader = group.group_leader;
-        //     const createTaskButton = document.getElementById('create-group-task-btn');
-
-        //     createTaskButton.dataset.groupName = groupName;
-        //     createTaskButton.dataset.groupId = groupId;
-        //     document.querySelector('.group-view-header .tertiary-heading').textContent = groupName;
-        //     document.querySelector('.group-view-header .less-imp-text').textContent = `Created by ${groupLeader}`;
-
-        //     generateGroupTasks(group.group_tasks);
-        //     // Here you can use the 'group' object to populate the group view container
-        //     // Clear previous content
-        //     // groupViewContainer.innerHTML = '';
-        //     // Iterate over group object properties and display them
-        //     // for (const property in group) {
-        //     //     if (Object.hasOwnProperty.call(group, property)) {
-        //     //         const propertyElement = document.createElement('div');
-        //     //         propertyElement.textContent = `${property}: ${group[property]}`;
-        //     //         groupViewContainer.appendChild(propertyElement);
-        //     //     }
-        //     // }
-        // }
 
         function openGroupView(group) {
             const groupViewContainer = document.querySelector('.container-groups-right');
@@ -1498,6 +1552,8 @@
                     // Handle error
                 });
         });
+
+        AOS.init();
     </script>
 </body>
 

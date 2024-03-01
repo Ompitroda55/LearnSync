@@ -88,15 +88,16 @@ async function checkEmail(email) {
     return data.message === 'Email available';
 }
 
-async function verifyEmail() {
+async function verifyEmail(email) {
     const response = await fetch('/send-verification-email', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: `email=${email}`
+        body: JSON.stringify({ email: email })
     });
     const data = await response.json();
+    alert(data.otp);
     return data;
 }
 
@@ -108,15 +109,16 @@ function verifyOtp(otp) {
     document.getElementById('verify-otp').addEventListener('click', function() {
         const enteredOTP = parseInt(document.getElementById('otp-field').value);
         const actualOTP = parseInt(otp); // Assuming `otp` is a global variable containing the actual OTP
-
+        console.log(enteredOTP);
+        console.log(actualOTP);
         if (enteredOTP === actualOTP) {
             // OTP verification successful
             // Perform actions such as enabling signup or moving to the next step
-            document.getElementById('signup-form').submit();  
+            // document.getElementById('signup-form').submit();  
         } else {
             // OTP verification failed
             // Show error message or take appropriate action
-            alert('Invalid OTP. Please try again.');
+            alert(enteredOTP);
         }
     });
 }
@@ -133,7 +135,7 @@ document.querySelector('#signup-link').addEventListener('click', async function 
     if (isEmailAvailable && isUsernameAvailable && password === not_pass) { console.log('Username is available and passwords match. Submitting form...');}
 
     if (isEmailAvailable && isUsernameAvailable && password === not_pass) {
-        const otp = await verifyEmail();
+        const otp = await verifyEmail(email);
         alert(otp);
         verifyOtp(otp);
         

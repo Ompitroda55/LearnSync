@@ -226,7 +226,7 @@ def send_verification_email():
 
     # Create MIME message
     msg = MIMEMultipart()
-    msg['From'] = email
+    msg['From'] = 'taccovan001@gmail.com'
     msg['To'] = email
     msg['Subject'] = subject
     msg.attach(MIMEText(html_content, 'html'))
@@ -234,11 +234,11 @@ def send_verification_email():
     # Connect to SMTP server and send email
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(email, 'your_password')  # Update with your email password
+    server.login('taccovan001@gmail.com', 'zrntrzoqwjgdhjzs')  # Update with your email password
     server.sendmail(email, email, msg.as_string())
     server.quit()
 
-    return jsonify({'otp': "123456"})
+    return jsonify({'otp': otp})
 
 def createFlashCard(name, category, hashtags_list, flashcard_data, user_name):
     collection = db["flashcards"]
@@ -401,7 +401,6 @@ def signup():
         email = request.form['email']
 
         user = createUser(username, password, email)
-        verify=sendMail.mail(email)
         # user_id = str(user.inserted_id)
         # user = fetch_user_by_id(user_id)
         # print(user)

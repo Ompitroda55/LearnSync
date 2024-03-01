@@ -17,7 +17,7 @@
 <body>
     <!-- Code for Login Overlay Displayed -->
     <login-overlay id="login-overlay">
-        <a id="close-login" class="link-primary close-button">Close</a>
+        <a id="close-login" class="ui-button">Close</a>
         <form action="/login" id="form-login" method="post">
             <div class="login-container">
                 <div class="heading">Login</div>
@@ -25,7 +25,7 @@
                 <input type="password" name="password" id="password" placeholder="Password">
                 <a href="#" class="link-secondary" id="submit-link">Login</a>
                 <div class="alert-box" id="alert-login-form">Oh O! Invalid Username</div>
-                <a href="#" class="link-secondary">Google</a>
+                <!-- <a href="#" class="link-secondary">Google</a> -->
                 <div class="link-primary" id="signup-link" style="display: none;">Signup Instead</div>
             </div>
         </form>
@@ -37,7 +37,7 @@
         <div class="nav-placeholder">
             <div class="nav-placeholder-container">
                 <div class="logo">LearnSync</div>
-                <a href="" style="display: none;">Get Started</a>
+                <a style="display: none;">Get Started</a>
             </div>
         </div>
 
@@ -60,7 +60,7 @@
                     learning!</span>
                 <div class="header-intro-right-links">
                     <a href="/sign-up" class="link-primary" id="target-1">Get Started</a>
-                    <a href="/login" class="link-secondary" id="open-login">I already have an account</a>
+                    <a class="link-secondary" id="open-login">I already have an account</a>
                 </div>
             </div>
         </div>

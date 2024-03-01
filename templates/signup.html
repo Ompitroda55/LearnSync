@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <login-overlay id="login-overlay">
+    <signup-overlay id="signup-overlay">
         <!-- <button id="close-login" class="link-tertiary">Close</button> -->
         <form action="/sign-up" id="signup-form" method="post">
             <div class="login-container">
@@ -19,14 +19,25 @@
                     <input type="text" name="username" id="username" placeholder="Username" required>
                     <input type="password" name="password" id="password" placeholder="Password" required>
                     <input type="password" name="not-pass" id="not-pass" placeholder="Re-confirm Password" required>
-                    <a href="#" class="link-primary" id="signup-link">Signup</a>
-
-                    <span>or continue with</span>
-
-                    <a href="#" class="link-primary">Google</a>
+                    <!-- <span>or continue with</span> 
+                        <a href="#" class="link-primary">Google</a> -->
                 </div>
                 <div id="step2" class="form-step">
-                    <select name="not-select" id=""></select>
+                    <input type="email" name="email" id="email" placeholder="Enter Your Email" required>
+                    <button id="verify-email" class="ui-button" style="display: flex; align-items: center;">
+                        Verify&nbsp;<span class="material-symbols-outlined">
+                            mail
+                            </span>
+                    </button>
+                    <input type="password" id="otp-field" name="opt_space" placeholder="Confirm OTP sent on to your Email" maxlength="6">
+                    <button id="verify-otp" class="ui-button" style="display: flex; align-items: center;">
+                        Verify&nbsp;<span class="material-symbols-outlined">
+                            Pin
+                            </span>
+                    </button>
+                </div>
+                <div id="step3" class="form-step">
+                    <a class="link-primary" id="signup-link">Signup</a>
                 </div>
                 <div class="nav-form">
                     <a id="prev-button" class="link-primary">
@@ -43,7 +54,7 @@
                 </div>
             </div>
         </form>
-    </login-overlay>
+    </signup-overlay>
     <script src="../static/js/signup.js"></script>
 </body>
 

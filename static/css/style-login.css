@@ -2,11 +2,28 @@ login-overlay {
     position: fixed;
     min-height: 100svh;
     width: 100%;
+    background-color: orange;
+    /* background-color: red; */
+    background-color: var(--snow);
+    z-index: 9000;
+    /* display: none; */
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    justify-content: center;
+}
+
+signup-overlay {
+    position: fixed;
+    min-height: 100svh;
+    width: 100%;
+    background-color: orange;
     /* background-color: red; */
     background-color: var(--snow);
     z-index: 9000;
     display: flex;
     align-items: center;
+    justify-content: center;
     overflow: hidden;
     justify-content: center;
 }
@@ -16,20 +33,22 @@ login-overlay > * {
 }
 
 .login-container, .form-step {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 3svh;
-    /* background-color: azure; */
+
 }
 
 .login-container, .form-step {
-    text-align: center;
     display: flex;
     flex-direction: column;
-    max-width: 100%;
-    min-width: fit-content;
+    text-align: center;
+    max-width: fit-content;
+    min-width: 400px;
     align-items: center;
+    justify-content: center;
+    gap: 3svh;
+    height: 50svh;
+    /* height: 100svh; */
+    /* background-color: azure; */
+    width: fit-content;
 }
 
 .login-container .sub-heading {
@@ -73,13 +92,19 @@ login-overlay > * {
     color: var(--snow);
 }
 
-/* #close-login {
+#close-login {
     position: absolute;
-    top: 2svh;
-    left: 2svw;
-    color: var(--hare) !important;
+    top: 20px;
+    left: 20px;
     background-color: var(--cardinal);
-} */
+    /* box-shadow: 0px 6px 1px var(--cardinal-mask); */
+    width: fit-content;
+    padding: 5px;
+}
+
+#close-login:hover {
+    background-color: var(--cardinal-light);
+}
 
 .form-step {
     display: none;
@@ -101,4 +126,12 @@ login-overlay > * {
     /* background-color: black; */
     justify-content: space-between;
     width: 100%;
+}
+
+#verify-email, #verify-otp {
+    width: fit-content;
+    padding: 5px;
+}
+#verify-email:hover {
+    background-color: var(--mask-green);
 }

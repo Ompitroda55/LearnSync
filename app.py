@@ -36,7 +36,7 @@ db = client["LearnSyncDatabase"]
 # 
 
 # Function for creating user
-def createUser(username, password):
+def createUser(username, password, email):
     collection = db["users"]
     
     # Hash the password
@@ -45,6 +45,7 @@ def createUser(username, password):
     new_user = {
         "username": username,
         "password": hashed_password,
+        "email": email,
         "stats": [
             {
                 "streaks":0,
@@ -143,7 +144,15 @@ def check_username_available():
     else:
         return jsonify({'message': 'Username available'}), 200
 
-
+@app.route('/check-email-availability', methods=['POST'])
+def check_username_available():
+    collection = db["users"]
+    username = request.form.get('email')
+    user = collection.find_one({'username': username})
+    if user:
+        return jsonify({'message': 'Username already exists'}), 409
+    else:
+        return jsonify({'message': 'Username available'}), 200
 
 @app.route('/check-username', methods=['POST'])
 def check_username():
@@ -336,7 +345,9 @@ def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = createUser(username, password)
+        email = request.form['email']
+
+        user = createUser(username, password, email)
         # user_id = str(user.inserted_id)
         # user = fetch_user_by_id(user_id)
         # print(user)

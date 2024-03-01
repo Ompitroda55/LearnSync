@@ -213,7 +213,39 @@ def send_verification_email():
             /* CSS styles here */
         </style>
     </head>
-
+        body {{
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #ffffff;
+            }}
+            .container {{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: #58cc02;
+                color: #ffffff;
+                padding: 20px;
+            }}
+            .logo {{
+                font-size: 2.5rem;
+                font-family: 'Varela Round', sans-serif;
+                font-weight: 800;
+                margin-bottom: 20px;
+            }}
+            .subject {{
+                font-size: 1.5rem;
+                font-family: 'Poppins', sans-serif;
+                margin-bottom: 20px;
+            }}
+            .text {{
+                font-size: 1rem;
+                font-family: 'Poppins', sans-serif;
+            }}
+            #email, #otp {{
+                font-weight: 600;
+            }}
     <body>
         <div class="container">
             <span class="logo">LearnSync</span>

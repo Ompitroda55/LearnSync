@@ -31,10 +31,9 @@ window.addEventListener('scroll', function () {
 
 document.getElementById('open-login').addEventListener('click', function() {
     // Show the overlay
-    document.getElementById('login').style.display = 'flex';
+    document.getElementById('login-overlay').style.display = 'flex';
 
     // Disable all focusable elements
-    disableFocusableElements(true);
 });
 
 document.getElementById('close-login').addEventListener('click', function() {
@@ -42,7 +41,6 @@ document.getElementById('close-login').addEventListener('click', function() {
     document.getElementById('login-overlay').style.display = 'none';
 
     // Enable all focusable elements
-    disableFocusableElements(false);
 });
 
 AOS.init();

@@ -221,6 +221,7 @@
     /* border: 3px solid var(--swan); */
     width: 100%;
     text-align: center;
+    cursor: pointer;
     font-size: var(--sub-heading-font-size);
     max-width: fit-content;
     min-width: 10svw;
@@ -353,13 +354,7 @@
     background-color: var(--mask-green);
 }
 
-.close-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: var(--cardinal);
-    box-shadow: 0px 6px 1px var(--cardinal-mask);
-}
+
 
 .close-button:hover {
     background-color: var(--cardinal-light);

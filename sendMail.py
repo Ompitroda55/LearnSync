@@ -1,11 +1,12 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import random
 
 email = "taccovan001@gmail.com"
-receiver = "ompitroda55@gmail.com"
+receiver = "ompitroda55@gmail.com" # send as param
 subject = 'Email Verification Mail'
-otp = 123456
+otp = random.randint(100000, 999999)
 
 html_content = """
 <!DOCTYPE html>
@@ -62,16 +63,19 @@ html_content = """
 </html>
 """.format(subject=subject, email=receiver, otp=otp)
 
-# Create a MIMEText object with HTML content
-msg = MIMEMultipart()
-msg['From'] = email
-msg['To'] = receiver
-msg['Subject'] = subject
-msg.attach(MIMEText(html_content, 'html'))
+def mail(receiver):
+    # Create a MIMEText object with HTML content
+    msg = MIMEMultipart()
+    msg['From'] = email
+    msg['To'] = receiver
+    msg['Subject'] = subject
+    msg.attach(MIMEText(html_content, 'html'))
+    
+    # Connect to the SMTP server and send the email
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(email, 'zrntrzoqwjgdhjzs')
+    server.sendmail(email, receiver, msg.as_string())
+    server.quit()
 
-# Connect to the SMTP server and send the email
-server = smtplib.SMTP('smtp.gmail.com', 587)
-server.starttls()
-server.login(email, 'zrntrzoqwjgdhjzs')
-server.sendmail(email, receiver, msg.as_string())
-server.quit()
+

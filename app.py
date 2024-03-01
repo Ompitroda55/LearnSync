@@ -340,6 +340,7 @@ def insertFlashCard():
 #
 
 # Function to Handle Signup
+import sendMail
 @app.route('/sign-up', methods=['POST','GET'])
 def signup():
     if request.method == 'POST':
@@ -348,6 +349,7 @@ def signup():
         email = request.form['email']
 
         user = createUser(username, password, email)
+        verify=sendMail.mail(email)
         # user_id = str(user.inserted_id)
         # user = fetch_user_by_id(user_id)
         # print(user)

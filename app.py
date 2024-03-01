@@ -678,8 +678,8 @@ def update_daily_task():
     collection = db["users"]
     try:
         # Retrieve user ID from session or request data
-        user_id = session.get('user_id')  # Assuming user ID is stored in the session
-        # user_id = request.form.get('user_id')  # Assuming user ID is sent in the request data
+        #_id = session.get('_id')  # Assuming user ID is stored in the session
+        _id = request.form.get('_id')  # Assuming user ID is sent in the request data
 
         # Retrieve task data from request parameters
         tasks_data = request.form.getlist('task[]')
@@ -697,7 +697,7 @@ def update_daily_task():
         } for task in tasks_data]
 
         # Update user's dailytasks array with new tasks
-        result = collection.update_one({'_id': ObjectId(user_id)}, {'$push': {'dailytasks': {'$each': tasks}}}, upsert=True)
+        result = collection.update_one({'_id': ObjectId(_id)}, {'$push': {'dailytasks': {'$each': tasks}}}, upsert=True)
 
         # Check if tasks were successfully added
         if result.modified_count > 0 or result.upserted_id is not None:

@@ -5,6 +5,10 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from flask import Flask, json, jsonify, render_template, request, redirect, session, url_for
 import secrets
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import random
 
 app = Flask(__name__)
 
@@ -187,6 +191,54 @@ def checkCredentials():
   
     else:
         return jsonify({'message': 'Username not available'}), 400
+
+@app.route('/send-verification-email', methods=['POST'])
+def send_verification_email():
+    # Get email and generate OTP
+    data = request.get_json()
+    email = data.get('email')
+    print(email)
+    otp = str(random.randint(100000, 999999))
+
+    # Construct HTML content for the email
+    subject = 'Email Verification Mail'
+    html_content = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{subject}</title>
+        <style>
+            /* CSS styles here */
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <span class="logo">LearnSync</span>
+            <span class="subject">{subject}</span>
+            <div class="text">Your OTP for email <span id="email">{email}</span> is <span id="otp">{otp}</span>.</div>
+        </div>
+    </body>
+    </html>
+    """.format(subject=subject, email=email, otp=otp)
+
+    # Create MIME message
+    msg = MIMEMultipart()
+    msg['From'] = email
+    msg['To'] = email
+    msg['Subject'] = subject
+    msg.attach(MIMEText(html_content, 'html'))
+
+    # Connect to SMTP server and send email
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(email, 'your_password')  # Update with your email password
+    server.sendmail(email, email, msg.as_string())
+    server.quit()
+
+    return jsonify({'otp': "123456"})
 
 def createFlashCard(name, category, hashtags_list, flashcard_data, user_name):
     collection = db["flashcards"]

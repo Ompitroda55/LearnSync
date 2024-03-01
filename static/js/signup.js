@@ -89,10 +89,10 @@ async function checkEmail(email) {
 }
 
 async function verifyEmail() {
-    const response = await fetch('/verify-email', {
+    const response = await fetch('/send-verification-email', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
         },
         body: `email=${email}`
     });
@@ -134,6 +134,7 @@ document.querySelector('#signup-link').addEventListener('click', async function 
 
     if (isEmailAvailable && isUsernameAvailable && password === not_pass) {
         const otp = await verifyEmail();
+        alert(otp);
         verifyOtp(otp);
         
     } else if (!isUsernameAvailable) {

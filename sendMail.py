@@ -63,19 +63,32 @@ html_content = """
 </html>
 """.format(subject=subject, email=receiver, otp=otp)
 
-def mail(receiver):
-    # Create a MIMEText object with HTML content
-    msg = MIMEMultipart()
-    msg['From'] = email
-    msg['To'] = receiver
-    msg['Subject'] = subject
-    msg.attach(MIMEText(html_content, 'html'))
+msg = MIMEMultipart()
+msg['From'] = email
+msg['To'] = receiver
+msg['Subject'] = subject
+msg.attach(MIMEText(html_content, 'html'))
+
+# Connect to the SMTP server and send the email
+server = smtplib.SMTP('smtp.gmail.com', 587)
+server.starttls()
+server.login(email, 'zrntrzoqwjgdhjzs')
+server.sendmail(email, receiver, msg.as_string())
+server.quit()
+
+# def mail(receiver):
+#     # Create a MIMEText object with HTML content
+#     msg = MIMEMultipart()
+#     msg['From'] = email
+#     msg['To'] = receiver
+#     msg['Subject'] = subject
+#     msg.attach(MIMEText(html_content, 'html'))
     
-    # Connect to the SMTP server and send the email
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(email, 'zrntrzoqwjgdhjzs')
-    server.sendmail(email, receiver, msg.as_string())
-    server.quit()
+#     # Connect to the SMTP server and send the email
+#     server = smtplib.SMTP('smtp.gmail.com', 587)
+#     server.starttls()
+#     server.login(email, 'zrntrzoqwjgdhjzs')
+#     server.sendmail(email, receiver, msg.as_string())
+#     server.quit()
 
 

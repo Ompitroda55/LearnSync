@@ -88,6 +88,39 @@ async function checkEmail(email) {
     return data.message === 'Email available';
 }
 
+async function verifyEmail() {
+    const response = await fetch('/verify-email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `email=${email}`
+    });
+    const data = await response.json();
+    return data;
+}
+
+function verifyOtp(otp) {
+    document.getElementById('otp-field').style.display = 'block';
+    document.getElementById('verify-otp').style.display = 'block';
+    document.getElementById('signup-link').style.display = 'none';
+    
+    document.getElementById('verify-otp').addEventListener('click', function() {
+        const enteredOTP = parseInt(document.getElementById('otp-field').value);
+        const actualOTP = parseInt(otp); // Assuming `otp` is a global variable containing the actual OTP
+
+        if (enteredOTP === actualOTP) {
+            // OTP verification successful
+            // Perform actions such as enabling signup or moving to the next step
+            document.getElementById('signup-form').submit();  
+        } else {
+            // OTP verification failed
+            // Show error message or take appropriate action
+            alert('Invalid OTP. Please try again.');
+        }
+    });
+}
+
 document.querySelector('#signup-link').addEventListener('click', async function (e) {
     e.preventDefault();
     const username = document.getElementById('username').value;
@@ -99,8 +132,10 @@ document.querySelector('#signup-link').addEventListener('click', async function 
     
     if (isEmailAvailable && isUsernameAvailable && password === not_pass) { console.log('Username is available and passwords match. Submitting form...');}
 
-    if (isUsernameAvailable && password === not_pass) {
-        document.getElementById('signup-form').submit();
+    if (isEmailAvailable && isUsernameAvailable && password === not_pass) {
+        const otp = await verifyEmail();
+        verifyOtp(otp);
+        
     } else if (!isUsernameAvailable) {
         alert('Username already exists. Please choose a different username.');
     } else if (!isEmailAvailable) {
@@ -109,3 +144,4 @@ document.querySelector('#signup-link').addEventListener('click', async function 
         alert('Passwords do not match. Please re-enter your passwords.');
     }
 });
+

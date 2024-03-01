@@ -109,16 +109,17 @@ function verifyOtp(otp) {
     document.getElementById('verify-otp').addEventListener('click', function() {
         const enteredOTP = parseInt(document.getElementById('otp-field').value);
         const actualOTP = parseInt(otp); // Assuming `otp` is a global variable containing the actual OTP
-        console.log(enteredOTP);
-        console.log(actualOTP);
-        if (enteredOTP === actualOTP) {
+        // console.log(enteredOTP);
+        // console.log(actualOTP);
+        if (enteredOTP == actualOTP) {
             // OTP verification successful
             // Perform actions such as enabling signup or moving to the next step
-            // document.getElementById('signup-form').submit();  
+            document.getElementById('signup-form').submit();  
         } else {
             // OTP verification failed
             // Show error message or take appropriate action
-            alert(enteredOTP);
+            console.log(enteredOTP);
+            console.log(actualOTP);
         }
     });
 }
@@ -136,7 +137,10 @@ document.querySelector('#signup-link').addEventListener('click', async function 
 
     if (isEmailAvailable && isUsernameAvailable && password === not_pass) {
         const otp = await verifyEmail(email);
-        alert(otp);
+        document.getElementById('signup-link').style.display = 'none'; // Hide the signup link
+        document.getElementById('email').style.display = 'none'; // Hide the signup form
+        document.getElementById('otp-field').style.display = 'block'; // Show the OTP field
+        document.getElementById('verify-otp').style.display = 'block';
         verifyOtp(otp);
         
     } else if (!isUsernameAvailable) {

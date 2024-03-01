@@ -377,9 +377,9 @@ content-container {
     position: relative;
 }
 
-.pomodoro-selector:first-child {
-    /* margin-left: 40px; */
-}
+/* .pomodoro-selector:first-child {
+
+} */
 
 .pomodoro-selector input[type="radio"] {
     display: none;

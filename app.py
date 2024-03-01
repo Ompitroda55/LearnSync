@@ -210,10 +210,7 @@ def send_verification_email():
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{subject}</title>
         <style>
-            /* CSS styles here */
-        </style>
-    </head>
-        body {{
+            body {{
                 margin: 0;
                 padding: 0;
                 font-family: Arial, sans-serif;
@@ -246,6 +243,8 @@ def send_verification_email():
             #email, #otp {{
                 font-weight: 600;
             }}
+        </style>
+    </head>
     <body>
         <div class="container">
             <span class="logo">LearnSync</span>
@@ -378,7 +377,6 @@ def login():
         username = request.form.get('username')
         # print(username, password)
         user = collection.find_one({'username': username})
-        print(user ,"jfasifjladsjljfladsjlfjasjdkjfkasdjf")
         session['username'] = user['username']
         session['user_id'] = str(user['_id'])
         # print(session.get('username'))
@@ -433,9 +431,16 @@ def signup():
         email = request.form['email']
 
         user = createUser(username, password, email)
+
+        collection = db["users"]
+        user = collection.find_one({'username': username})
+        session['username'] = user['username']
+        session['user_id'] = str(user['_id'])
         # user_id = str(user.inserted_id)
         # user = fetch_user_by_id(user_id)
         # print(user)
+        user = collection.find_one({'username': username})
+        return render_template('dashboard.html', user=user)
         return render_template('home_alt.html')
     else:
         return render_template('signup.html')
@@ -976,6 +981,22 @@ def delete_group_task():
     except Exception as e:
         # Handle any errors that occur during the deletion process
         return jsonify({'success': False, 'message': f'An error occurred: {str(e)}'}), 500
+
+@app.route('/fetch_random_riddle', methods=['GET'])
+def fetch_random_riddle():
+    # Connect to MongoDB
+    collection = db["riddles"]
+
+    # Fetch total number of riddles
+    total_riddles = collection.count_documents({})
+
+    # Generate a random number within the range of total riddles
+    random_index = random.randint(0, total_riddles - 1)
+
+    # Fetch the random riddle from MongoDB
+    random_riddle = collection.find({}, {'_id': 0}).skip(random_index).limit(1)[0]
+    return jsonify(random_riddle)
+
 # 
 # Main() function of app
 # 

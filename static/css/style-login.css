@@ -133,7 +133,11 @@ login-overlay > * {
     width: 100%;
 }
 
-#verify-email, #verify-otp {
+#otp-field,
+#verify-otp {
+    display: flex;
+    position: fixed;
+    top: -1000px;
     width: fit-content;
     padding: 5px;
 }

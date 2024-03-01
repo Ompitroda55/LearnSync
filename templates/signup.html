@@ -12,7 +12,7 @@
 <body>
     <signup-overlay id="signup-overlay">
         <!-- <button id="close-login" class="link-tertiary">Close</button> -->
-        <form action="/sign-up" id="signup-form" method="post">
+        <form id="signup-form" method="post">
             <div class="login-container">
                 <div class="heading">Signup</div>
                 <div id="step1" class="form-step">
@@ -24,16 +24,12 @@
                 </div>
                 <div id="step2" class="form-step">
                     <input type="email" name="email" id="email" placeholder="Enter Your Email" required>
-                    <!-- <button id="verify-email" class="ui-button" style="display: flex; align-items: center;">
-                        Verify&nbsp;<span class="material-symbols-outlined">
-                            mail
-                            </span>
-                    </button> -->
-                    <input type="password" id="otp-field" name="opt_space" placeholder="Confirm OTP sent on to your Email" maxlength="6">
-                    <button id="verify-otp" class="ui-button" style="display: flex; align-items: center;">
+                    <input type="password" id="otp-field" name="opt_space"
+                        placeholder="Confirm OTP sent on to your Email" maxlength="6">
+                    <button id="verify-otp" class="ui-button">
                         Verify&nbsp;<span class="material-symbols-outlined">
                             Pin
-                            </span>
+                        </span>
                     </button>
                     <a class="link-primary" id="signup-link">Signup</a>
                 </div>
@@ -53,7 +49,189 @@
             </div>
         </form>
     </signup-overlay>
-    <script src="../static/js/signup.js"></script>
+    <!-- <script src="../static/js/signup.js"></script> -->
+    <script>
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const formSteps = document.querySelectorAll('.form-step');
+        //     let currentStep = 0;
+        //     updateNavButtons();
+
+        //     document.querySelector('#prev-button').addEventListener('click', function (e) {
+        //         e.preventDefault();
+        //         currentStep = Math.max(0, currentStep - 1);
+        //         updateNavButtons();
+        //     });
+
+        //     document.querySelector('#next-button').addEventListener('click', function (e) {
+        //         e.preventDefault();
+        //         currentStep = Math.min(formSteps.length - 1, currentStep + 1);
+        //         updateNavButtons();
+        //     });
+
+        //     function updateNavButtons() {
+        //         formSteps.forEach((step, index) => {
+        //             step.style.display = index === currentStep ? 'flex' : 'none';
+        //         });
+
+        //         document.querySelector('#prev-button').disabled = currentStep === 0;
+        //         document.querySelector('#next-button').disabled = currentStep === formSteps.length - 1;
+        //     }
+
+        // });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const formSteps = document.querySelectorAll('.form-step');
+            let currentStep = 0;
+            updateNavButtons();
+
+            document.querySelector('#prev-button').addEventListener('click', function (e) {
+                e.preventDefault();
+                currentStep = Math.max(0, currentStep - 1);
+                updateNavButtons();
+            });
+
+            document.querySelector('#next-button').addEventListener('click', function (e) {
+                e.preventDefault();
+                currentStep = Math.min(formSteps.length - 1, currentStep + 1);
+                updateNavButtons();
+            });
+
+            function updateNavButtons() {
+                formSteps.forEach((step, index) => {
+                    step.style.display = index === currentStep ? 'flex' : 'none';
+                });
+
+                const prevButton = document.querySelector('#prev-button');
+                const nextButton = document.querySelector('#next-button');
+                const signupLinkButton = document.querySelector('#signup-link');
+
+                prevButton.disabled = currentStep === 0;
+                nextButton.disabled = currentStep === formSteps.length - 1;
+
+                // if (currentStep === formSteps.length - 1) {
+                //     signupLinkButton.disabled = false;
+                // } else {
+                //     signupLinkButton.disabled = true;
+                // }
+            }
+        });
+
+
+        async function checkUsername(username) {
+            const response = await fetch('/check-username-availability', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `username=${username}`
+            });
+            const data = await response.json();
+            return data.message === 'Username available';
+        }
+
+        async function checkEmail(email) {
+            const response = await fetch('/check-email-availability', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `email=${email}`
+            });
+            const data = await response.json();
+            return data.message === 'Email available';
+        }
+
+        async function verifyEmail(email) {
+            const response = await fetch('/send-verification-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
+            });
+            const data = await response.json();
+            alert(data.otp);
+            return data.otp;
+        }
+
+        function verifyOtp(otp) {
+            alert(otp)
+            document.getElementById('otp-field').style.position = 'relative';
+            document.getElementById('verify-otp').style.position = 'relative';
+            document.getElementById('otp-field').style.top = '0px';
+            document.getElementById('verify-otp').style.top = '0px';
+
+
+
+            document.getElementById('signup-link').style.display = 'none';
+            document.getElementById('email').style.display = 'none';
+
+            document.getElementById('verify-otp').addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent default form submission behavior
+
+                const enteredOTP = parseInt(document.getElementById('otp-field').value);
+                const actualOTP = parseInt(otp); // Assuming `otp` is a global variable containing the actual OTP
+                alert("Tumne enter kiya hain!", enteredOTP);
+                console.log(enteredOTP + "Entered OTP");
+                console.log(actualOTP + "Actual OTP");
+                console.log(enteredOTP === actualOTP);
+                if (enteredOTP === actualOTP) {
+                    // OTP verification successful
+                    // Proceed with form submission
+                    const formData = new FormData(document.getElementById('signup-form'));
+                    fetch('/sign-up', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // Form submission successful
+                                alert("Form submitted successfully!");
+                                window.location.href = 'http://127.0.0.1:8888/login';
+                            } else {
+                                // Form submission failed
+                                alert("Error submitting form. Please try again.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert("An error occurred while submitting the form.");
+                        });
+                } else {
+                    // OTP verification failed
+                    // Show error message or take appropriate action
+                    alert('Invalid OTP. Please try again.');
+                }
+            });
+        }
+
+        document.querySelector('#signup-link').addEventListener('click', async function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const not_pass = document.getElementById('not-pass').value;
+            const email = document.getElementById('email').value;
+            const isUsernameAvailable = await checkUsername(username);
+            const isEmailAvailable = await checkEmail(email);
+
+            if (isEmailAvailable && isUsernameAvailable && password === not_pass) { console.log('Username is available and passwords match. Submitting form...'); }
+
+            if (isEmailAvailable && isUsernameAvailable && password === not_pass) {
+                const otp = await verifyEmail(email);
+                alert("Tumhara otp hain..." + otp);
+                verifyOtp(otp);
+
+            } else if (!isUsernameAvailable) {
+                alert('Username already exists. Please choose a different username.');
+            } else if (!isEmailAvailable) {
+                alert('Email already exists. Please choose a different email.');
+            } else if (password !== not_pass) {
+                alert('Passwords do not match. Please re-enter your passwords.');
+            }
+        });
+
+
+    </script>
 </body>
 
 </html>

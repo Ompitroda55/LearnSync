@@ -170,7 +170,7 @@ footer {
     margin: auto;
     max-width: 60svw;
     display: flex;
-    
+
     flex-direction: column;
     padding: 5svh 0px;
     gap: 3svh;
@@ -191,24 +191,29 @@ footer {
 }
 
 .foot-main-content ul.foot-list {
-    list-style: none; /* Remove default list styling */
+    list-style: none;
+    /* Remove default list styling */
     padding: 0;
     margin: 0;
 }
 
 .foot-list li a {
-    margin-bottom: 10px; /* Optional: Add spacing between list items */
+    margin-bottom: 10px;
+    /* Optional: Add spacing between list items */
     color: var(--mask-green);
     font-weight: 600;
-    text-decoration: none; /* Optional: Remove default underline */
+    text-decoration: none;
+    /* Optional: Remove default underline */
 }
 
 .foot-list li a:hover {
-    color: var(--foot-green); /* Replace with your desired hover color */
+    color: var(--foot-green);
+    /* Replace with your desired hover color */
 }
 
 .foot-main-content ul.foot-list li {
-    margin-bottom: 10px; /* Optional: Add spacing between list items */
+    margin-bottom: 10px;
+    /* Optional: Add spacing between list items */
     color: var(--mask-green);
     font-weight: 600;
 }
@@ -217,14 +222,77 @@ hr {
     border: 0;
     height: 3px;
     background-color: var(--mask-green);
-    margin: 20px 0; /* Optional: Adjust the margin as needed */
+    margin: 20px 0;
+    /* Optional: Adjust the margin as needed */
     width: 100%;
+}
+
+.riddle-container {
+    /* background-color: orange; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px;
+    gap: 15px;
+    justify-content: center;
+    width: 80svw;
+    position: relative;
+}
+
+#riddle-question {
+    font-size: var(--font-for-flash-card);
+    color: var(--eel);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    position: relative;
+    border-radius: var(--border-radius);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+#riddle-answer {
+    font-size: var(--font-for-flash-card);
+    color: var(--eel);
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    position: absolute;
+    padding: 10px;
+    top: -550px;
+    font-size: var(--sub-heading-font-size);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+#riddle-question:hover {
+    box-shadow: 0 0 12px rgba(0, 195, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+#riddle-question:hover + #riddle-answer {
+    opacity: 1; /* Show riddle-answer */
+    visibility: visible; /* Show riddle-answer */
+    top: -80px;
+}
+
+.ui-button {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    background-color: var(--snow);
+    color: var(--eel);
+    border-radius: var(--border-radius);
+    padding: 5px;
+}
+
+.ui-button:hover {
+    box-shadow: 0 0 12px rgba(106, 255, 0, 0.519);
+    transform: translateY(-2px);
+    background-color: var(--snow);
 }
 
 
 
 @media only screen and (max-width: 425px) {
-    header{
+    header {
         min-width: 100vw;
         /* background-color: orangered; */
     }
@@ -258,7 +326,7 @@ hr {
     .feature-img {
         width: 60svw;
         height: auto;
-        
+
     }
 
     .foot-img {
@@ -280,5 +348,4 @@ hr {
     }
 }
 
-@media only screen and (min-width: 1025px) {
-}
+@media only screen and (min-width: 1025px) {}

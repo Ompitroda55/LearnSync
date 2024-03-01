@@ -145,14 +145,14 @@ def check_username_available():
         return jsonify({'message': 'Username available'}), 200
 
 @app.route('/check-email-availability', methods=['POST'])
-def check_username_available():
+def check_email_available():
     collection = db["users"]
-    username = request.form.get('email')
-    user = collection.find_one({'username': username})
-    if user:
-        return jsonify({'message': 'Username already exists'}), 409
+    email = request.form.get('email')
+    email = collection.find_one({'email': email})
+    if email:
+        return jsonify({'message': 'Email already exists'}), 409
     else:
-        return jsonify({'message': 'Username available'}), 200
+        return jsonify({'message': 'Email available'}), 200
 
 @app.route('/check-username', methods=['POST'])
 def check_username():

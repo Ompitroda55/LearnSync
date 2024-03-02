@@ -150,12 +150,12 @@
                 body: JSON.stringify({ email: email })
             });
             const data = await response.json();
-            alert(data.otp);
+            // alert(data.otp);
             return data.otp;
         }
 
         function verifyOtp(otp) {
-            alert(otp)
+            // alert(otp)
             document.getElementById('otp-field').style.position = 'relative';
             document.getElementById('verify-otp').style.position = 'relative';
             document.getElementById('otp-field').style.top = '0px';
@@ -171,7 +171,7 @@
 
                 const enteredOTP = parseInt(document.getElementById('otp-field').value);
                 const actualOTP = parseInt(otp); // Assuming `otp` is a global variable containing the actual OTP
-                alert("Tumne enter kiya hain!", enteredOTP);
+                // alert("Tumne enter kiya hain!", enteredOTP);
                 console.log(enteredOTP + "Entered OTP");
                 console.log(actualOTP + "Actual OTP");
                 console.log(enteredOTP === actualOTP);
@@ -218,7 +218,7 @@
 
             if (isEmailAvailable && isUsernameAvailable && password === not_pass) {
                 const otp = await verifyEmail(email);
-                alert("Tumhara otp hain..." + otp);
+                // alert("Tumhara otp hain..." + otp);
                 verifyOtp(otp);
 
             } else if (!isUsernameAvailable) {

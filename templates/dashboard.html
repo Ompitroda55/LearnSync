@@ -126,388 +126,393 @@
             });
 
         </script>
-        <main-content-container>
-            <content-container>
-                <div class="container-home" id="container-home" data-aos="fade-up" data-aos-duration="1000">
-                    <div class="title-dashboard">Dashboard</div>
-                    <div class="container-default home-pomodoro-timer">
-                        <a id="expand-timer" onclick="expandTimer()">
-                            <span class="material-symbols-outlined " style="font-size:32px;">
-                                expand_content
-                            </span>
-                        </a>
-                        <a id="collapse-timer" onclick="collapseTimer()">
-                            <span class="material-symbols-outlined" style="font-size:32px;">
-                                collapse_content
-                            </span>
-                        </a>
+        <main-content-wrapper>
 
-                        <!-- <div class="heading">Pomodoro Timer</div> -->
-                        <div class="container-pomodoro-timer">
-                            <div id="time">
-                                <div id="time-min">25</div>
-                                <div id="time-colon">:</div>
-                                <div id="time-sec">00</div>
-                            </div>
-                            <div id="pomo-btns">
-                                <a id="start" class="link-primary-btn">Start</a>
-                                <a id="stop" class="link-secondary-btn">Stop</a>
-                                <a id="reset" class="link-tertiary-btn">Reset</a>
-                            </div>
-                        </div>
-                        <form class="container-pomodoro-selector">
-                            <div class="pomodoro-selector">
-                                <input type="radio" name="time_opt" data-option="0" value="1" checked>
-                                Timer N-N
-                            </div>
-                            <div class="pomodoro-selector">
-                                <input type="radio" name="time_opt" data-option="1" value="2">
-                                Time N-N
-                            </div>
-                            <div class="pomodoro-selector">
-                                <input type="radio" name="time_opt" data-option="2" value="3">
-                                Time N-N
-                            </div>
-                        </form>
-                        <audio id="timer-sound">
-                            <source src="../static/resources/sounds/pomodoro_timer/sound_1.mp3" type="audio/mp3">
-                            Your browser does not support the audio element.
-                        </audio>
-                        <script>
-                            function expandTimer() {
-                                document.getElementById("expand-timer").style.display = "none";
-                                document.getElementById("collapse-timer").style.display = "flex";
-                                var timerContainer = document.querySelector('.home-pomodoro-timer');
-                                // var timeContainer = document.querySelector('#time');
-                                // var minContainer = document.querySelector('#time-min');
-                                // var secContainer = document.querySelector('#time-sec');
-                                // minContainer.classList.add("timer-full-time");
-                                timerContainer.classList.add('home-pomodoro-timer-full');
-                                timerContainer.classList.remove('container-default');
-
-
-                            }
-                            function collapseTimer() {
-                                document.getElementById("expand-timer").style.display = "flex";
-                                document.getElementById("collapse-timer").style.display = "none";
-                                var timerContainer = document.querySelector('.home-pomodoro-timer');
-                                timerContainer.classList.remove('home-pomodoro-timer-full');
-                                timerContainer.classList.add('container-default');
-                            }
-                        </script>
-                    </div>
-                </div>
-                <div class="container-preferences" id="container-preferences" data-aos="fade-up"
-                    data-aos-duration="1000">
-                    <div class="title-dashboard">User Preferences</div>
-                    <div class="user-daily-tasks container-default">
-                        <form id="flashCardForm" id="todoForm" method=POST>
-                            <div id="taskFields">
-                                <input type="text" class="task" name="task[]" placeholder="Task">
-                            </div>
-                            <a class="link-primary-btn" href="#" id="addFields">Add Task</a>
-                            <!--<a class="link-secondary-btn" id="update-task-btn">Submit</a> -->
-                            <button class="link-secondary-btn" id="update-task-btn">Submit</button>
-                        </form>
-                    </div>
-                    <div class="user-pomodoro-sequences container-default">
-                        <div id="pomo-seq-info">
-                            <div class="secondary-heading">Pomodoro Timer Sequences</div>
-                            <a href="" class="info-btn" id="pomo-seq-info-link">
-                                <span class="material-symbols-outlined" style="font-size: 14px;">
-                                    help
+            <main-content-container>
+                <content-container>
+                    <div class="container-home" id="container-home" data-aos="fade-up" data-aos-duration="1000">
+                        <div class="title-dashboard">Dashboard</div>
+                        <div class="container-default home-pomodoro-timer">
+                            <a id="expand-timer" onclick="expandTimer()">
+                                <span class="material-symbols-outlined " style="font-size:32px;">
+                                    expand_content
                                 </span>
-                                <div id="pomo-seq-info-text" class="tool-tip">
-                                    1. Keep input field empty to remove sequence.<br>2. Odd positions represent work
-                                    time, even positions are break time, separated by commas.
-                                </div>
                             </a>
-                        </div>
-                        <form action="" method="post" id="user-pomodoro-form">
-                            <div class="user-pomodoro-form-sequence">
-                                <span class="secondary-heading">sequences</span>
-                                <input type="text" name="" id="" required>
-                            </div>
-                            <div class="user-pomodoro-form-actions">
-                                <a class="ui-button" id="addSequence">
-                                    <span class="material-symbols-outlined">
-                                        add_circle
-                                    </span>&nbsp;Sequence</a>
-                                <a class="ui-button" id="update-sequence-btn">
-                                    <span class="material-symbols-outlined">
-                                        save
-                                    </span>&nbsp;Save</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="container-profile" id="container-profile" data-aos="fade-up" data-aos-duration="1000">
-                    <div class="title-dashboard">Profile</div>
-                    <div class="container-friends container-default" data-aos="fade-up" data-aos-duration="1000">
-                        <div class="secondary-heading">Friends</div>
-                        <form action="/add-friend/{{ user._id }}" method="post">
-                            <div class="friend-form">
-                                <div class="friend-form-input">
-                                    <input type="text" placeholder="Friend's Username" name="friend-username"
-                                        id="friend-username">
+                            <a id="collapse-timer" onclick="collapseTimer()">
+                                <span class="material-symbols-outlined" style="font-size:32px;">
+                                    collapse_content
+                                </span>
+                            </a>
+
+                            <!-- <div class="heading">Pomodoro Timer</div> -->
+                            <div class="container-pomodoro-timer">
+                                <div id="time">
+                                    <div id="time-min">25</div>
+                                    <div id="time-colon">:</div>
+                                    <div id="time-sec">00</div>
                                 </div>
-                                <button type="submit" class="ui-button" id="add-friend-btn">
-                                    <span class="material-symbols-outlined">
-                                        person_add
-                                    </span>
-                                </button>
-                            </div>
-                        </form>
-                        <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div>
-                        <div class="container-friends-list" id="container-friends-list">
-
-                        </div>
-                    </div>
-                    <!-- <div class="container-daily-tasks container-default">
-
-                    </div> -->
-                    <div class="container-groups container-default">
-                        <div class="container-groups-left">
-                            <div class="secondary-heading">Groups</div>
-                            <div class="container-user-groups-list">
-                                <span class="tertiary-heading" style="text-wrap: nowrap;">Your Groups</span>
-                            </div>
-                            <form class="container-groups-create">
-                                <div class="container-groups-actions">
-                                    <input type="text" placeholder="Name" id="groupName" />
-                                    <button id="create-group-btn" class="ui-button"
-                                        style="width: fit-content; padding: 0 10px 0 10px;">
-                                        <span class="material-symbols-rounded">
-                                            diversity_1
-                                        </span>&nbsp;Create
-                                    </button>
+                                <div id="pomo-btns">
+                                    <a id="start" class="link-primary-btn">Start</a>
+                                    <a id="stop" class="link-secondary-btn">Stop</a>
+                                    <a id="reset" class="link-tertiary-btn">Reset</a>
                                 </div>
-                                <div class="container-groups-members-select">
-
+                            </div>
+                            <form class="container-pomodoro-selector">
+                                <div class="pomodoro-selector">
+                                    <input type="radio" name="time_opt" data-option="0" value="1" checked>
+                                    Timer N-N
+                                </div>
+                                <div class="pomodoro-selector">
+                                    <input type="radio" name="time_opt" data-option="1" value="2">
+                                    Time N-N
+                                </div>
+                                <div class="pomodoro-selector">
+                                    <input type="radio" name="time_opt" data-option="2" value="3">
+                                    Time N-N
                                 </div>
                             </form>
+                            <audio id="timer-sound">
+                                <source src="../static/resources/sounds/pomodoro_timer/sound_1.mp3" type="audio/mp3">
+                                Your browser does not support the audio element.
+                            </audio>
+                            <script>
+                                function expandTimer() {
+                                    document.getElementById("expand-timer").style.display = "none";
+                                    document.getElementById("collapse-timer").style.display = "flex";
+                                    var timerContainer = document.querySelector('.home-pomodoro-timer');
+                                    // var timeContainer = document.querySelector('#time');
+                                    // var minContainer = document.querySelector('#time-min');
+                                    // var secContainer = document.querySelector('#time-sec');
+                                    // minContainer.classList.add("timer-full-time");
+                                    timerContainer.classList.add('home-pomodoro-timer-full');
+                                    timerContainer.classList.remove('container-default');
 
+
+                                }
+                                function collapseTimer() {
+                                    document.getElementById("expand-timer").style.display = "flex";
+                                    document.getElementById("collapse-timer").style.display = "none";
+                                    var timerContainer = document.querySelector('.home-pomodoro-timer');
+                                    timerContainer.classList.remove('home-pomodoro-timer-full');
+                                    timerContainer.classList.add('container-default');
+                                }
+                            </script>
                         </div>
-                        <div class="container-groups-right">
-                            <div class="container-group-view">
-                                <button id="group-close-button" class="ui-button"
-                                    style="background-color: var(--cardinal); width: fit-content;">
-                                    <span class="material-symbols-rounded">close</span>
-                                </button>
-                                <script>
-                                    document.getElementById("group-close-button").addEventListener("click", function () {
-                                        document.querySelector(".container-groups-right").style.display = "none";
-                                    });
-
-                                </script>
-                                <div class="group-view-header">
-                                    <span class="tertiary-heading">group.name</span>
-                                    <span class="less-imp-text">Created by group.leader</span>
+                    </div>
+                    <div class="container-preferences" id="container-preferences" data-aos="fade-up"
+                        data-aos-duration="1000">
+                        <div class="title-dashboard">User Preferences</div>
+                        <div class="user-daily-tasks container-default">
+                            <form id="flashCardForm" id="todoForm" method=POST>
+                                <div id="taskFields">
+                                    <input type="text" class="task" name="task[]" placeholder="Task">
                                 </div>
-                                <div class="group-view-tasks">
-                                    <form class="view-tasks-create">
-                                        <input type="text" id="task-name" placeholder="Create task..." />
-                                        <input type="date" id="date-task-completion" name="date" min="" max="" required>
-                                        <button type="submit" id="create-group-task-btn" class="ui-button">
-                                            <span class="material-symbols-rounded">
-                                                add_circle
-                                            </span>
-                                        </button>
-                                    </form>
-                                    <script>
-                                        // Get current date
-                                        const currentDate = new Date();
-
-                                        // Calculate one week ahead date
-                                        const oneWeekAhead = new Date();
-                                        oneWeekAhead.setDate(currentDate.getDate() + 30);
-
-                                        // Format the dates as strings in YYYY-MM-DD format
-                                        const formattedCurrentDate = currentDate.toISOString().split('T')[0];
-                                        const formattedOneWeekAhead = oneWeekAhead.toISOString().split('T')[0];
-
-                                        // Set min and max attributes of the date input field
-                                        document.getElementById("date-task-completion").setAttribute("min", formattedCurrentDate);
-                                        document.getElementById("date-task-completion").setAttribute("max", formattedOneWeekAhead);
-                                    </script>
-                                </div>
-                                <div class="group-tasks-show-table">
-                                    <div class="tasks-show-table-row">
-                                        <div class="task-table-info"> {task is the best thing in the world that can
-                                            be completed}
-                                            <div class="task-info-date">
-                                                <span class="created_at">{created_at}</span>
-                                                <span class="days_remaining">{remaining-days}</span>
-                                                <span class="completion_at">{completion_date}</span>
-                                            </div>
-                                        </div>
-                                        <div class="task-table-actions">
-                                            <a href="" id="delete-task" class="ui-button"
-                                                style="background-color: var(--cardinal);">
-                                                <span class="material-symbols-rounded ">
-                                                    delete
-                                                </span>
-                                            </a>
-                                        </div>
+                                <a class="link-primary-btn" href="#" id="addFields">Add Task</a>
+                                <!--<a class="link-secondary-btn" id="update-task-btn">Submit</a> -->
+                                <button class="link-secondary-btn" id="update-task-btn">Submit</button>
+                            </form>
+                        </div>
+                        <div class="user-pomodoro-sequences container-default">
+                            <div id="pomo-seq-info">
+                                <div class="secondary-heading">Pomodoro Timer Sequences</div>
+                                <a href="" class="info-btn" id="pomo-seq-info-link">
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">
+                                        help
+                                    </span>
+                                    <div id="pomo-seq-info-text" class="tool-tip">
+                                        1. Keep input field empty to remove sequence.<br>2. Odd positions represent work
+                                        time, even positions are break time, separated by commas.
                                     </div>
+                                </a>
+                            </div>
+                            <form action="" method="post" id="user-pomodoro-form">
+                                <div class="user-pomodoro-form-sequence">
+                                    <span class="secondary-heading">sequences</span>
+                                    <input type="text" name="" id="" required>
                                 </div>
-                                <div class="group-view-content">
-                                    <div class="container-members-add">
-                                        <span class="less-imp-text">Add members</span>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-                                        <a href="" class="ui-button add-member-btn">Test Member</a>
-
-                                    </div>
-                                    <div class="container-members-remove">
-                                        <span class="less-imp-text">Remove members</span>
-                                        <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                        <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                        <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                        <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                        <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                        <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                    </div>
+                                <div class="user-pomodoro-form-actions">
+                                    <a class="ui-button" id="addSequence">
+                                        <span class="material-symbols-outlined">
+                                            add_circle
+                                        </span>&nbsp;Sequence</a>
+                                    <a class="ui-button" id="update-sequence-btn">
+                                        <span class="material-symbols-outlined">
+                                            save
+                                        </span>&nbsp;Save</a>
                                 </div>
-                                <div class="group-view-actions">
-                                    <button class="ui-button"
-                                        style="background-color: var(--cardinal); width: fit-content; padding: 3px;">
-                                        Delete Group&nbsp;<span class="material-symbols-rounded">
-                                            delete
+                            </form>
+                        </div>
+                    </div>
+                    <div class="container-profile" id="container-profile" data-aos="fade-up" data-aos-duration="1000">
+                        <div class="title-dashboard">Profile</div>
+                        <div class="container-friends container-default" data-aos="fade-up" data-aos-duration="1000">
+                            <div class="secondary-heading">Friends</div>
+                            <form action="/add-friend/{{ user._id }}" method="post">
+                                <div class="friend-form">
+                                    <div class="friend-form-input">
+                                        <input type="text" placeholder="Friend's Username" name="friend-username"
+                                            id="friend-username">
+                                    </div>
+                                    <button type="submit" class="ui-button" id="add-friend-btn">
+                                        <span class="material-symbols-outlined">
+                                            person_add
                                         </span>
                                     </button>
                                 </div>
+                            </form>
+                            <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div>
+                            <div class="container-friends-list" id="container-friends-list">
+
+                            </div>
+                        </div>
+                        <!-- <div class="container-daily-tasks container-default">
+
+                    </div> -->
+                        <div class="container-groups container-default">
+                            <div class="container-groups-left">
+                                <div class="secondary-heading">Groups</div>
+                                <div class="container-user-groups-list">
+                                    <span class="tertiary-heading" style="text-wrap: nowrap;">Your Groups</span>
+                                </div>
+                                <form class="container-groups-create">
+                                    <div class="container-groups-actions">
+                                        <input type="text" placeholder="Name" id="groupName" />
+                                        <button id="create-group-btn" class="ui-button"
+                                            style="width: fit-content; padding: 0 10px 0 10px;">
+                                            <span class="material-symbols-rounded">
+                                                diversity_1
+                                            </span>&nbsp;Create
+                                        </button>
+                                    </div>
+                                    <div class="container-groups-members-select">
+
+                                    </div>
+                                </form>
+
+                            </div>
+                            <div class="container-groups-right">
+                                <div class="container-group-view">
+                                    <button id="group-close-button" class="ui-button"
+                                        style="background-color: var(--cardinal); width: fit-content;">
+                                        <span class="material-symbols-rounded">close</span>
+                                    </button>
+                                    <script>
+                                        document.getElementById("group-close-button").addEventListener("click", function () {
+                                            document.querySelector(".container-groups-right").style.display = "none";
+                                        });
+
+                                    </script>
+                                    <div class="group-view-header">
+                                        <span class="tertiary-heading">group.name</span>
+                                        <span class="less-imp-text">Created by group.leader</span>
+                                    </div>
+                                    <div class="group-view-tasks">
+                                        <form class="view-tasks-create">
+                                            <input type="text" id="task-name" placeholder="Create task..." />
+                                            <input type="date" id="date-task-completion" name="date" min="" max=""
+                                                required>
+                                            <button type="submit" id="create-group-task-btn" class="ui-button">
+                                                <span class="material-symbols-rounded">
+                                                    add_circle
+                                                </span>
+                                            </button>
+                                        </form>
+                                        <script>
+                                            // Get current date
+                                            const currentDate = new Date();
+
+                                            // Calculate one week ahead date
+                                            const oneWeekAhead = new Date();
+                                            oneWeekAhead.setDate(currentDate.getDate() + 30);
+
+                                            // Format the dates as strings in YYYY-MM-DD format
+                                            const formattedCurrentDate = currentDate.toISOString().split('T')[0];
+                                            const formattedOneWeekAhead = oneWeekAhead.toISOString().split('T')[0];
+
+                                            // Set min and max attributes of the date input field
+                                            document.getElementById("date-task-completion").setAttribute("min", formattedCurrentDate);
+                                            document.getElementById("date-task-completion").setAttribute("max", formattedOneWeekAhead);
+                                        </script>
+                                    </div>
+                                    <div class="group-tasks-show-table">
+                                        <div class="tasks-show-table-row">
+                                            <div class="task-table-info"> {task is the best thing in the world that can
+                                                be completed}
+                                                <div class="task-info-date">
+                                                    <span class="created_at">{created_at}</span>
+                                                    <span class="days_remaining">{remaining-days}</span>
+                                                    <span class="completion_at">{completion_date}</span>
+                                                </div>
+                                            </div>
+                                            <div class="task-table-actions">
+                                                <a href="" id="delete-task" class="ui-button"
+                                                    style="background-color: var(--cardinal);">
+                                                    <span class="material-symbols-rounded ">
+                                                        delete
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="group-view-content">
+                                        <div class="container-members-add">
+                                            <span class="less-imp-text">Add members</span>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+                                            <a href="" class="ui-button add-member-btn">Test Member</a>
+
+                                        </div>
+                                        <div class="container-members-remove">
+                                            <span class="less-imp-text">Remove members</span>
+                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
+                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
+                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
+                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
+                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
+                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
+                                        </div>
+                                    </div>
+                                    <div class="group-view-actions">
+                                        <button class="ui-button"
+                                            style="background-color: var(--cardinal); width: fit-content; padding: 3px;">
+                                            Delete Group&nbsp;<span class="material-symbols-rounded">
+                                                delete
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="container-leaderboards" id="container-leaderboards" data-aos="fade-up"
-                    data-aos-duration="1000">
-                    <div class="title-dashboard">Leaderboards</div>
-                </div>
-                <!-- <div class="container-preferences container-default" id="container-preferences">
+                    <div class="container-leaderboards" id="container-leaderboards" data-aos="fade-up"
+                        data-aos-duration="1000">
+                        <div class="title-dashboard">Leaderboards</div>
+                    </div>
+                    <!-- <div class="container-preferences container-default" id="container-preferences">
 
                 </div> -->
 
-            </content-container>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const linkIds = ['link-home', 'link-leaderboards', 'link-profile', 'link-preferences'];
-                    const containerIds = ['container-home', 'container-leaderboards', 'container-profile', 'container-preferences'];
-                    function viewManager(position) {
+                </content-container>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const linkIds = ['link-home', 'link-leaderboards', 'link-profile', 'link-preferences'];
+                        const containerIds = ['container-home', 'container-leaderboards', 'container-profile', 'container-preferences'];
+                        function viewManager(position) {
 
-                        // Hide all containers
-                        containerIds.forEach(id => {
-                            document.getElementById(id).style.display = 'none';
-                        });
-                        if (position == 0 || position === 2) {
-                            document.getElementById(containerIds[position]).style.display = 'grid';
-
-                        } else {
-                            document.getElementById(containerIds[position]).style.display = 'flex';
-                        }
-                        // Show the container corresponding to the given position
-                    }
-
-                    // Call viewManager with 0 to show container-home by default
-                    viewManager(0);
-
-                    // Add event listeners to links to call viewManager with the corresponding position
-                    linkIds.forEach((id, index) => {
-                        const link = document.getElementById(id);
-                        if (link) {
-                            link.addEventListener('click', function (event) {
-                                event.preventDefault(); // Prevent default link behavior
-                                viewManager(index);
+                            // Hide all containers
+                            containerIds.forEach(id => {
+                                document.getElementById(id).style.display = 'none';
                             });
-                        } else {
-                            console.error('Element with ID ' + id + ' not found.');
-                        }
-                    });
-                });
-            </script>
-            <extras-container>
-                <div class="stats-container container-default">
-                    <div class="stat">
-                        <img class="stat-icon" src="../static/resources/images/dashboard/streak-icon.png" alt="">
-                        <stat class="stat-value sub-heading" id="streaks-stat"></stat>
-                    </div>
-                    <div class="stat">
-                        <img class="stat-icon" src="../static/resources/images/dashboard/gems-icon.png" alt="">
-                        <stat class="stat-value sub-heading" id="gems-stat"></stat>
-                    </div>
-                    <div class="stat">
-                        <img class="stat-icon" src="../static/resources/images/dashboard/heart-icon.png" alt="">
-                        <stat class="stat-value sub-heading" id="hearts-stat"></stat>
-                    </div>
-                </div>
-                <div class="notification-container container-default">
-                    <div class="secondary-heading">Notifications</div>
-                    <div class="notification-social-reqs">
-                    </div>
-                </div>
-                <div class="daily-tasks-container  container-default">
-                    <div class="secondary-heading">Daily Tasks</div>
-                    <div class="daily-tasks-show">
-                        <div class="daily-task">
-                            <div class="daily-task-difficulty">#Important</div>
-                            <div class="daily-task-actions">
-                                <input type="checkbox" name="" id="">
-                            </div>
-                            <div class="daily-task-description">
-                                Task1 taski si njimprot
-                            </div>
-                        </div>
-                        <div class="daily-task">
-                            <div class="daily-task-difficulty">#Important</div>
-                            <div class="daily-task-actions">
-                                <input type="checkbox" name="" id="">
-                            </div>
-                            <div class="daily-task-description">
-                                Task1 taski si njimprot
-                            </div>
-                        </div>
-                        <div class="daily-task">
-                            <div class="daily-task-difficulty">No No nO</div>
-                            <div class="daily-task-actions">
-                                <input type="checkbox" name="" id="">
-                            </div>
-                            <div class="daily-task-description">
-                                Task1 taski si njimprot
-                            </div>
-                        </div>
-                        <div class="daily-task">
-                            <div class="daily-task-difficulty">#Important</div>
-                            <div class="daily-task-actions">
-                                <input type="checkbox" name="" id="">
-                            </div>
-                            <div class="daily-task-description">
-                                Task1 taski si njimprot
-                            </div>
-                        </div>
-                        <div class="daily-task">
-                            <div class="daily-task-difficulty">#Important</div>
-                            <div class="daily-task-actions">
-                                <input type="checkbox" name="" id="">
-                            </div>
-                            <div class="daily-task-description">
-                                Task1 taski si njimprot
-                            </div>
-                        </div>
+                            if (position == 0 || position === 2) {
+                                document.getElementById(containerIds[position]).style.display = 'grid';
 
+                            } else {
+                                document.getElementById(containerIds[position]).style.display = 'flex';
+                            }
+                            // Show the container corresponding to the given position
+                        }
+
+                        // Call viewManager with 0 to show container-home by default
+                        viewManager(0);
+
+                        // Add event listeners to links to call viewManager with the corresponding position
+                        linkIds.forEach((id, index) => {
+                            const link = document.getElementById(id);
+                            if (link) {
+                                link.addEventListener('click', function (event) {
+                                    event.preventDefault(); // Prevent default link behavior
+                                    viewManager(index);
+                                });
+                            } else {
+                                console.error('Element with ID ' + id + ' not found.');
+                            }
+                        });
+                    });
+                </script>
+                <extras-container>
+                    <div class="stats-container container-default">
+                        <div class="stat">
+                            <img class="stat-icon" src="../static/resources/images/dashboard/streak-icon.png" alt="">
+                            <stat class="stat-value sub-heading" id="streaks-stat"></stat>
+                        </div>
+                        <div class="stat">
+                            <img class="stat-icon" src="../static/resources/images/dashboard/gems-icon.png" alt="">
+                            <stat class="stat-value sub-heading" id="gems-stat"></stat>
+                        </div>
+                        <div class="stat">
+                            <img class="stat-icon" src="../static/resources/images/dashboard/heart-icon.png" alt="">
+                            <stat class="stat-value sub-heading" id="hearts-stat"></stat>
+                        </div>
                     </div>
-                </div>
-                <div class="heading" id="homo"></div>
-            </extras-container>
-        </main-content-container>
+                    <div class="notification-container container-default">
+                        <div class="secondary-heading">Notifications</div>
+                        <div class="notification-social-reqs">
+                        </div>
+                    </div>
+                    <div class="daily-tasks-container  container-default">
+                        <div class="secondary-heading">Daily Tasks</div>
+                        <div class="daily-tasks-show">
+                            <div class="daily-task">
+                                <div class="daily-task-difficulty">#Important</div>
+                                <div class="daily-task-actions">
+                                    <input type="checkbox" name="" id="">
+                                </div>
+                                <div class="daily-task-description">
+                                    Task1 taski si njimprot
+                                </div>
+                            </div>
+                            <div class="daily-task">
+                                <div class="daily-task-difficulty">#Important</div>
+                                <div class="daily-task-actions">
+                                    <input type="checkbox" name="" id="">
+                                </div>
+                                <div class="daily-task-description">
+                                    Task1 taski si njimprot
+                                </div>
+                            </div>
+                            <div class="daily-task">
+                                <div class="daily-task-difficulty">No No nO</div>
+                                <div class="daily-task-actions">
+                                    <input type="checkbox" name="" id="">
+                                </div>
+                                <div class="daily-task-description">
+                                    Task1 taski si njimprot
+                                </div>
+                            </div>
+                            <div class="daily-task">
+                                <div class="daily-task-difficulty">#Important</div>
+                                <div class="daily-task-actions">
+                                    <input type="checkbox" name="" id="">
+                                </div>
+                                <div class="daily-task-description">
+                                    Task1 taski si njimprot
+                                </div>
+                            </div>
+                            <div class="daily-task">
+                                <div class="daily-task-difficulty">#Important</div>
+                                <div class="daily-task-actions">
+                                    <input type="checkbox" name="" id="">
+                                </div>
+                                <div class="daily-task-description">
+                                    Task1 taski si njimprot
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="heading" id="homo"></div>
+                </extras-container>
+            </main-content-container>
+        </main-content-wrapper>
+
     </main-container>
 
     <script>

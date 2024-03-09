@@ -558,8 +558,9 @@ def searchFlashcards():
 # 
 
 # Function for add friend fuctionality
-@app.route("/add-friend/<user_id>", methods=['POST'])
-def addFriend(user_id):
+@app.route("/add-friend", methods=['POST'])
+def addFriend():
+    user_id = session.get('user_id')
     user = fetch_user_by_id(user_id)
     friend_username = request.form['friend-username']
     # print(friend_username)
@@ -575,7 +576,21 @@ def addFriend(user_id):
             return jsonify({'message': 'Friend Request Sent!'}), 200
         else:
             return jsonify({'message': 'Failed to add friend'}), 500
-    
+
+def handleFriendSearch():
+    user_id = session.get('user_id')
+    user = fetch_user_by_id(user_id)
+    friend_username = request.form['friend-username']
+    if friend_username in user['friends']:
+        return jsonify({'message': 0}), 400
+    else:
+        # If not, add the friend to the user's friends array
+        # result = db["users"].update_one({"_id": ObjectId(user_id)}, {"$push": {"friends": friend_username}})
+        if createRequest(user['username'], friend_username, 0):
+            return jsonify({'message': 'Friend Request Sent!'}), 200
+        else:
+            return jsonify({'message': 'Failed to add friend'}), 500
+
 # Function to accept friend request
 @app.route("/accept-friend-request/<request_id>", methods=['POST'])
 def accept_friend_request(request_id):

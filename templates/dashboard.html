@@ -243,24 +243,58 @@
                             </form>
                         </div>
                     </div>
-                    <div class="container-profile" id="container-profile" data-aos="fade-up" data-aos-duration="1000">
+                    <div class="container-profile" id="container-profile">
                         <div class="title-dashboard">Profile</div>
-                        <div class="container-friends container-default" data-aos="fade-up" data-aos-duration="1000">
-                            <div class="secondary-heading">Friends</div>
-                            <form action="/add-friend/{{ user._id }}" method="post">
-                                <div class="friend-form">
-                                    <div class="friend-form-input">
-                                        <input type="text" placeholder="Friend's Username" name="friend-username"
-                                            id="friend-username">
+                        <div class="container-profile-info">
+                            <div class="info-general">
+                                <span id="profile-name" class="secondary-heading">Om Pitroda</span>
+                                <span id="profile-email" class="tertiary-heading"
+                                    style="color: var(--wolf);">ompitroda55@gmail.com</span>
+                                <span id="profile-join-date" class="less-imp-text">Joined 24th February, 2024</span>
+                            </div>
+                            <div class="info-social">Have 30 friend's & member in 6 Groups </div>
+                            <hr>
+                        </div>
+                        <div class="container-profile-statistics">
+                            <span class="secondary-heading">Statistics</span>
+                            <div class="profile-stats-container">
+                                <div class="profile-stats container-default">
+                                    <img src="../static/resources/images/dashboard/streak-icon.png" alt=""
+                                        class="profile-stats-icon">
+                                    <div class="profile-stats-data">
+                                        <span class="stats-data-main">32</span>
+                                        <span class="stats-data-label">Days Streak</span>
                                     </div>
-                                    <button type="submit" class="ui-button" id="add-friend-btn">
-                                        <span class="material-symbols-outlined">
-                                            person_add
-                                        </span>
-                                    </button>
                                 </div>
-                            </form>
-                            <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div>
+                                <div class="profile-stats container-default">
+                                    <img src="../static/resources/images/dashboard/gems-icon.png" alt=""
+                                        class="profile-stats-icon">
+                                    <div class="profile-stats-data">
+                                        <span class="stats-data-main">32</span>
+                                        <span class="stats-data-label">Total XP</span>
+                                    </div>
+                                </div>
+                                <div class="profile-stats container-default">
+                                    <img src="../static/resources/images/dashboard/heart-icon.png" alt=""
+                                        class="profile-stats-icon">
+                                    <div class="profile-stats-data">
+                                        <span class="stats-data-main">32</span>
+                                        <span class="stats-data-label">Hearts Collected</span>
+                                    </div>
+                                </div>
+                                <div class="profile-stats container-default">
+                                    <img src="../static/resources/images/dashboard/leaderboard-icon.png" alt=""
+                                        class="profile-stats-icon">
+                                    <div class="profile-stats-data">
+                                        <span class="stats-data-main">32</span>
+                                        <span class="stats-data-label">Top 10 finishes</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-friends container-default">
+                            <div class="secondary-heading">Friends</div>
+
                             <div class="container-friends-list" id="container-friends-list">
 
                             </div>
@@ -405,12 +439,24 @@
                     document.addEventListener('DOMContentLoaded', function () {
                         const linkIds = ['link-home', 'link-leaderboards', 'link-profile', 'link-preferences'];
                         const containerIds = ['container-home', 'container-leaderboards', 'container-profile', 'container-preferences'];
+                        const sideContainerIds = ['notification-container', 'daily-tasks-container', 'friends-container-side']
                         function viewManager(position) {
 
                             // Hide all containers
                             containerIds.forEach(id => {
                                 document.getElementById(id).style.display = 'none';
                             });
+                            sideContainerIds.forEach(id => {
+                                document.getElementById(id).style.display = 'none';
+                            });
+                            if (position == 0) {
+                                document.getElementById(sideContainerIds[0]).style.display = 'flex';
+                                document.getElementById(sideContainerIds[1]).style.display = 'flex';
+
+                            }
+                            if (position == 2) {
+                                document.getElementById(sideContainerIds[2]).style.display = 'flex';
+                            }
                             if (position == 0 || position === 2) {
                                 document.getElementById(containerIds[position]).style.display = 'grid';
 
@@ -421,7 +467,7 @@
                         }
 
                         // Call viewManager with 0 to show container-home by default
-                        viewManager(0);
+                        viewManager(2);
 
                         // Add event listeners to links to call viewManager with the corresponding position
                         linkIds.forEach((id, index) => {
@@ -452,12 +498,12 @@
                             <stat class="stat-value sub-heading" id="hearts-stat"></stat>
                         </div>
                     </div>
-                    <div class="notification-container container-default">
+                    <div class="notification-container container-default" id="notification-container">
                         <div class="secondary-heading">Notifications</div>
                         <div class="notification-social-reqs">
                         </div>
                     </div>
-                    <div class="daily-tasks-container  container-default">
+                    <div class="daily-tasks-container  container-default" id="daily-tasks-container">
                         <div class="secondary-heading">Daily Tasks</div>
                         <div class="daily-tasks-show">
                             <div class="daily-task">
@@ -505,9 +551,51 @@
                                     Task1 taski si njimprot
                                 </div>
                             </div>
-
                         </div>
                     </div>
+                    <div id="friends-container-side" class="friends-container-side container-default">
+                        <div class="secondary-heading">Add Friends</div>
+                        <div class="add-friends-container">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">
+                                search
+                            </span>
+                            <input type="text" placeholder="Friend's Username" name="friend-username"
+                                id="friend-username">
+                            <span id="friend-search-status">
+                                <!-- Found -->
+                            </span>
+                            <button type="submit" id="add-friend-btn">
+                                <span class="material-symbols-outlined" style="font-size: 24px;">
+                                    send
+                                </span>
+                            </button>
+                            <div class="alert-box-warn" id="alert-friend-form" popover>
+
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        document.getElementById("friend-username").addEventListener("input", async function () {
+                            var username = this.value;
+                            console.log(username);
+                            if(username == "") {
+                                document.getElementById("friend-search-status").innerHTML = "";
+                                document.getElementById("friend-search-status").style.backgroundColor = "var(--snow)";
+                                
+                            } else {
+                                var res = await checkUsername(username);
+                                console.log(res);
+                                if (res) {
+                                    document.getElementById("friend-search-status").textContent = "Found";
+                                    document.getElementById("friend-search-status").style.backgroundColor = "var(--feather-green)";
+                                    // alert("User Found");
+                                } else {
+                                    document.getElementById("friend-search-status").textContent = "Not Found";
+                                    document.getElementById("friend-search-status").style.backgroundColor = "var(--cardinal)";
+                                }
+                            }
+                        });
+                    </script>
                     <div class="heading" id="homo"></div>
                 </extras-container>
             </main-content-container>
@@ -868,7 +956,7 @@
         }
 
         async function checkStatus(username) {
-            const response = await fetch('/add-friend/{{ user._id }}', {
+            const response = await fetch('/add-friend', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -883,11 +971,15 @@
             e.preventDefault();
             const username = document.querySelector('#friend-username').value;
             // console.log(username)
-            const user_id = '{{ user._id }}';
+            // const user_id = '{{ user._id }}';
             let alertbox = document.querySelector('#alert-friend-form');
             if (!username) {
+                alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--cardinal);">error</span>Please Enter Name'
                 alertbox.style.display = 'flex';
-                alertbox.textContent = "Please enter Friends username";
+
+                setTimeout(function () {
+                    alertbox.style.display = 'none';
+                }, 5000)
             }
             const isFriendPresent = await checkUsername(username);
 
@@ -896,18 +988,29 @@
                 // console.log(response);
                 if (response === 'Friend already in friends list') {
                     alertbox.style.display = 'flex';
-                    alertbox.textContent = "Already you're friends";
+                    alert.appendChild(spanElement);
+                    alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--cardinal);">error</span>You\'re already Friends'
                 } else if (response === 'Friend Request Sent!') {
                     alertbox.style.display = 'flex';
-                    alertbox.style.backgroundColor = 'var(--feather-green)';
-                    alertbox.textContent = "Friend Request Sent!";
+                    // alertbox.style.backgroundColor = 'var(--feather-green)';
+                    alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--feather-green);">done</span>Friend Request Sent!</span>'
+                    setTimeout(function () {
+                        alertbox.style.display = 'none';
+                    }, 3000)
                 } else {
                     alertbox.style.display = 'flex';
-                    alertbox.textContent = "Failed to add friend"
+                    alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--feather-green);">error</span>Failed to send request!</span>'
+                    setTimeout(function () {
+                        alertbox.style.display = 'none';
+                    }, 3000)
                 }
             } else {
                 alertbox.style.display = 'flex';
-                alertbox.textContent = "Check Friend's Name";
+                alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--cardinal);">error</span>Check Friend\s Name'
+                // alertbox.textContent = "Check Friend's Name";
+                setTimeout(function () {
+                    alertbox.style.display = 'none';
+                }, 3000)
             }
         });
 
@@ -955,7 +1058,8 @@
                 // console.log(data.message);
                 // Remove the notification from the UI
                 const notification = document.querySelector(`.notification[data-request-id="${requestId}"]`);
-                notification.style.display = 'none';
+                // notification.style.display = 'none';
+                updateNotifications();
             } else {
                 // Handle error, maybe show an error message
                 console.error(data.message);
@@ -1509,7 +1613,7 @@
             updateNotifications();
             generateFriendsList('.container-groups-members-select');
             generateUserGroupsList();
-            setInterval(updateNotifications(), 5000);
+            setInterval(updateNotifications, 5000);
             setInterval(updateStats, 5000);
         });
 
@@ -1564,3 +1668,18 @@
 </body>
 
 </html>
+<!-- 
+<form action="/add-friend/{{ user._id }}" method="post">
+    <div class="friend-form">
+        <div class="friend-form-input">
+            <input type="text" placeholder="Friend's Username" name="friend-username"
+                id="friend-username">
+        </div>
+        <button type="submit" class="ui-button" id="add-friend-btn">
+            <span class="material-symbols-outlined">
+                person_add
+            </span>
+        </button>
+    </div>
+</form>
+<div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div> -->

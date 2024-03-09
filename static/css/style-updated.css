@@ -157,12 +157,12 @@
 }
 
 .secondary-heading {
-    font-family: var(--main-font);
+    font-family: var(--logo-font);
     font-size: var(--sub-heading-font-size);
-    font-weight: 600;
+    font-weight: 800;
     text-align: left;
     color: var(--eel);
-    line-height: 2.5em;
+    line-height: 2em;
 }
 
 .tertiary-heading {
@@ -374,6 +374,7 @@
 hr {
     color: var(--hare);
     width: 100%;
+    margin: 15px 0 15px 0;
 }
 
 .general-links {
@@ -419,7 +420,22 @@ hr {
     background-color: var(--mask-green);
 }
 
-
+.alert-box-warn, .alert-box-success {
+    /* display: flex; */
+    /* display: flex; */
+    justify-content: center;
+    width: fit-content;
+    padding: 10px;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--snow);
+    position: absolute;
+    top: -100px;
+    border-radius: var(--link-radius);
+    border: none;
+    font-size: var(--less-imp-font-size);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.376);
+}
 
 @media only screen and (max-width: 425px) {
     :root {

@@ -141,7 +141,10 @@ nav {
     display: flex;
 }
 
-
+.info-social {
+    color: var(--macaw);
+    font-weight: 800;
+}
 
 .show {
     display: flex; /* Show the menu when the 'show' class is added */
@@ -850,6 +853,7 @@ input[type="text"] {
     font-size: var(--less-imp-font-size);
     width: fit-content;
     display: flex;
+    font-weight: 800;
     justify-content: center;
     align-items: center;
     gap: 3px;

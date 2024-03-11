@@ -195,7 +195,7 @@ content-container {
 .container-preferences {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    /* gap: 15px; */
 }
 
 .container-profile {
@@ -1226,10 +1226,9 @@ Help Menu
     flex-direction: column;
 }
 
-.add-friends-container {
+.add-friends-container, .create-groups-container {
     display: flex;
     flex-direction: row;
-    align-items: center;
     gap: 2px;
     /* width: fit-content; */
     border: var(--default-border-width) solid var(--polar);
@@ -1239,26 +1238,31 @@ Help Menu
     /* background-color: orange; */
     padding: 5px;
     position: relative;
+    align-items: center;
 }
-.add-friends-container input[type="text"], #add-friend-btn {
+.add-friends-container input[type="text"], #add-friend-btn, #create-group-btn {
     all: unset;   
 }
 
-#friend-username::placeholder {
+.create-groups-container input[type="text"]{
+    all: unset;   
+}
+
+#friend-username::placeholder, #group-name::placeholder {
     color: var(--hare);
 }
 
-#friend-username {
+#friend-username, #group-name {
     /* flex: 1; */
     flex: 1;
     border-bottom: 2px solid transparent;
 }
 
-#friend-username:focus {
+#friend-username:focus, #group-name:focus {
     border-bottom: 2px solid var(--wolf);
 }
 
-#add-friend-btn{
+#add-friend-btn, #create-group-btn{
     display: flex;
     align-items: center;
     /* background-color: red; */
@@ -1277,3 +1281,36 @@ Help Menu
     text-wrap: nowrap;
 }
 
+.groups-container-side {
+    display: flex;
+    flex-direction: column;
+}
+
+.group-member-add-list {
+    display: flex;
+    flex-direction: column;
+    max-height: 200px;
+    height: 200px;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.grp-member-item {
+    display: flex;
+    font-weight: 800;
+    flex-direction: row;
+    margin: 0 5px;
+    background-color: var(--polar);
+    border-radius: var(--link-radius);
+    padding: 5px 10px;
+    justify-content: space-between;
+    transition: all 0.5s ease; /* Corrected transition property */
+    box-shadow: none;
+}
+
+.grp-member-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.377);
+    background-color: var(--foot-green);
+    color: var(--eel);
+}

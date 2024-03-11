@@ -199,8 +199,7 @@
                             </script>
                         </div>
                     </div>
-                    <div class="container-preferences" id="container-preferences" data-aos="fade-up"
-                        data-aos-duration="1000">
+                    <div class="container-preferences" id="container-preferences">
                         <div class="title-dashboard">User Preferences</div>
                         <div class="user-daily-tasks container-default">
                             <form id="flashCardForm" id="todoForm" method=POST>
@@ -212,20 +211,20 @@
                                 <button class="link-secondary-btn" id="update-task-btn">Submit</button>
                             </form>
                         </div>
-                        
+
+                        <div id="pomo-seq-info">
+                            <div class="secondary-heading">Pomodoro Timer Sequences</div>
+                            <a href="" class="info-btn" id="pomo-seq-info-link">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">
+                                    help
+                                </span>
+                                <div id="pomo-seq-info-text" class="tool-tip">
+                                    1. Keep input field empty to remove sequence.<br>2. Odd positions represent work
+                                    time, even positions are break time, separated by commas.
+                                </div>
+                            </a>
+                        </div>
                         <div class="user-pomodoro-sequences container-default">
-                            <div id="pomo-seq-info">
-                                <div class="secondary-heading">Pomodoro Timer Sequences</div>
-                                <a href="" class="info-btn" id="pomo-seq-info-link">
-                                    <span class="material-symbols-outlined" style="font-size: 14px;">
-                                        help
-                                    </span>
-                                    <div id="pomo-seq-info-text" class="tool-tip">
-                                        1. Keep input field empty to remove sequence.<br>2. Odd positions represent work
-                                        time, even positions are break time, separated by commas.
-                                    </div>
-                                </a>
-                            </div>
                             <form action="" method="post" id="user-pomodoro-form">
                                 <div class="user-pomodoro-form-sequence">
                                     <span class="secondary-heading">sequences</span>
@@ -249,7 +248,8 @@
                         <div class="container-profile-info">
                             <div class="info-general">
                                 <span id="profile-name" class="secondary-heading">Om Pitroda</span>
-                                <span id="profile-email" class="tertiary-heading" style="color: var(--wolf);">ompitroda55@gmail.com</span>
+                                <span id="profile-email" class="tertiary-heading"
+                                    style="color: var(--wolf);">ompitroda55@gmail.com</span>
                                 <span id="profile-join-date" class="less-imp-text">Joined 24th February, 2024</span>
                             </div>
                             <div class="info-social">Have 30 friend's & member in 6 Groups </div>
@@ -311,12 +311,12 @@
                                 <form class="container-groups-create">
                                     <div class="container-groups-actions">
                                         <input type="text" placeholder="Name" id="groupName" />
-                                        <button id="create-group-btn" class="ui-button"
+                                        <!-- <button id="create-group-btn" class="ui-button"
                                             style="width: fit-content; padding: 0 10px 0 10px;">
                                             <span class="material-symbols-rounded">
                                                 diversity_1
                                             </span>&nbsp;Create
-                                        </button>
+                                        </button> -->
                                     </div>
                                     <div class="container-groups-members-select">
 
@@ -561,17 +561,70 @@
                             </span>
                             <input type="text" placeholder="Friend's Username" name="friend-username"
                                 id="friend-username">
-                            <span id="friend-search-status">
-                                <!-- Found -->
-                            </span>
-                            <button type="submit" id="add-friend-btn">
-                                <span class="material-symbols-outlined" style="font-size: 24px;">
+                            <!-- <span id="friend-search-status">
+                                
+                            </span> -->
+                            <button type="submit" id="add-friend-btn" style="cursor: pointer; color: var(--polar);">
+                                <span class="material-symbols-outlined" id="send-btn-frnd" style="font-size: 24px;">
                                     send
                                 </span>
                             </button>
                             <div class="alert-box-warn" id="alert-friend-form" popover>
 
                             </div>
+                        </div>
+                    </div>
+                    <div class="groups-container-side container-default" id="groups-container-side">
+                        <div class="secondary-heading">Create Group</div>
+                        <div class="create-groups-container" style="gap: 5px; align-items: center;">
+                            <span class="material-symbols-rounded" style="font-size: 24px;">
+                                diversity_1
+                            </span>
+                            <input type="text" placeholder="Groups Name" name="group-name" id="group-name">
+                            <button id="create-group-btn" style="cursor: pointer; color: var(--polar);">
+                                <span class="material-symbols-outlined" style="font-size: 24px;">
+                                    send
+                                </span>
+                            </button>
+                            <div class="alert-box-warn" id="alert-group-form" popover>
+
+                            </div>
+                        </div>
+                        <script>
+                            document.getElementById("group-name").addEventListener("input", async function () {
+                            var groupname = this.value;
+                            
+                            // console.log(username);
+                            if (groupname == "") {
+                                document.getElementById("create-group-btn").style.color = "var(--polar)";
+                                // document.getElementById("group-name").disabled = true;
+                                // document.getElementById("friend-search-status").innerHTML = "";
+                                // document.getElementById("friend-search-status").style.backgroundColor = "var(--snow)";
+
+                            } else {
+                                var res = await checkGroupname(groupname);
+                                console.log(res);
+                                if (res) {
+                                    document.getElementById("create-group-btn").style.color = "var(--feather-green)";
+
+                                    // document.getElementById("friend-search-status").textContent = "Found";
+                                    // document.getElementById("friend-search-status").style.backgroundColor = "var(--feather-green)";
+                                    // alert("User Found");
+                                } else {
+                                    document.getElementById("create-group-btn").style.color = "var(--cardinal)";
+
+                                    // document.getElementById("friend-search-status").textContent = "Not Found";
+                                    // document.getElementById("friend-search-status").style.backgroundColor = "var(--cardinal)";
+                                }
+                            }
+                        });
+                        </script>
+                        <div class="less-imp-text" style="text-align: center; margin: 10px 0;">Add Group Members</div>
+                        <div class="group-member-add-list">
+                            <!-- <div class="grp-member-item">
+                                <input type="checkbox" name="" id="friend-${friend}" data-friend="${friend}">
+                                <label for="friend-${friend}">${friend}</label>
+                            </div> -->
                         </div>
                     </div>
                     <div class="friends-list-side container-default" id="friends-list-side">
@@ -581,20 +634,26 @@
                         document.getElementById("friend-username").addEventListener("input", async function () {
                             var username = this.value;
                             console.log(username);
-                            if(username == "") {
-                                document.getElementById("friend-search-status").innerHTML = "";
-                                document.getElementById("friend-search-status").style.backgroundColor = "var(--snow)";
-                                
+                            if (username == "") {
+                                document.getElementById("send-btn-frnd").style.color = "var(--hare)";
+                                document.getElementById("send-btn-frnd").disabled = true;
+                                // document.getElementById("friend-search-status").innerHTML = "";
+                                // document.getElementById("friend-search-status").style.backgroundColor = "var(--snow)";
+
                             } else {
                                 var res = await checkUsername(username);
                                 console.log(res);
                                 if (res) {
-                                    document.getElementById("friend-search-status").textContent = "Found";
-                                    document.getElementById("friend-search-status").style.backgroundColor = "var(--feather-green)";
+                                    document.getElementById("send-btn-frnd").style.color = "var(--feather-green)";
+
+                                    // document.getElementById("friend-search-status").textContent = "Found";
+                                    // document.getElementById("friend-search-status").style.backgroundColor = "var(--feather-green)";
                                     // alert("User Found");
                                 } else {
-                                    document.getElementById("friend-search-status").textContent = "Not Found";
-                                    document.getElementById("friend-search-status").style.backgroundColor = "var(--cardinal)";
+                                    document.getElementById("send-btn-frnd").style.color = "var(--cardinal)";
+
+                                    // document.getElementById("friend-search-status").textContent = "Not Found";
+                                    // document.getElementById("friend-search-status").style.backgroundColor = "var(--cardinal)";
                                 }
                             }
                         });
@@ -991,8 +1050,11 @@
                 // console.log(response);
                 if (response === 'Friend already in friends list') {
                     alertbox.style.display = 'flex';
-                    alert.appendChild(spanElement);
-                    alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--cardinal);">error</span>You\'re already Friends'
+                    // alertbox.style.backgroundColor = 'var(--feather-green)';
+                    alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--feather-green);">sentiment_very_satisfied</span>You\'re Already Friends</span>'
+                    setTimeout(function () {
+                        alertbox.style.display = 'none';
+                    }, 3000)
                 } else if (response === 'Friend Request Sent!') {
                     alertbox.style.display = 'flex';
                     // alertbox.style.backgroundColor = 'var(--feather-green)';
@@ -1288,21 +1350,24 @@
 
         function generateFriendsList() {
             getUser().then((user) => {
-                const container = document.querySelector('.container-groups-members-select');
+                const container = document.querySelector('.group-member-add-list');
                 container.innerHTML = '';
-                const span = document.createElement('span');
-                span.textContent = 'Your Friends';
-                span.classList.add('tertiary-heading');
-                container.appendChild(span);
+
+                
                 user.friends.forEach((friend) => {
                     const friendElement = document.createElement('div');
-                    friendElement.classList.add('member-select');
+                    friendElement.classList.add('grp-member-item');
                     friendElement.innerHTML = `
                   <input type="checkbox" name="" id="friend-${friend}" data-friend="${friend}">
                     <label for="friend-${friend}">${friend}</label>
                 `;
                     container.appendChild(friendElement);
                 });
+                const demoElement = document.createElement('span');
+                demoElement.classList.add('less-imp-text');
+                demoElement.style.textAlign = 'center';
+                demoElement.textContent = 'End Of List';
+                container.appendChild(demoElement);
             });
         }
 
@@ -1350,27 +1415,50 @@
 
         document.getElementById('create-group-btn').addEventListener('click', async function (event) {
             event.preventDefault();
-            const groupNameInput = document.getElementById('groupName');
+            const groupNameInput = document.getElementById('group-name');
             const groupName = groupNameInput.value.trim();
+            alertbox = document.getElementById('alert-group-form');
+            if (groupName == "") {
+                alertbox.style.display = 'flex';
+                    // alertbox.style.backgroundColor = 'var(--feather-green)';
+                    alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--feather-green);">sentiment_very_satisfied</span>You\'re Enter a Group Name</span>'
+                    setTimeout(function () {
+                        alertbox.style.display = 'none';
+                    }, 3000)
+            }
             const validatedGroupName = await checkGroupname(groupName);
 
             if (validatedGroupName) {
                 const selectedFriends = [];
-                const checkboxes = document.querySelectorAll('.member-select input[type="checkbox"]');
+                const checkboxes = document.querySelectorAll('.grp-member-item input[type="checkbox"]');
                 checkboxes.forEach(checkbox => {
                     if (checkbox.checked) {
                         selectedFriends.push(checkbox.dataset.friend);
                     }
                 });
-
-                const formData = new FormData();
-                formData.append('groupname', groupName);
-                formData.append('selectedFriends', JSON.stringify(selectedFriends));
-                const response = await createGroup(formData);
-
-                alert(response.message);
+                if (selectedFriends.length > 0) {
+                    const formData = new FormData();
+                    formData.append('groupname', groupName);
+                    formData.append('selectedFriends', JSON.stringify(selectedFriends));
+                    const response = await createGroup(formData);
+    
+                    alertbox.style.display = 'flex';
+                    // alertbox.style.backgroundColor = 'var(--feather-green)';
+                    alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--feather-green);">sentiment_very_satisfied</span>Group Succesfully Created</span>'
+                    setTimeout(function () {
+                        alertbox.style.display = 'none';
+                    }, 3000)
+                } else {
+                    alertbox.style.display = 'flex';
+                    // alertbox.style.backgroundColor = 'var(--feather-green)';
+                    alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--feather-green);">sentiment_very_satisfied</span>Please select atleast one member</span>'
+                    setTimeout(function () {
+                        alertbox.style.display = 'none';
+                    }, 3000)
+                }
             } else {
-                alert('Groupname not available');
+                var alert = document.getElementById('alert-group-form');
+
             }
         });
 
@@ -1672,17 +1760,5 @@
 
 </html>
 <!-- 
-<form action="/add-friend/{{ user._id }}" method="post">
-    <div class="friend-form">
-        <div class="friend-form-input">
-            <input type="text" placeholder="Friend's Username" name="friend-username"
-                id="friend-username">
-        </div>
-        <button type="submit" class="ui-button" id="add-friend-btn">
-            <span class="material-symbols-outlined">
-                person_add
-            </span>
-        </button>
-    </div>
-</form>
+
 <div class="alert-box" id="alert-friend-form">Oh O! Invalid Username</div> -->

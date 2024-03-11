@@ -162,7 +162,7 @@
     font-weight: 800;
     text-align: left;
     color: var(--eel);
-    line-height: 2em;
+    margin: .5em 0 .5em 0;
 }
 
 .tertiary-heading {

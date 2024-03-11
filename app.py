@@ -669,11 +669,20 @@ def removeFriend(username):
     except Exception as e:
         return jsonify({'message': f'Failed to remove friend: {str(e)}'}), 500
 
-
-
 @app.route('/update-daily-task', methods=['POST'])
-def updateDailyTasks():
-    pass
+def update_daily_tasks():
+    collection = db['users']
+    if request.method == 'POST':
+        username = session.get('username')
+        if username:
+            task_list = request.form.getlist('task[]')
+            updated_tasks = [{'task': task, 'priority': 1, 'completed': 0, 'lastupdate': datetime.utcnow()} for task in task_list]
+            collection.update_one({'username': username}, {'$push': {'dailytasks': {'$each': updated_tasks}}})
+            return jsonify({'message': 'Tasks updated successfully'}), 200
+        else:
+            return jsonify({'message': 'Username not provided in the form data'}), 400
+    else:
+        return jsonify({'message': 'Method not allowed'}), 405
 
 # Function for sharing user stats with homepage
 def fetch_user_stats(user_id):

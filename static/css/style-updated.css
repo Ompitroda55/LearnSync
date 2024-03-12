@@ -437,6 +437,32 @@ hr {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.376);
 }
 
+.smart-input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    border: var(--default-border-width) solid var(--swan);
+    border-radius: var(--link-radius);
+}
+
+.smart-input-container > input[type=text] {
+    all: unset;
+    border-bottom: 2px solid transparent;
+    color: var(--eel);
+}
+
+.smart-input-container > input[type=text]:focus {
+    border-bottom: 2px solid var(--eel);
+    color: var(--eel);
+}
+
+.smart-input-container > input[type=text]::placeholder {
+    color: var(--hare);
+}
+
+
 @media only screen and (max-width: 425px) {
     :root {
         --logo-font-size: 24pt;

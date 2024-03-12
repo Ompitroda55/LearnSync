@@ -464,7 +464,7 @@ content-container {
 
 .container-groups {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     /* background-color: #66bb6a; */
 }
 
@@ -1313,4 +1313,96 @@ Help Menu
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.377);
     background-color: var(--foot-green);
     color: var(--eel);
+}
+
+.group-display-container {
+    /* background-color: orange; */
+    display: flex;
+    flex-direction: row;
+
+}
+
+.group-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* background-color: aqua; */
+}
+
+.group-list-container {
+    display: flex;
+    /* background-color: greenyellow; */
+    flex-direction: column;
+    gap: 5px;
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.grp-lst-item {
+    /* background-color: orange; */
+    display: flex;
+    flex-direction: row;
+    text-decoration: none;
+    color: var(--eel);
+    margin-bottom: 5px;
+    margin-right: 5px;
+    align-items: center;
+    border-bottom: var(--default-border-width) solid var(--swan);
+    transition: all 0.3s ease;
+}
+
+.grp-lst-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+    border-radius: var(--link-radius);
+}
+
+.grp-logo {
+    font-size: 24px;
+    background-color: var(--feather-green);
+    border-radius: 999px;
+    padding: 5px;
+    color: var(--snow);
+    width: 32px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    height: 32px;
+    margin: 5px;
+    aspect-ratio: 1;
+}
+
+.grp-desc {
+    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 5px;
+}
+.grp-name {
+    color: var(--eel);
+    font-weight: 600;
+    text-align: right;
+    font-size: var(--default-font-size);
+}
+.grp-admin {
+    color: var(--hare);
+    text-align: right;
+    font-size: var(--less-imp-font-size);
+}
+
+.group-details {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* background-color: pink; */
+    /* font-size: var(--less-imp-font-size); */
+    border-left: var(--default-border-width) solid var(--hare);
+}
+
+.empty-state {
+    color: var(--hare);
+    
 }

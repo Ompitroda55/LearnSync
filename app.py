@@ -197,7 +197,7 @@ def send_verification_email():
     # Get email and generate OTP
     data = request.get_json()
     email = data.get('email')
-    print(email)
+    # print(email)
     otp = str(random.randint(100000, 999999))
 
     # Construct HTML content for the email
@@ -843,7 +843,7 @@ def insertNewGroup():
     # print(selected_friends)
 
     user = session.get('username')
-    print(user)
+    # print(user)
     group_id = createGroup(groupname, user, selected_friends, datetime.now())
 
     if group_id:
@@ -851,14 +851,19 @@ def insertNewGroup():
     else:
         return jsonify({'message': 'Failed to create group'}), 500
     
-@app.route('/get-user-groups', methods=['POST'])
-def getUserGroups():#
+@app.route('/get-user-groups/<mode>', methods=['POST'])
+def getUserGroups(mode):#
     username = session.get('username')
     groups_collection = db["groups"]
-    user_groups = list(groups_collection.find({"group_leader": username}))
+    user_groups = []
+    if int(mode) == 1:
+        user_groups = list(groups_collection.find({"group_leader": username}))
+    else:
+        user_groups = list(groups_collection.find({"members": username}))
     for group in user_groups:
-        group['_id'] = str(group['_id'])
+            group['_id'] = str(group['_id'])
     return jsonify(user_groups)
+        
 
 @app.route("/get-friends-list", methods=["POST"])
 def getUserFriends():
@@ -875,7 +880,7 @@ def getUserFriends():
         else:
             return None
     except Exception as e:
-        print(f'An error occurred: {str(e)}')
+        # print(f'An error occurred: {str(e)}')
         return None
 
 
@@ -964,24 +969,30 @@ def getGroupMembers(group_id):
 def get_group_tasks():
     try:
         group_id = request.json.get('group_id')
+        # print(group_id)
         tasks_collection = db["tasks"]
         current_date = datetime.now()
         group_tasks = list(tasks_collection.find({"group_id": ObjectId(group_id)}).sort("task_completion_date", 1))
         
+        # print(group_tasks)
+
         # Convert task_completion_date strings to datetime objects
         for task in group_tasks:
             task["task_completion_date"] = datetime.strptime(task["task_completion_date"], "%Y-%m-%d")
         
-        closest_tasks = [task for task in group_tasks if task["task_completion_date"] >= current_date]
+        # closest_tasks = [task for task in group_tasks if task["task_completion_date"] >= current_date]
         
+        closest_tasks = group_tasks
+
         for task in closest_tasks:
             task['_id'] = str(task['_id'])
             task['group_id'] = str(task['group_id'])
-            print(task)
-        
-        return jsonify(closest_tasks), 200
+            # print(task)
+        print(closest_tasks)
+        arr = [session.get('username'), closest_tasks];
+        return jsonify(arr), 200
     except Exception as e:
-        print(f'An error occurred: {str(e)}')
+        # print(f'An error occurred: {str(e)}')
         return jsonify({'message': 'Failed to fetch tasks for the group'}), 500
 
 @app.route('/delete-group-task', methods=['POST'])

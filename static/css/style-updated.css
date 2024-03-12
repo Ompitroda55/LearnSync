@@ -442,9 +442,10 @@ hr {
     flex-direction: row;
     align-items: center;
     gap: 5px;
-    padding: 5px;
+    padding: 5px 8px;
     border: var(--default-border-width) solid var(--swan);
     border-radius: var(--link-radius);
+    transition: all 0.3s ease;
 }
 
 .smart-input-container > input[type=text] {
@@ -462,6 +463,63 @@ hr {
     color: var(--hare);
 }
 
+.smart-input-container > button {
+    all: unset;
+    background-color: pink;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--eel);
+    border-radius: 999px;
+    background-color: var(--swan);
+    padding: 5px;
+    transition: all 0.3s ease;
+    &:hover {
+        color: var(--bee-mask);
+        background-color: var(--macaw);
+    }
+}
+
+.ui-button-2 {
+    all: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    aspect-ratio: 1;
+    all: unset;
+    color: var(--eel);
+    /* background-color: var(--swan); */
+    padding: 5px;
+    height: 25px;
+    width: 25px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 999px;
+    background-color: var(--polar);
+    /* height: 20px; width: 20px; */
+    &:hover {
+        background-color: var(--swan);
+    }
+    /* width: 15px; */
+    /* height: 15px; */
+}
+
+.info-popup {
+    display: flex;
+    flex-direction: column;
+    /* border: var(--default-border-width) solid var(--swan); */
+    background-color: var(--snow);
+    /* padding: 5px; */
+    border-radius: var(--btn-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    margin: auto;
+    z-index: 999;
+    overflow: hidden;
+}
+/* .info-popup */
 
 @media only screen and (max-width: 425px) {
     :root {

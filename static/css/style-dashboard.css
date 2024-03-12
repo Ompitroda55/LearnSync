@@ -1395,8 +1395,6 @@ Help Menu
     display: flex;
     flex: 1;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     /* background-color: pink; */
     /* font-size: var(--less-imp-font-size); */
     border-left: var(--default-border-width) solid var(--hare);
@@ -1404,5 +1402,167 @@ Help Menu
 
 .empty-state {
     color: var(--hare);
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.selected-group-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+    /* background-color: orange; */
+    /* height: 350px; */
+}
+
+.group-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: var(--default-border-width) solid var(--hare);
+    /* background-color: orange; */
+}
+
+.group-title {
+    /* background-color: #66bb6a; */
+    display: flex;
+    flex-direction: column;
+    /* padding-left: 15px; */
+}
+
+.group-info {
+    background-color: #66bb6a;
+    border-radius: var(--link-radius);
+    background-color: transparent;
+    color: var(--eel);
+    transition: all 0.3s ease;
+    &:hover {
+        background-color: var(--swan);
+        color: var(--eel);
+    }
+}
+
+.group-task-list {
+    /* flex: 1; */
+    /* background-color: black; */
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    /* overflow: visible; */
+    overflow-y: auto;
+}
+
+.group-task-item {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+}
+
+.group-task-item-main{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    /* width: 100%; */
+    padding: 5px 3px;
+    border-bottom: var(--default-border-width) solid var(--swan);
+}
+
+.grp-task-name {
+    /* Your CSS styles for .grp-task-name */
+    display: flex;
+    flex-direction: column;
+    /* background-color: orange; */
+    flex: 1;
+}
+
+.grp-task-elapse {
+    /* Your CSS styles for .grp-task-elapse */
     
 }
+
+.grp-task-status {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    border-radius: var(--link-radius);
+    background-color: var(--polar);
+    transition: all 0.3s ease;
+    &:hover {
+        background-color: var(--bee);
+    }
+    /* height: fit-content; */
+    /* Your CSS styles for .grp-task-status */
+}
+.mark-as-complete {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    border-radius: var(--link-radius);
+    background-color: var(--polar);
+    transition: all 0.3s ease;
+    &:hover {
+        background-color: var(--feather-green);
+        color: var(--snow);
+    }
+}
+
+.task-det-handle {
+    /* Your CSS styles for .task-det-handle */
+    &:hover {
+        background-color: var(--macaw);
+        color: var(--snow);
+    }
+}
+
+.task-more-info {
+    /* position: absolute; */
+    z-index: 9999;
+    right: -20px;
+}
+
+.task-member-status {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.task-member {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* font-size: 16px; */
+}
+
+.task-calendar {
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.create-date, .complete-date {
+    font-size: var(--less-imp-font-size);
+    font-weight: 800;
+    border-radius: var(--link-radius);
+    padding: 2px 3px;
+}
+
+.task-member-status {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* .complete-date {
+}
+
+.info-popup {
+} */

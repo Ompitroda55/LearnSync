@@ -675,8 +675,8 @@ def update_daily_tasks():
     if request.method == 'POST':
         username = session.get('username')
         if username:
-            task_list = request.form.getlist('task[]')
-            updated_tasks = [{'task': task, 'priority': 1, 'completed': 0, 'lastupdate': datetime.utcnow()} for task in task_list]
+            task_list = request.form.get('task')
+            updated_tasks = {'task': task_list, 'priority': 2, 'completed': 0, 'lastupdate': datetime.utcnow()} 
             collection.update_one({'username': username}, {'$push': {'dailytasks': {'$each': updated_tasks}}})
             return jsonify({'message': 'Tasks updated successfully'}), 200
         else:

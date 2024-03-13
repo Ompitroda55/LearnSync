@@ -862,6 +862,7 @@ def getUserGroups(mode):#
         user_groups = list(groups_collection.find({"members": username}))
     for group in user_groups:
             group['_id'] = str(group['_id'])
+    return jsonify([session.get('username'),user_groups])
     return jsonify(user_groups)
         
 
@@ -1017,6 +1018,39 @@ def delete_group_task():
         # Handle any errors that occur during the deletion process
         return jsonify({'success': False, 'message': f'An error occurred: {str(e)}'}), 500
 
+@app.route('/mark-my-task', methods=['POST'])
+def markMyTaskAsComplete():
+    try:
+        # Extract the task ID from the request
+        task_id = request.json.get('task_id')
+        mode = request.json.get('mode')
+        for_user = request.json.get('user')
+        
+        tasks_collection = db["tasks"]
+        
+        # Find the task document from the database using its ID
+        task = tasks_collection.find_one({"_id": ObjectId(task_id)})
+        print(task['members_status'][for_user])
+        if task:
+            # Update the status of the specified user in the members_status array
+            task['members_status'][for_user] = mode
+            
+            # Update the task document in the database
+            result = tasks_collection.update_one({"_id": ObjectId(task_id)}, {"$set": task})
+            
+            if result.modified_count == 1:
+                # Task status updated successfully
+                return jsonify({'success': True, 'message': 'Task status updated successfully'}), 200
+            else:
+                # Task not found or update unsuccessful
+                return jsonify({'success': False, 'message': 'Task not found or update unsuccessful'}), 404
+        else:
+            # Task not found
+            return jsonify({'success': False, 'message': 'Task not found'}), 404
+    except Exception as e:
+        # Handle any errors that occur during the update process
+        return jsonify({'success': False, 'message': f'An error occurred: {str(e)}'}), 500
+    
 @app.route('/fetch_random_riddle', methods=['GET'])
 def fetch_random_riddle():
     # Connect to MongoDB

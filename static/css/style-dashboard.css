@@ -18,7 +18,7 @@ nav {
     top: 0;
     height: 100svh;
     background-color: var(--snow);
-    position: relative;
+    /* position: relative; */
     /* background-color: pink; */
     /* padding: 0 15px 0 15px; */
     border-right: var(--default-border-width) solid var(--swan);
@@ -1397,20 +1397,20 @@ Help Menu
     flex-direction: column;
     /* background-color: pink; */
     /* font-size: var(--less-imp-font-size); */
-    border-left: var(--default-border-width) solid var(--hare);
+    /* border-left: var(--default-border-width) solid var(--hare); */
 }
 
 .empty-state {
     color: var(--hare);
     width: 100%;
     height: 100%;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .selected-group-info {
-    display: flex;
+    display: none;
     flex-direction: column;
     margin-left: 15px;
     /* background-color: orange; */
@@ -1451,7 +1451,7 @@ Help Menu
     display: flex;
     flex-direction: column;
     /* overflow: visible; */
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .group-task-item {
@@ -1462,7 +1462,7 @@ Help Menu
 
 .group-task-item-main{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     gap: 5px;
@@ -1477,12 +1477,27 @@ Help Menu
     display: flex;
     flex-direction: column;
     /* background-color: orange; */
-    flex: 1;
+    /* background-color: orange; */
+    width: fit-content;
+    max-width: 400px;
+
+    max-height: 200px;
+    overflow-y: scroll;
 }
 
 .grp-task-elapse {
     /* Your CSS styles for .grp-task-elapse */
-    
+    flex: 1;
+}
+
+.grp-most-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    gap: 10px;
+    align-items: center;
+    /* background-color: #66bb6a; */
 }
 
 .grp-task-status {
@@ -1522,9 +1537,9 @@ Help Menu
 }
 
 .task-more-info {
-    /* position: absolute; */
-    z-index: 9999;
-    right: -20px;
+
+    display: none;
+    border-bottom: var(--default-border-width) solid var(--swan);
 }
 
 .task-member-status {
@@ -1553,6 +1568,10 @@ Help Menu
     font-weight: 800;
     border-radius: var(--link-radius);
     padding: 2px 3px;
+}
+
+.group-tsk-crt-con {
+    margin-left: 15px;
 }
 
 .task-member-status {

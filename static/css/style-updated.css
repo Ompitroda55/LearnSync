@@ -88,7 +88,7 @@
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 5px;
     height: 4px;
     /* width of the scrollbar */
 }
@@ -101,7 +101,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: var(--hare);
+    background: var(--feather-green);
     /* color of the handle */
     border-radius: 999px;
     /* roundness of the handle */
@@ -109,7 +109,7 @@
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--feather-green);
+    background: var(--feather-green-mask);
     /* color of the handle on hover */
 }
 
@@ -509,13 +509,9 @@ hr {
 .info-popup {
     display: flex;
     flex-direction: column;
-    /* border: var(--default-border-width) solid var(--swan); */
+
     background-color: var(--snow);
-    /* padding: 5px; */
-    border-radius: var(--btn-radius);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    width: 90%;
-    margin: auto;
+
     z-index: 999;
     overflow: hidden;
 }

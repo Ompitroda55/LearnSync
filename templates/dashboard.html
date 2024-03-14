@@ -263,7 +263,7 @@
                                         class="profile-stats-icon">
                                     <div class="profile-stats-data">
                                         <span class="stats-data-main">32</span>
-                                        <span class="stats-data-label">Days Streak</span>
+                                        <span class="stats-data-label" id="u-streak">Days Streak</span>
                                     </div>
                                 </div>
                                 <div class="profile-stats container-default">
@@ -271,7 +271,7 @@
                                         class="profile-stats-icon">
                                     <div class="profile-stats-data">
                                         <span class="stats-data-main">32</span>
-                                        <span class="stats-data-label">Total XP</span>
+                                        <span class="stats-data-label" id="u-xp">Total XP</span>
                                     </div>
                                 </div>
                                 <div class="profile-stats container-default">
@@ -279,7 +279,7 @@
                                         class="profile-stats-icon">
                                     <div class="profile-stats-data">
                                         <span class="stats-data-main">32</span>
-                                        <span class="stats-data-label">Hearts Collected</span>
+                                        <span class="stats-data-label" id="u-hearts">Hearts Collected</span>
                                     </div>
                                 </div>
                                 <div class="profile-stats container-default">
@@ -287,7 +287,7 @@
                                         class="profile-stats-icon">
                                     <div class="profile-stats-data">
                                         <span class="stats-data-main">32</span>
-                                        <span class="stats-data-label">Top 10 finishes</span>
+                                        <span class="stats-data-label" id="u-top10">Top 10 finishes</span>
                                     </div>
                                 </div>
                             </div>
@@ -345,7 +345,6 @@
                                             <script>
                                                 const groupInfoButton = document.getElementById("group-info-more");
 
-                                                // Add event listener for "click" event
                                                 groupInfoButton.addEventListener("click", async function () {
                                                     try {
                                                         // Perform asynchronous action here
@@ -361,11 +360,6 @@
                                                         // console.log(manager.dataset.grpN);
                                                         template.style.display = "flex";
                                                         generateManagerList(manager.dataset.grpN, manager.dataset.grpI, manager.dataset.isUserAdmin);
-                                                        // For example, fetch data from an API
-                                                        // const response = await fetch('/some-api-endpoint');
-                                                        // const data = await response.json();
-
-                                                        // Handle the response data
 
                                                     } catch (error) {
                                                         console.error('An error occurred:', error);
@@ -2304,8 +2298,27 @@
             }
         }
 
+        async function fillProfile() {
+            const user = await getUser();
+            const u_name = document.getElementById('profile-name');
+            const u_email = document.getElementById('profile-email');
+            const u_social = document.querySelector('.info-social');
+            const u_streak = document.querySelector('#u-streak');
+            const u_xp = document.querySelector('#u-xp');
+            const u_hearts = document.querySelector('#u-hearts');
+            const u_top10 = document.querySelector('#u-top10');
+
+            u_name.textContent = user.username;
+            u_email.textContent = user.email;
+
+            
+            
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
+
             updateStats();
+            fillProfile();
             updateNotifications();
             generateFriendsList('.group-member-add-list');
             // generateFriendsList('.friends-list');
@@ -2316,51 +2329,6 @@
 
 
 
-    </script>
-    <script>
-        // Add task input field
-        // document.getElementById('addTask').addEventListener('click', function () {
-        //     var taskFields = document.getElementById('taskFields');
-        //     var input = document.createElement('input');
-        //     input.type = 'text';
-        //     input.className = 'task';
-        //     input.name = 'task[]';
-        //     input.placeholder = 'Task';
-        //     taskFields.appendChild(input);
-        // });
-
-        // // Submit tasks
-        // document.getElementById('update-task-btn').addEventListener('click', function () {
-        //     var form = document.getElementById('taskForm');
-        //     var formData = new FormData(form);
-
-        //     fetch('/updateDailyTasks', {
-        //         method: 'POST',
-        //         body: formData
-        //     })
-        //         .then(response => {
-        //             if (!response.ok) {
-        //                 throw new Error('Network response was not ok');
-        //             }
-        //             return response.json();
-        //         })
-        //         .then(data => {
-        //             console.log(data);
-        //             // Handle response data as needed
-        //             if (data.success) {
-        //                 alert('Tasks added successfully');
-        //                 // Redirect or perform any other action upon success
-        //             } else {
-        //                 alert('Failed to add tasks: ' + data.error);
-        //             }
-        //         })
-        //         .catch(error => {
-        //             console.error('There was a problem with the fetch operation:', error);
-        //             // Handle error
-        //         });
-        // });
-
-        AOS.init();
     </script>
     <script>
         function calculateTaskCompletionPercentage(taskObject) {

@@ -422,11 +422,13 @@ hr {
 
 .alert-box-warn, .alert-box-success {
     /* display: flex; */
-    /* display: flex; */
+    display: flex;
+    /* display: none; */
     justify-content: center;
     width: fit-content;
     padding: 10px;
     align-items: center;
+    text-wrap: nowrap;
     gap: 5px;
     background-color: var(--snow);
     position: absolute;

@@ -1468,21 +1468,28 @@ Help Menu
     gap: 5px;
     position: relative;
     /* width: 100%; */
+    width: 380px;
+    /* overflow-x: hidden; */
     padding: 5px 3px;
     border-bottom: var(--default-border-width) solid var(--swan);
 }
 
 .grp-task-name {
     /* Your CSS styles for .grp-task-name */
-    display: flex;
-    flex-direction: column;
+    /* display: flex; */
+    /* flex-direction: column; */
     /* background-color: orange; */
     /* background-color: orange; */
     width: fit-content;
-    max-width: 400px;
+    /* max-width: 400px; */
+    background-color: orange;
 
     max-height: 200px;
     overflow-y: scroll;
+}
+
+.grp-tsk-name {
+    background-color: red;
 }
 
 .grp-task-elapse {
@@ -1571,7 +1578,14 @@ Help Menu
 }
 
 .group-tsk-crt-con {
-    margin-left: 15px;
+    position: relative;
+}
+
+#group-tsk-crt-alert {
+    /* top: 10px; */
+    top: -30px;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .task-member-status {

@@ -976,7 +976,7 @@ def get_group_tasks():
         group_tasks = list(tasks_collection.find({"group_id": ObjectId(group_id)}).sort("task_completion_date", 1))
         
         # print(group_tasks)
-
+        print(group_tasks)
         # Convert task_completion_date strings to datetime objects
         for task in group_tasks:
             task["task_completion_date"] = datetime.strptime(task["task_completion_date"], "%Y-%m-%d")
@@ -993,7 +993,7 @@ def get_group_tasks():
         arr = [session.get('username'), closest_tasks];
         return jsonify(arr), 200
     except Exception as e:
-        # print(f'An error occurred: {str(e)}')
+        print(f'An error occurred: {str(e)}')
         return jsonify({'message': 'Failed to fetch tasks for the group'}), 500
 
 @app.route('/delete-group-task', methods=['POST'])

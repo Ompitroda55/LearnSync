@@ -431,17 +431,73 @@
                                         <div class="group-tsk-crt-con smart-input-container">
                                             <input type="text" name="" id="grp-tsk-add-field"
                                                 placeholder="Create a new task..." style="flex: 1;" />
-                                            <input type="date" id="date-task-completion" name="date" min="" max="" required>
+                                            <input type="date" id="date-task-completion" name="date" min="" max=""
+                                                required>
                                             <button id="create-grp-task-btn" title="Add Task">
                                                 <span class="material-symbols-outlined" style="font-size: 24px;">
                                                     add_task
                                                 </span>
                                             </button>
+                                            <div class="alert-box-warn" id="group-tsk-crt-alert">
+                                                <span class="material-symbols-outlined"
+                                                    style="font-size: 24px; color: var(--cardinal);">
+                                                    warning
+                                                </span>
+                                                <span id="grp-tsk-warn">
+
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <script>
+                            const createTaskButton = document.getElementById("create-grp-task-btn");
+                            const grpTskAlert = document.getElementById("group-tsk-crt-alert");
+                            const grpTskField = document.getElementById("grp-tsk-add-field");
+                            createTaskButton.addEventListener("click", async function () {
+                                // Get task name
+                                var taskName = document.getElementById("grp-tsk-add-field").value;
+
+                                // Get completion date
+                                var completionDate = document.getElementById("date-task-completion").value;
+                                if (completionDate == "" || taskName == "") {
+                                    const alrtBox = document.querySelector('#group-tsk-crt-alert');
+                                    alrtBox.style.display = 'flex';
+                                    const alrtIco = document.querySelector('#group-tsk-crt-alert > .material-symbols-outlined');
+                                    alrtIco.textContent = "warning";
+                                    alrtIco.style.color = 'var(--bee-mask)';
+                                    const alrtSpan = document.querySelector('#group-tsk-crt-alert > #grp-tsk-warn');
+                                    alrtSpan.textContent = "Please check Task and Date";
+                                    setTimeout(function () {
+                                        alrtBox.style.display = 'none';
+                                    }, 3000)
+                                } else {
+                                    var grpId = createTaskButton.dataset.grpId; // Example: You can replace this with the actual value of your additional data attribute
+                                    var grpName = createTaskButton.dataset.grpName; // Example: You can replace this with the actual value of your additional data attribute
+                                    var isUserAdmin = createTaskButton.dataset.isUsrAdmin;
+                                    // Call the createGroupTask function with the retrieved values
+                                    var res = await createGroupTask( grpId, grpName, taskName, completionDate);
+                                    if(res.message == "Task created successfully") {
+                                        const alrtBox = document.querySelector('#group-tsk-crt-alert');
+                                        alrtBox.style.display = 'flex';
+                                        const alrtIco = document.querySelector('#group-tsk-crt-alert > .material-symbols-outlined');
+                                        alrtIco.textContent = "done";
+                                        alrtIco.style.color = 'var(--feather-green)'
+                                        const alrtSpan = document.querySelector('#group-tsk-crt-alert > #grp-tsk-warn');
+                                        alrtSpan.textContent = "Task Created Succesfully";
+                                        setTimeout(function () {
+                                            alrtBox.style.display = 'none';
+                                        }, 3000)
+                                        generateGrpTsk(grpId, isUserAdmin);
+                                        taskName.value = "";
+                                        completionDate.value = "";
+                                    }
+                                }
+                                // Get additional data attributes (if any)
+                            });
+                        </script>
                         <script>
                             // Get current date
                             const currentDate = new Date();
@@ -1859,7 +1915,10 @@
         }
 
         function openGroupView(group, currUser) {
+
             // alert("Button Clicked"+ group.name);
+            const crtTaskCon = document.querySelector(".group-tsk-crt-con");
+            const crtTaskBtn = document.getElementById("create-grp-task-btn");
             const groupContainer = document.querySelector(".selected-group-info");
             const taskListContainer = document.querySelector(".group-task-list");
             const emptyHandler = document.querySelector(".empty-state");
@@ -1867,6 +1926,15 @@
             const groupMembers = document.getElementById("grp-members");
 
             const isUserAdmin = currUser == group.group_leader ? true : false;
+
+            if (isUserAdmin) {
+                crtTaskCon.style.display = 'flex';
+                crtTaskBtn.dataset.grpId = group._id;
+                crtTaskBtn.dataset.grpName = group.name;
+                crtTaskBtn.dataset.isUsrAdmin = isUserAdmin;
+            } else {
+                crtTaskCon.style.display = 'none';
+            }
 
             groupName.textContent = group.name;
             groupMembers.textContent = group.members.length + " members";
@@ -1876,7 +1944,7 @@
             console.log(groupId, isUserAdmin);
             // generateGroupTasks(groupId, isUserAdmin);
             generateGrpTsk(groupId, isUserAdmin);
-            console.log("Hello this step reached!!!!!!!!")
+            // console.log("Hello this step reached!!!!!!!!")
 
         }
 

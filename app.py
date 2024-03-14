@@ -955,7 +955,56 @@ def changeTaskStatus(task_id, member_name, new_status):
             return False
     except Exception as e:
         return False
+from pymongo.errors import PyMongoError
+@app.route('/remove-grp-member', methods=['POST'])
+def removeMemberFromGroup():
+    try:
+        # Get data from request
+        group_id = request.json.get('group_id')
+        member_name = request.json.get('member_name')
+        print(group_id, member_name)
 
+        # Check if group exists
+        groups_collection = db["groups"]
+        group = groups_collection.find_one({"_id": ObjectId(group_id)})
+        if not group:
+            return jsonify({'message': 'Group not found'}), 404
+
+        # Update group document to remove the member from 'members' list
+        result = groups_collection.update_one(
+            {"_id": ObjectId(group_id)},
+            {"$pull": {"members": member_name}}
+        )
+
+        # Check if group document was updated successfully
+        if result.modified_count > 0:
+            # Update tasks to remove the member from 'members_status' dictionary
+            tasks_collection = db["tasks"]
+            tasks_collection.update_many(
+                {"group_id": ObjectId(group_id)},
+                {"$unset": {"members_status." + member_name: ""}}
+            )
+
+            return jsonify({'message': 'Removed successfully from group and tasks'}), 200
+        else:
+            return jsonify({'message': 'Failed to remove group member'}), 500
+
+    except PyMongoError as e:
+        return jsonify({'error': str(e)}), 500
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/get-grp-members', methods=['POST'])
+def getGrpMembers():
+    group_id = request.json.get('group_id')
+    groups_collection = db["groups"]
+    group = groups_collection.find_one({"_id": ObjectId(group_id)})
+    if group:
+        arr = group.get('members', [])
+        return jsonify(arr), 200
+    else:
+        return jsonify({'message': 'Failed to fetch group members'}), 500
 
 def getGroupMembers(group_id):
     # Assuming you have a groups collection in your database

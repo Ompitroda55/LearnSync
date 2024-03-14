@@ -341,11 +341,125 @@
                                                 <span class="material-symbols-outlined" style="font-size: 24px;">
                                                     more_horiz
                                                 </span>
-                                                <!-- <div class="grp-more-opt">
-                                                    <a href="" class="select-item">Group Info</a>
-                                                    <a href="" class="select-item">Leave Group</a>
-                                                </div> -->
                                             </button>
+                                            <script>
+                                                const groupInfoButton = document.getElementById("group-info-more");
+
+                                                // Add event listener for "click" event
+                                                groupInfoButton.addEventListener("click", async function () {
+                                                    try {
+                                                        // Perform asynchronous action here
+                                                        const template = document.querySelector(".group-handle-con-back");
+                                                        const manager = document.querySelector(".group-handle-con");
+                                                        const groupName = document.querySelector("#handle-grp-name");
+                                                        groupName.textContent = manager.dataset.grpN;
+                                                        const addMember = document.querySelector("#add-member");
+                                                        const delGroup = document.querySelector("#del-group");
+                                                        addMember.style.display = manager.dataset.isUserAdmin == 'true' ? 'flex' : 'none';
+                                                        delGroup.style.display = manager.dataset.isUserAdmin == 'true' ? 'flex' : 'none';
+
+                                                        // console.log(manager.dataset.grpN);
+                                                        template.style.display = "flex";
+                                                        generateManagerList(manager.dataset.grpN, manager.dataset.grpI, manager.dataset.isUserAdmin);
+                                                        // For example, fetch data from an API
+                                                        // const response = await fetch('/some-api-endpoint');
+                                                        // const data = await response.json();
+
+                                                        // Handle the response data
+
+                                                    } catch (error) {
+                                                        console.error('An error occurred:', error);
+                                                        // Handle errors
+                                                    }
+
+                                                    async function generateManagerList(grpN, grpI, isUserAdmin) {
+                                                        try {
+                                                            const response = await fetch('/get-grp-members', {
+                                                                method: 'POST',
+                                                                headers: {
+                                                                    'Content-Type': 'application/json'
+                                                                },
+                                                                body: JSON.stringify({ group_id: grpI })
+                                                            });
+                                                            if (!response.ok) {
+                                                                throw new Error('Failed to fetch members');
+                                                            }
+                                                            const grpMembers = await response.json();
+                                                            console.log(grpMembers);
+                                                            const groupMemberList = document.querySelector(".group-member-list");
+                                                            groupMemberList.innerHTML = '';
+
+                                                            grpMembers.forEach((name, index) => {
+                                                                // Create elements for each member
+                                                                const groupMemberItem = document.createElement('div');
+                                                                groupMemberItem.classList.add('group-member-item');
+                                                                groupMemberItem.dataset.name = name;
+                                                                const memberNameSpan = document.createElement('span');
+                                                                const manager = document.querySelector(".group-handle-con");
+                                                                memberNameSpan.classList.add('grp-member-name');
+                                                                memberNameSpan.textContent = name;
+                                                                // console.log("Mera jhoota hai Japani");
+                                                                console.log(isUserAdmin + "Value of IUA" + typeof(isUserAdmin));
+                                                                const res = manager.dataset.isUserAdmin;
+                                                                console.log(res + "It is it's result" + typeof(res));
+                                                                if (res == 'true') {
+                                                                    const grpMemberAction = document.createElement('div');
+                                                                    grpMemberAction.classList.add('grp-member-action');
+
+                                                                    const removeButton = document.createElement('button');
+                                                                    removeButton.classList.add('ui-button-2', 'remove-group-member');
+                                                                    removeButton.addEventListener('click', async function () {
+                                                                        removeGrpMember(grpI, groupMemberItem.dataset.name);
+                                                                    });
+
+                                                                    const materialSymbol = document.createElement('span');
+                                                                    materialSymbol.classList.add('material-symbols-outlined');
+                                                                    materialSymbol.style.color = 'var(--cardinal)';
+                                                                    materialSymbol.style.fontSize = '24px';
+                                                                    materialSymbol.textContent = 'person_remove';
+                                                                    removeButton.appendChild(materialSymbol);
+                                                                    grpMemberAction.appendChild(removeButton);
+
+                                                                    // Append elements to their respective parent
+                                                                    groupMemberItem.appendChild(memberNameSpan);
+                                                                    groupMemberItem.appendChild(grpMemberAction);
+                                                                } else {
+                                                                    // Append elements to their respective parent
+                                                                    groupMemberItem.appendChild(memberNameSpan);
+                                                                }
+                                                                groupMemberList.appendChild(groupMemberItem);
+                                                            });
+
+                                                        } catch (error) {
+                                                            console.error('Error fetching friend requests:', error);
+                                                        }
+
+                                                    }
+                                                });
+
+                                                async function removeGrpMember(grpI, name) {
+                                                    try {
+                                                        const requestBody = {
+                                                            group_id: grpI,
+                                                            member_name: name // Include 'name' parameter in the request body
+                                                        };
+                                                        const response = await fetch('/remove-grp-member', {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json'
+                                                            },
+                                                            body: JSON.stringify(requestBody)
+                                                        });
+                                                        if (!response.ok) {
+                                                            throw new Error('Failed to fetch members');
+                                                        }
+                                                        const grpMembers = await response.json();
+                                                    } catch (error) {
+                                                        console.log(error.message)
+                                                    }
+                                                }
+
+                                            </script>
                                         </div>
                                         <div class="group-task-list">
                                             <div class="group-task-item ">
@@ -452,6 +566,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <script>
                             const createTaskButton = document.getElementById("create-grp-task-btn");
                             const grpTskAlert = document.getElementById("group-tsk-crt-alert");
@@ -478,8 +593,8 @@
                                     var grpName = createTaskButton.dataset.grpName; // Example: You can replace this with the actual value of your additional data attribute
                                     var isUserAdmin = createTaskButton.dataset.isUsrAdmin;
                                     // Call the createGroupTask function with the retrieved values
-                                    var res = await createGroupTask( grpId, grpName, taskName, completionDate);
-                                    if(res.message == "Task created successfully") {
+                                    var res = await createGroupTask(grpId, grpName, taskName, completionDate);
+                                    if (res.message == "Task created successfully") {
                                         const alrtBox = document.querySelector('#group-tsk-crt-alert');
                                         alrtBox.style.display = 'flex';
                                         const alrtIco = document.querySelector('#group-tsk-crt-alert > .material-symbols-outlined');
@@ -764,7 +879,63 @@
                                     </div>
                                 </div>
                             </div>  -->
-                    </div>
+                        <div class="group-handle-con-back">
+                            <div class="group-handle-con container-default">
+                                <div class="group-handle-heading">
+                                    <div class="group-view-select">
+                                        <!-- <button id="view-member" class="ui-button-3">Members</button> -->
+                                        <span id="handle-grp-name" class="secondary-heading">Maru Potanu Group</span>
+                                        <button id="add-member" class="ui-button-2"><span
+                                                class="material-symbols-outlined" style="font-size: 24px;">
+                                                group_add
+                                            </span></button>
+                                        <button id="del-group" class="ui-button-2"><span
+                                                class="material-symbols-outlined" style="font-size: 24px;">
+                                                delete
+                                            </span></button>
+                                    </div>
+                                    <button id="handle-grp-close" class="ui-button-2">
+                                        <span class="material-symbols-outlined"
+                                            style="font-size: 24px; color: var(--cardinal);">
+                                            close
+                                        </span>
+                                    </button>
+                                    <script>
+                                        const closeButton = document.getElementById("handle-grp-close");
+
+                                        // Add event listener for "click" event
+                                        closeButton.addEventListener("click", function () {
+                                            // Select the element with the class "group-handle-con-back"
+                                            const groupHandleConBack = document.querySelector(".group-handle-con-back");
+
+                                            // Set the display of the element to "none"
+                                            groupHandleConBack.style.display = "none";
+                                        });
+                                    </script>
+                                </div>
+
+                                <div class="group-manager">
+                                    <div class="group-member-list">
+                                        <div class="group-member-item">
+                                            <span class="grp-member-name">Member 1</span>
+                                            <div class="grp-member-action">
+                                                <button class="ui-button-2 remove-group-member">
+                                                    <span class="material-symbols-outlined"
+                                                        style="color: var(--cardinal); font-size: 24px;">
+                                                        person_remove
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="friends-list">
+                                        
+                                        <button id="add-member-addn" class="ui-button3">Add Members</button>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="background-blur"></div>
+                        </div>
                     </div>
                     <div class="container-leaderboards" id="container-leaderboards" data-aos="fade-up"
                         data-aos-duration="1000">
@@ -1688,9 +1859,9 @@
 
 
 
-        function generateFriendsList() {
+        function generateFriendsList(targetContainer) {
             getUser().then((user) => {
-                const container = document.querySelector('.group-member-add-list');
+                const container = document.querySelector(targetContainer);
                 container.innerHTML = '';
 
 
@@ -1924,8 +2095,13 @@
             const emptyHandler = document.querySelector(".empty-state");
             const groupName = document.getElementById("grp-name");
             const groupMembers = document.getElementById("grp-members");
-
+            const groupManager = document.querySelector('.group-handle-con');
             const isUserAdmin = currUser == group.group_leader ? true : false;
+
+            groupManager.dataset.grpN = group.name;
+            groupManager.dataset.grpI = group._id;
+            // groupManager.dataset.grpN = group.name;
+            groupManager.dataset.isUserAdmin = isUserAdmin;
 
             if (isUserAdmin) {
                 crtTaskCon.style.display = 'flex';
@@ -2013,8 +2189,13 @@
                             const deleteButton = document.createElement('a');
                             deleteButton.classList.add('ui-button');
                             deleteButton.style.backgroundColor = 'var(--cardinal)';
+                            deleteButton.dataset.grpId = groupId;
+                            deleteButton.dataset.isUserAdmin = isUserAdmin;
                             deleteButton.innerHTML = '<span class="material-symbols-rounded">delete</span>';
-                            deleteButton.addEventListener('click', () => deleteGroupTask(task._id));
+                            alert(groupId, isUserAdmin);
+                            // var grpId = groupId;
+                            // var iUA = isUserAdmin;
+                            deleteButton.addEventListener('click', () => deleteGroupTask(task._id, deleteButton.dataset.grpId, deleteButton.dataset.isUserAdmin));
                             taskActions.appendChild(deleteButton);
                             taskRow.appendChild(taskActions);
                         }
@@ -2046,7 +2227,7 @@
             }
         }
 
-        async function deleteGroupTask(taskId) {
+        async function deleteGroupTask(taskId, groupId, isUserAdmin) {
             try {
                 const response = await fetch('/delete-group-task', {
                     method: 'POST',
@@ -2058,8 +2239,9 @@
                 const data = await response.json();
                 if (data.success) {
                     // Reload group tasks after deletion
-                    const groupId = document.getElementById('create-group-task-btn').dataset.groupId;
-                    generateGrpTsk(groupId);
+                    // const groupId = document.getElementById('create-group-task-btn').dataset.groupId;
+                    // console.log(groupId, isUserAdmin);
+                    generateGrpTsk(groupId, isUserAdmin);
 
                 } else {
                     console.error('Error deleting task:', data.error);
@@ -2125,7 +2307,8 @@
         document.addEventListener('DOMContentLoaded', function () {
             updateStats();
             updateNotifications();
-            generateFriendsList('.container-groups-members-select');
+            generateFriendsList('.group-member-add-list');
+            // generateFriendsList('.friends-list');
             generateUserGroupsList();
             setInterval(updateNotifications, 5000);
             setInterval(updateStats, 5000);
@@ -2339,7 +2522,7 @@
                             delTskBtn.className = 'del-grp-tsk ui-button-2';
                             var deleteSymbol = document.createElement('span');
                             deleteSymbol.className = 'material-symbols-outlined';
-                            delTskBtn.addEventListener('click', () => deleteGroupTask(task._id));
+                            delTskBtn.addEventListener('click', () => deleteGroupTask(task._id, groupId, isUserAdmin));
                             deleteSymbol.style.fontSize = '24px';
                             deleteSymbol.textContent = 'delete';
                             delTskBtn.appendChild(deleteSymbol);

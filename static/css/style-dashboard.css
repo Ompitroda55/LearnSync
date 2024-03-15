@@ -270,44 +270,54 @@ content-container {
 
 .user-pomodoro-sequences {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    gap: 15px;
+    /* background-color: orange; */
 }
 
-.user-pomodoro-form-sequence {
+.user-pomodoro-suggestions {
+    flex: 1;
+}
+
+.our-pomodoro-suggestions {
+    flex: 1;
+    /* background-color: red; */
+    /* height: 100px; */
+}
+.user-pomo-suggestion-header {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: flex-start;
-    height: fit-content;
-}
+    justify-content: space-between;
 
-.user-pomodoro-form-actions {
+}
+.user-pomodoro-form-sequence {
     display: flex;
-    flex: row;
+    flex-direction: column;
+    /* flex-wrap: wrap; */
+    justify-content: flex-start;
+    /* align-items: center; */
     gap: 10px;
+    font-size: var(--default-font-size) !important;
+    /* justify-content: flex-start; */
+    height: 300px;
+    overflow-y: auto;
 }
 
-.user-pomodoro-form-actions .ui-button {
-    width: fit-content;
-    padding: 3px;
-}
-
-#addSequence {
-    background-color: var(--macaw);
+.pomo-form-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
 }
 
 #addSequence:hover {
-    background-color: var(--macaw-mask);
-}
-
-#update-sequence-btn {
-    background-color: var(--feather-green);
-}
+    background-color: var(--bee-mask);
+} 
 
 #update-sequence-btn:hover {
-    background-color: var(--mask-green);
+    background-color: var(--feather-green);
+    color: white;
 }
 
 .container-pomodoro-timer {
@@ -816,7 +826,7 @@ input[type="text"] {
     font-family: var(--main-font);
     border-radius: var(--btn-radius);
     padding: 5px;
-    font-size: var(--less-imp-font-size);
+    font-size: var(--normal-font-size);
 }
 
 #friend-username {
@@ -1719,6 +1729,10 @@ Help Menu
     overflow-y: auto;
 }
 
+
+.our-pomodoro-suggestions {
+    flex: 1;
+}
 /* #view-member, #add-member  {
     all: unset;
     border-radius: var(--border-radius);

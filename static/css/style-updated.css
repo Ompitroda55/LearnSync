@@ -467,7 +467,7 @@ hr {
 
 .smart-input-container > button {
     all: unset;
-    background-color: pink;
+    /* background-color: pink; */
     aspect-ratio: 1;
     display: flex;
     align-items: center;
@@ -481,6 +481,23 @@ hr {
         color: var(--bee-mask);
         background-color: var(--macaw);
     }
+}
+
+.smart-input-gen-container > input[type='text'] {
+    all: unset;
+    color: var(--wolf);
+    font-weight: 400;
+    border-bottom: var(--default-border-width) solid var(--swan);
+    outline: none;
+    padding: 5px;
+    transition: all 0.3s ease;
+    /* width: fit-content; */
+    &:focus {
+        border-bottom: var(--default-border-width) solid var(--eel);
+        /* border-radius: var(--border-radius); */
+        color: var(--eel);
+    }
+    /* background-color: orange; */
 }
 
 .ui-button-2 {
@@ -541,7 +558,6 @@ hr {
     z-index: 999;
     overflow: hidden;
 }
-/* .info-popup */
 
 @media only screen and (max-width: 425px) {
     :root {

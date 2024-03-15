@@ -201,15 +201,13 @@
                     </div>
                     <div class="container-preferences" id="container-preferences">
                         <div class="title-dashboard">User Preferences</div>
-                        <div class="user-daily-tasks container-default">
-                            <form id="flashCardForm" id="todoForm" method=POST>
-                                <div id="taskFields">
-                                    <input type="text" class="task" name="task" placeholder="Task">
+                        <span class="secondary-heading">Your Daily Tasks</span>
+                        <div class="user-daily-tasks ">
+                            <div class="user-daily-tasks-container container-default">
+                                <div class="user-task-item">
+                                    
                                 </div>
-                                <!--<a class="link-primary-btn" href="#" id="addFields">Add Task</a>-->
-                                <!--<a class="link-secondary-btn" id="update-task-btn">Submit</a> -->
-                                <button class="link-secondary-btn" id="update-task-btn">Submit</button>
-                            </form>
+                            </div>
                         </div>
 
                         <div id="pomo-seq-info">
@@ -225,22 +223,29 @@
                             </a>
                         </div>
                         <div class="user-pomodoro-sequences container-default">
-                            <form action="" method="post" id="user-pomodoro-form">
-                                <div class="user-pomodoro-form-sequence">
-                                    <span class="secondary-heading">sequences</span>
-                                    <input type="text" name="" id="" required>
+                            <div class="user-pomodoro-suggestions">
+                                <div class="user-pomo-suggestion-header">
+                                    <span class="secondary-heading">Your Sequences</span>
+                                    <div class="pomo-form-actions">
+
+                                        <a class="ui-button-2" id="addSequence">
+                                            <span class="material-symbols-outlined" style="font-size: 24px;">
+                                                add_circle
+                                            </span></a>
+                                        <a class="ui-button-2" id="update-sequence-btn">
+                                            <span class="material-symbols-outlined" style="font-size: 24px;">
+                                                save
+                                            </span></a>
+                                    </div>
                                 </div>
-                                <div class="user-pomodoro-form-actions">
-                                    <a class="ui-button" id="addSequence">
-                                        <span class="material-symbols-outlined">
-                                            add_circle
-                                        </span>&nbsp;Sequence</a>
-                                    <a class="ui-button" id="update-sequence-btn">
-                                        <span class="material-symbols-outlined">
-                                            save
-                                        </span>&nbsp;Save</a>
-                                </div>
-                            </form>
+                                <form action="" id="user-pomodoro-form">
+                                    <div class="user-pomodoro-form-sequence smart-input-gen-container ">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="our-pomodoro-suggestions">
+                                <div class="secondary-heading">LearnSync's Suggestions</div>
+                            </div>
                         </div>
                     </div>
                     <div class="container-profile" id="container-profile">
@@ -932,7 +937,7 @@
                         }
 
                         // Call viewManager with 0 to show container-home by default
-                        viewManager(2);
+                        viewManager(3);
 
                         // Add event listeners to links to call viewManager with the corresponding position
                         linkIds.forEach((id, index) => {
@@ -1235,18 +1240,24 @@
         function generateSequenceFields() {
             const container = document.querySelector('.user-pomodoro-form-sequence');
             container.innerHTML = ''; // Clear existing fields
-            const seq = document.createElement('div');
-            seq.textContent = 'Your Sequences :'; // Clear existing fields
-            seq.className = 'tertiary-heading';
-            container.appendChild(seq);
+            // const seq = document.createElement('div');
+            // seq.textContent = 'Your Sequences '; // Clear existing fields
+            // seq.className = 'secondary-heading';
+            // container.appendChild(seq);
             // Loop through the user_sequences and generate input fields
             user_sequences.forEach((sequence, index) => {
                 const sequenceInput = document.createElement('input');
                 sequenceInput.type = 'text';
+                sequenceInput.className = "smart-input-container";
                 sequenceInput.name = `sequence[]`; // Set unique name for each input field
                 sequenceInput.value = sequence.join(', '); // Populate input field with sequence data
                 container.appendChild(sequenceInput); // Append input field to container
             });
+            const seq = document.createElement('div');
+            seq.textContent = 'End-Of-List'; // Clear existing fields
+            seq.className = 'less-imp-text';
+            seq.style.margin = "0 auto";
+            container.appendChild(seq);
         }
 
         const addSequenceLink = document.getElementById('addSequence');

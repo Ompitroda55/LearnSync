@@ -414,7 +414,7 @@ content-container {
 }
 
 .pomodoro-selector label {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     cursor: pointer;
     padding: 3px 5px;
@@ -1295,7 +1295,7 @@ Help Menu
     overflow-y: auto;
 }
 
-.grp-member-item, .group-member-item {
+.grp-member-item, .group-member-item, .grp-exmember-item {
     display: flex;
     font-weight: 800;
     flex-direction: row;
@@ -1307,6 +1307,10 @@ Help Menu
     justify-content: space-between;
     transition: all 0.5s ease; /* Corrected transition property */
     box-shadow: none;
+}
+
+.grp-exmember-item {
+    width: 90%;
 }
 
 .grp-member-item:hover {
@@ -1677,6 +1681,22 @@ Help Menu
     margin: auto;
 }
 
+.add-member-list {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 40dvh;
+    overflow-y: auto;
+    /* background-color: orange; */
+}
+
+#add-btn-grp {
+    display: none;
+    margin: auto;
+}
+
 #add-member {
     &:hover {
         background-color: var(--feather-green);
@@ -1695,6 +1715,8 @@ Help Menu
     display: flex;
     flex-direction: column;
     gap: 5px;
+    height: 40dvh;
+    overflow-y: auto;
 }
 
 /* #view-member, #add-member  {
@@ -1712,3 +1734,9 @@ Help Menu
 
 .info-popup {
 } */
+.group-manager {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+
+}

@@ -247,12 +247,11 @@
                         <div class="title-dashboard">Profile</div>
                         <div class="container-profile-info">
                             <div class="info-general">
-                                <span id="profile-name" class="secondary-heading">Om Pitroda</span>
-                                <span id="profile-email" class="tertiary-heading"
-                                    style="color: var(--wolf);">ompitroda55@gmail.com</span>
-                                <span id="profile-join-date" class="less-imp-text">Joined 24th February, 2024</span>
+                                <span id="profile-name" class="secondary-heading" style="line-height: 0;"></span>
+                                <span id="profile-email" class="tertiary-heading" style="color: var(--wolf);"></span>
+                                <span id="profile-join-date" class="less-imp-text"></span>
                             </div>
-                            <div class="info-social">Have 30 friend's & member in 6 Groups </div>
+                            <div class="info-social"></div>
                             <hr>
                         </div>
                         <div class="container-profile-statistics">
@@ -310,8 +309,16 @@
                                         <span class="material-symbols-outlined" style="font-size: 24px;">
                                             search
                                         </span>
-                                        <input type="text" name="" id="" placeholder="Search Groups">
+                                        <input type="text" name="" id="group-search-input" placeholder="Search Groups">
                                     </div>
+                                    <script>
+                                        const groupSearchInput = document.getElementById('group-search-input');
+                                        groupSearchInput.addEventListener('keyup', function (event) {
+                                            // Call the function to generate user group list'
+                                            const searchText = groupSearchInput.value;
+                                            generateUserGroupsList(searchText);
+                                        });
+                                    </script>
                                     <div class="group-list-container">
                                         <a class="grp-lst-item" href="#">
                                             <div class="grp-logo">
@@ -322,7 +329,6 @@
                                                 <span class="grp-admin">Jacob</span>
                                             </div>
                                         </a>
-
                                     </div>
                                 </div>
                                 <div class="group-details">
@@ -360,78 +366,81 @@
                                                         // console.log(manager.dataset.grpN);
                                                         template.style.display = "flex";
                                                         generateManagerList(manager.dataset.grpN, manager.dataset.grpI, manager.dataset.isUserAdmin);
+                                                        generateExFriendsList('.add-member-list');
 
                                                     } catch (error) {
                                                         console.error('An error occurred:', error);
                                                         // Handle errors
                                                     }
 
-                                                    async function generateManagerList(grpN, grpI, isUserAdmin) {
-                                                        try {
-                                                            const response = await fetch('/get-grp-members', {
-                                                                method: 'POST',
-                                                                headers: {
-                                                                    'Content-Type': 'application/json'
-                                                                },
-                                                                body: JSON.stringify({ group_id: grpI })
-                                                            });
-                                                            if (!response.ok) {
-                                                                throw new Error('Failed to fetch members');
-                                                            }
-                                                            const grpMembers = await response.json();
-                                                            console.log(grpMembers);
-                                                            const groupMemberList = document.querySelector(".group-member-list");
-                                                            groupMemberList.innerHTML = '';
-
-                                                            grpMembers.forEach((name, index) => {
-                                                                // Create elements for each member
-                                                                const groupMemberItem = document.createElement('div');
-                                                                groupMemberItem.classList.add('group-member-item');
-                                                                groupMemberItem.dataset.name = name;
-                                                                const memberNameSpan = document.createElement('span');
-                                                                const manager = document.querySelector(".group-handle-con");
-                                                                memberNameSpan.classList.add('grp-member-name');
-                                                                memberNameSpan.textContent = name;
-                                                                // console.log("Mera jhoota hai Japani");
-                                                                console.log(isUserAdmin + "Value of IUA" + typeof(isUserAdmin));
-                                                                const res = manager.dataset.isUserAdmin;
-                                                                console.log(res + "It is it's result" + typeof(res));
-                                                                if (res == 'true') {
-                                                                    const grpMemberAction = document.createElement('div');
-                                                                    grpMemberAction.classList.add('grp-member-action');
-
-                                                                    const removeButton = document.createElement('button');
-                                                                    removeButton.classList.add('ui-button-2', 'remove-group-member');
-                                                                    removeButton.addEventListener('click', async function () {
-                                                                        removeGrpMember(grpI, groupMemberItem.dataset.name);
-                                                                    });
-
-                                                                    const materialSymbol = document.createElement('span');
-                                                                    materialSymbol.classList.add('material-symbols-outlined');
-                                                                    materialSymbol.style.color = 'var(--cardinal)';
-                                                                    materialSymbol.style.fontSize = '24px';
-                                                                    materialSymbol.textContent = 'person_remove';
-                                                                    removeButton.appendChild(materialSymbol);
-                                                                    grpMemberAction.appendChild(removeButton);
-
-                                                                    // Append elements to their respective parent
-                                                                    groupMemberItem.appendChild(memberNameSpan);
-                                                                    groupMemberItem.appendChild(grpMemberAction);
-                                                                } else {
-                                                                    // Append elements to their respective parent
-                                                                    groupMemberItem.appendChild(memberNameSpan);
-                                                                }
-                                                                groupMemberList.appendChild(groupMemberItem);
-                                                            });
-
-                                                        } catch (error) {
-                                                            console.error('Error fetching friend requests:', error);
-                                                        }
-
-                                                    }
                                                 });
+                                                async function generateManagerList(grpN, grpI, isUserAdmin) {
+                                                    try {
+                                                        const response = await fetch('/get-grp-members', {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json'
+                                                            },
+                                                            body: JSON.stringify({ group_id: grpI })
+                                                        });
+                                                        if (!response.ok) {
+                                                            throw new Error('Failed to fetch members');
+                                                        }
+                                                        const grpMembers = await response.json();
+                                                        console.log(grpMembers);
+                                                        const groupMemberList = document.querySelector(".group-member-list");
+                                                        groupMemberList.innerHTML = '';
 
-                                                async function removeGrpMember(grpI, name) {
+                                                        grpMembers.forEach((name, index) => {
+                                                            // Create elements for each member
+                                                            const groupMemberItem = document.createElement('div');
+                                                            groupMemberItem.classList.add('group-member-item');
+                                                            groupMemberItem.dataset.name = name;
+                                                            const memberNameSpan = document.createElement('span');
+                                                            const manager = document.querySelector(".group-handle-con");
+                                                            memberNameSpan.classList.add('grp-member-name');
+                                                            memberNameSpan.textContent = name;
+                                                            // console.log("Mera jhoota hai Japani");
+                                                            console.log(isUserAdmin + "Value of IUA" + typeof (isUserAdmin));
+                                                            const res = manager.dataset.isUserAdmin;
+                                                            console.log(res + "It is it's result" + typeof (res));
+                                                            if (res == 'true') {
+                                                                const grpMemberAction = document.createElement('div');
+                                                                grpMemberAction.classList.add('grp-member-action');
+
+                                                                const removeButton = document.createElement('button');
+                                                                removeButton.classList.add('ui-button-2', 'remove-group-member');
+                                                                removeButton.addEventListener('click', async function () {
+                                                                    await removeGrpMember(grpI, groupMemberItem.dataset.name, grpN, isUserAdmin);
+                                                                    await generateManagerList(grpN, grpI, isUserAdmin);
+                                                                    await generateExFriendsList('.add-member-list');
+                                                                });
+
+                                                                const materialSymbol = document.createElement('span');
+                                                                materialSymbol.classList.add('material-symbols-outlined');
+                                                                materialSymbol.style.color = 'var(--cardinal)';
+                                                                materialSymbol.style.fontSize = '24px';
+                                                                materialSymbol.textContent = 'person_remove';
+                                                                removeButton.appendChild(materialSymbol);
+                                                                grpMemberAction.appendChild(removeButton);
+
+                                                                // Append elements to their respective parent
+                                                                groupMemberItem.appendChild(memberNameSpan);
+                                                                groupMemberItem.appendChild(grpMemberAction);
+                                                            } else {
+                                                                // Append elements to their respective parent
+                                                                groupMemberItem.appendChild(memberNameSpan);
+                                                            }
+                                                            groupMemberList.appendChild(groupMemberItem);
+                                                        });
+
+                                                    } catch (error) {
+                                                        console.error('Error fetching friend requests:', error);
+                                                    }
+
+                                                }
+
+                                                async function removeGrpMember(grpI, name, grpN, isUserAdmin) {
                                                     try {
                                                         const requestBody = {
                                                             group_id: grpI,
@@ -446,6 +455,9 @@
                                                         });
                                                         if (!response.ok) {
                                                             throw new Error('Failed to fetch members');
+                                                        } else {
+                                                            // generateManagerList(grpN, grpI, isUserAdmin);
+                                                            // generateExFriendsList('.add-member-list');
                                                         }
                                                         const grpMembers = await response.json();
                                                     } catch (error) {
@@ -760,119 +772,7 @@
 
 
                         </script>
-                        <script>
-                            // Function to toggle visibility of task more info
 
-
-                        </script>
-                        <!-- <div class="container-groups-left">
-                                <div class="secondary-heading">Groups</div>
-                                <div class="container-user-groups-list">
-                                    <span class="tertiary-heading" style="text-wrap: nowrap;">Your Groups</span>
-                                </div>
-                                
-
-                            </div> -->
-                        <!-- <div class="container-groups-right">
-                                <div class="container-group-view">
-                                    <button id="group-close-button" class="ui-button"
-                                        style="background-color: var(--cardinal); width: fit-content;">
-                                        <span class="material-symbols-rounded">close</span>
-                                    </button>
-                                    <script>
-                                        document.getElementById("group-close-button").addEventListener("click", function () {
-                                            document.querySelector(".container-groups-right").style.display = "none";
-                                        });
-
-                                    </script>
-                                    <div class="group-view-header">
-                                        <span class="tertiary-heading">group.name</span>
-                                        <span class="less-imp-text">Created by group.leader</span>
-                                    </div>
-                                    <div class="group-view-tasks">
-                                        <form class="view-tasks-create">
-                                            <input type="text" id="task-name" placeholder="Create task..." />
-                                            <input type="date" id="date-task-completion" name="date" min="" max=""
-                                                required>
-                                            <button type="submit" id="create-group-task-btn" class="ui-button">
-                                                <span class="material-symbols-rounded">
-                                                    add_circle
-                                                </span>
-                                            </button>
-                                        </form>
-                                        <script>
-                                            // Get current date
-                                            const currentDate = new Date();
-
-                                            // Calculate one week ahead date
-                                            const oneWeekAhead = new Date();
-                                            oneWeekAhead.setDate(currentDate.getDate() + 30);
-
-                                            // Format the dates as strings in YYYY-MM-DD format
-                                            const formattedCurrentDate = currentDate.toISOString().split('T')[0];
-                                            const formattedOneWeekAhead = oneWeekAhead.toISOString().split('T')[0];
-
-                                            // Set min and max attributes of the date input field
-                                            document.getElementById("date-task-completion").setAttribute("min", formattedCurrentDate);
-                                            document.getElementById("date-task-completion").setAttribute("max", formattedOneWeekAhead);
-                                        </script>
-                                    </div>
-                                    <div class="group-tasks-show-table">
-                                        <div class="tasks-show-table-row">
-                                            <div class="task-table-info"> {task is the best thing in the world that can
-                                                be completed}
-                                                <div class="task-info-date">
-                                                    <span class="created_at">{created_at}</span>
-                                                    <span class="days_remaining">{remaining-days}</span>
-                                                    <span class="completion_at">{completion_date}</span>
-                                                </div>
-                                            </div>
-                                            <div class="task-table-actions">
-                                                <a href="" id="delete-task" class="ui-button"
-                                                    style="background-color: var(--cardinal);">
-                                                    <span class="material-symbols-rounded ">
-                                                        delete
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="group-view-content">
-                                        <div class="container-members-add">
-                                            <span class="less-imp-text">Add members</span>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-                                            <a href="" class="ui-button add-member-btn">Test Member</a>
-
-                                        </div>
-                                        <div class="container-members-remove">
-                                            <span class="less-imp-text">Remove members</span>
-                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                            <a href="" class="ui-button remove-member-btn">Test Member</a>
-                                        </div>
-                                    </div>
-                                    <div class="group-view-actions">
-                                        <button class="ui-button"
-                                            style="background-color: var(--cardinal); width: fit-content; padding: 3px;">
-                                            Delete Group&nbsp;<span class="material-symbols-rounded">
-                                                delete
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>  -->
                         <div class="group-handle-con-back">
                             <div class="group-handle-con container-default">
                                 <div class="group-handle-heading">
@@ -886,7 +786,8 @@
                                         <button id="del-group" class="ui-button-2"><span
                                                 class="material-symbols-outlined" style="font-size: 24px;">
                                                 delete
-                                            </span></button>
+                                            </span>
+                                        </button>
                                     </div>
                                     <button id="handle-grp-close" class="ui-button-2">
                                         <span class="material-symbols-outlined"
@@ -905,10 +806,42 @@
                                             // Set the display of the element to "none"
                                             groupHandleConBack.style.display = "none";
                                         });
+
+                                        const delGroupButton = document.querySelector("#del-group");
+                                        delGroupButton.addEventListener('click', async function () {
+                                            try {
+                                                // Call the deleteGroup function
+                                                const groupManager = document.querySelector('.group-handle-con');
+
+                                                const res = await deleteGroup(groupManager.dataset.grpI, groupManager.dataset.isUserAdmin);
+                                                if (res) {
+                                                    generateUserGroupsList("");
+                                                    const groupHandleConBack = document.querySelector(".group-handle-con-back");
+                                                    const eS = document.querySelector(".empty-state");
+                                                    const groupContainer = document.querySelector(".selected-group-info");
+                                                    groupHandleConBack.style.display = "none";
+                                                    eS.style.display = "flex";
+                                                    groupContainer.style.display = "none";
+
+                                                }
+                                            } catch (error) {
+                                                console.error('An error occurred:', error);
+                                                // Handle errors here
+                                            }
+                                        });
                                     </script>
                                 </div>
-
                                 <div class="group-manager">
+                                    <div class="add-member-list">
+
+                                    </div>
+                                    <button id="add-btn-grp" class="ui-button-3"
+                                        style="font-size: var(--normal-font-size);">
+                                        <span class="material-symbols-outlined"
+                                            style="font-size: 24px; color: var(--feather-green);">
+                                            group_add
+                                        </span>&nbsp;Member's
+                                    </button>
                                     <div class="group-member-list">
                                         <div class="group-member-item">
                                             <span class="grp-member-name">Member 1</span>
@@ -922,23 +855,50 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="friends-list">
-                                        
-                                        <button id="add-member-addn" class="ui-button3">Add Members</button>
-                                    </div> -->
                                 </div>
                             </div>
                             <div class="background-blur"></div>
                         </div>
+                        <script>
+                            const addButton = document.getElementById('add-member');
+                            let isAddMember = false;
+                            // Add an event listener to the button
+                            addButton.addEventListener('click', async function () {
+                                // Call a function when the button is clicked
+                                const manager = document.querySelector(".group-handle-con");
+                                event.preventDefault();
+                                if (!isAddMember) {
+                                    addButton.innerHTML = `<span class="material-symbols-outlined" style="font-size: 24px; color: var(--hare);">arrow_back</span>`;
+                                    const memberList = document.querySelector(".group-member-list");
+                                    const btn = document.querySelector("#add-btn-grp");
+                                    btn.style.display = 'flex';
+                                    memberList.style.display = 'none';
+                                    addButton.style.color = 'var(--hare)';
+                                    const addMemberList = document.querySelector(".add-member-list");
+                                    addMemberList.style.display = 'flex';
+                                    addMemberList.style.margin = "auto";
+                                    isAddMember = true;
+                                    // generateManagerList(manager.dataset.grpN, manager.dataset.grpI, manager.dataset.isUserAdmin);
+                                    // await generateExFriendsList('.add-member-list');
+                                } else {
+                                    addButton.innerHTML = `<span class="material-symbols-outlined" style="font-size: 24px;">group_add</span>`;
+                                    const memberList = document.querySelector(".group-member-list");
+                                    const btn = document.querySelector("#add-btn-grp");
+                                    btn.style.display = 'none';
+                                    memberList.style.display = 'flex';
+                                    const addMemberList = document.querySelector(".add-member-list");
+                                    addMemberList.style.display = 'none'
+                                    isAddMember = false;
+                                    // await generateManagerList(manager.dataset.grpN, manager.dataset.grpI, manager.dataset.isUserAdmin);
+
+                                }
+                                // For example, you can call a function to handle adding a member
+                            });
+                        </script>
                     </div>
-                    <div class="container-leaderboards" id="container-leaderboards" data-aos="fade-up"
-                        data-aos-duration="1000">
+                    <div class="container-leaderboards" id="container-leaderboards">
                         <div class="title-dashboard">Leaderboards</div>
                     </div>
-                    <!-- <div class="container-preferences container-default" id="container-preferences">
-
-                </div> -->
-
                 </content-container>
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
@@ -1603,13 +1563,23 @@
             }
         }
 
-        async function closeNotification(notificationId) {
+        async function closeNotification(notificationId, buttonElement) {
             const response = await fetch(`/close-notification/${notificationId}`, {
                 method: 'POST'
             });
             const data = await response.json();
             if (response.status === 200) {
-                updateNotifications();
+                const notificationElement = buttonElement.closest('.notification');
+                // notificationElement.style.display = 'none';
+                // updateNotifications();
+                notificationElement.style.transition = 'opacity 0.3s ease-out, height 0.3s ease-out';
+                // Set opacity to 0 and height to 0 to gradually hide the element
+                notificationElement.style.opacity = '0';
+                notificationElement.style.height = '0';
+                // After the transition duration, remove the notification element from the DOM
+                setTimeout(() => {
+                    notificationElement.remove();
+                }, 300);
                 // Handle success, maybe hide the notification or update UI
                 // console.log(data.message);
             } else {
@@ -1804,7 +1774,7 @@
                 <div class="notification-type">${notification.type}</div>
                 </div>
                 <div class="notification-action" id="notification-actions">
-                    <button class="notification-action-btn close" onclick="closeNotification('${notification._id}')"><span class="material-symbols-outlined">close</span></button>
+                    <button class="notification-action-btn close" onclick="closeNotification('${notification._id}',this)"><span class="material-symbols-outlined">close</span></button>
             </div>`;
                 notificationsContainer.appendChild(notificationElement);
             });
@@ -1851,7 +1821,48 @@
 
 
 
+        async function generateExFriendsList(targetContainer) {
+            try {
+                const user = await getUser();
+                const container = document.querySelector(targetContainer);
+                const manager = document.querySelector(".group-handle-con");
+                container.innerHTML = '';
+                const response = await fetch('/get-grp-members', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ group_id: manager.dataset.grpI })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch members');
+                }
+                const members = await response.json();
 
+                user.friends.forEach((friend) => {
+                    // Check if the friend is not a member of the group
+                    if (!members.includes(friend)) {
+                        const friendElement = document.createElement('div');
+                        friendElement.classList.add('grp-exmember-item');
+                        friendElement.innerHTML = `
+                    <input type="checkbox" name="" id="ex-friend-${friend}" data-friend="${friend}">
+                    <label for="ex-friend-${friend}">${friend}</label>
+                `;
+                        container.appendChild(friendElement);
+                    }
+                });
+
+                const demoElement = document.createElement('span');
+                demoElement.classList.add('less-imp-text');
+                demoElement.style.textAlign = 'center';
+                demoElement.textContent = 'End Of List';
+                container.appendChild(demoElement);
+                console.log("I was called");
+            } catch (error) {
+                console.error('An error occurred:', error);
+                // Handle error or display a message to the user
+            }
+        }
 
         function generateFriendsList(targetContainer) {
             getUser().then((user) => {
@@ -1918,6 +1929,23 @@
             }
         }
 
+        async function addMembers(formData) {
+            try {
+                const response = await fetch('/add-member-to-group', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to add members!');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error adding members', error);
+                return { message: 'Error adding members' };
+            }
+        }
+
         document.getElementById('create-group-btn').addEventListener('click', async function (event) {
             event.preventDefault();
             const groupNameInput = document.getElementById('group-name');
@@ -1967,14 +1995,71 @@
             }
         });
 
-        async function getUserGroups() {
+        document.getElementById('add-btn-grp').addEventListener('click', async function (event) {
+            event.preventDefault();
+            const groupManager = document.querySelector('.group-handle-con');
+            const groupId = groupManager.dataset.grpI;
+            const selectedFriends = [];
+            const checkboxes = document.querySelectorAll('.grp-exmember-item input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedFriends.push(checkbox.dataset.friend);
+                }
+            });
+            if (selectedFriends.length > 0) {
+                const formData = new FormData();
+                // formData.append('groupname', groupName);
+                formData.append('groupId', groupId);
+                formData.append('selectedFriends', JSON.stringify(selectedFriends));
+                const response = await addMembers(formData);
+                await generateExFriendsList('.add-member-list');
+                await generateManagerList(groupManager.dataset.grpN, groupManager.dataset.grpI, groupManager.dataset.isUserAdmin);
+                // alertbox.style.display = 'flex';
+                // // alertbox.style.backgroundColor = 'var(--feather-green)';
+                // alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--feather-green);">sentiment_very_satisfied</span>Group Succesfully Created</span>'
+                // setTimeout(function () {
+                //     alertbox.style.display = 'none';
+                // }, 3000)
+            } else {
+                // alertbox.style.display = 'flex';
+                // // alertbox.style.backgroundColor = 'var(--feather-green)';
+                // alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--feather-green);">sentiment_very_satisfied</span>Please select atleast one member</span>'
+                // setTimeout(function () {
+                //     alertbox.style.display = 'none';
+                // }, 3000)
+            }
+        });
+
+        // async function getUserGroups(query = null) {
+        //     try {
+        //         const response = await fetch('/get-user-groups/2', {
+        //             method: 'POST'
+        //         });
+        //         if (!response.ok) {
+        //             throw new Error('Failed to fetch user groups');
+        //         }
+        //         const groups = await response.json();
+        //         return groups;
+        //     } catch (error) {
+        //         console.error('Error fetching user groups:', error);
+        //         return null;
+        //     }
+        // }
+
+        async function getUserGroups(query = null) {
             try {
+                const formData = new FormData();
+                formData.append('query', query);
+
                 const response = await fetch('/get-user-groups/2', {
-                    method: 'POST'
+                    method: 'POST',
+                    body: formData
                 });
+
                 if (!response.ok) {
                     throw new Error('Failed to fetch user groups');
                 }
+
                 const groups = await response.json();
                 return groups;
             } catch (error) {
@@ -1984,16 +2069,17 @@
         }
 
 
-        async function generateUserGroupsList() {
+        async function generateUserGroupsList(query = null) {
             var colorCodes = ["#70d6ff", "#ff70a6", "#ff9770", "#ffd670", "#e9ff70", "#9381ff", "#7bf1a8"];
 
             function getRandomColor() {
                 return colorCodes[Math.floor(Math.random() * colorCodes.length)];
             }
 
-            const groups = await getUserGroups();
+            const groups = await getUserGroups(query);
 
             const container = document.querySelector('.group-list-container');
+            container.textContent = "";
             // console.log(groups.length);
             var currUser = groups[0];
             currentUser = groups[0];
@@ -2096,6 +2182,9 @@
             groupManager.dataset.grpI = group._id;
             // groupManager.dataset.grpN = group.name;
             groupManager.dataset.isUserAdmin = isUserAdmin;
+            groupManager.dataset.members = group.members;
+
+
 
             if (isUserAdmin) {
                 crtTaskCon.style.display = 'flex';
@@ -2140,87 +2229,6 @@
             }
         }
 
-        async function generateGroupTasks(groupId, isUserAdmin) {
-            try {
-                const response = await fetch('/get-group-tasks', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ group_id: groupId })
-                });
-                const tasks = await response.json();
-                console.log(tasks);
-                const groupTasksContainer = document.querySelector('.group-task-list');
-                groupTasksContainer.innerHTML = ''; // Clear previous content
-
-                if (tasks[1].length > 0) {
-                    tasks[1].forEach(task => {
-                        console.log("Generating Tasksksskssss");
-                        const taskRow = document.createElement('div');
-                        taskRow.classList.add('tasks-show-table-row');
-
-                        const taskInfo = document.createElement('div');
-                        taskInfo.classList.add('task-table-info');
-                        taskInfo.textContent = task.task_name; // Adjust to match your task object property
-
-                        const taskInfoDate = document.createElement('div');
-                        taskInfoDate.classList.add('task-info-date');
-
-                        const createdDate = new Date(task.creation_date);
-                        const completionDate = new Date(task.task_completion_date);
-                        const remainingDays = Math.ceil((completionDate - new Date()) / (1000 * 60 * 60 * 24));
-
-                        taskInfoDate.innerHTML = `
-                        <span class="created_at">${createdDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</span>
-                        <span class="days_remaining">Remaining Days ${remainingDays}</span>
-                        <span class="completion_at">${completionDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</span>`;
-                        taskInfo.appendChild(taskInfoDate);
-
-                        if (isUserAdmin) {
-                            const taskActions = document.createElement('div');
-                            taskActions.classList.add('task-table-actions');
-                            const deleteButton = document.createElement('a');
-                            deleteButton.classList.add('ui-button');
-                            deleteButton.style.backgroundColor = 'var(--cardinal)';
-                            deleteButton.dataset.grpId = groupId;
-                            deleteButton.dataset.isUserAdmin = isUserAdmin;
-                            deleteButton.innerHTML = '<span class="material-symbols-rounded">delete</span>';
-                            alert(groupId, isUserAdmin);
-                            // var grpId = groupId;
-                            // var iUA = isUserAdmin;
-                            deleteButton.addEventListener('click', () => deleteGroupTask(task._id, deleteButton.dataset.grpId, deleteButton.dataset.isUserAdmin));
-                            taskActions.appendChild(deleteButton);
-                            taskRow.appendChild(taskActions);
-                        }
-
-                        taskRow.appendChild(taskInfo);
-
-                        groupTasksContainer.appendChild(taskRow);
-
-                    });
-                    const spn = document.createElement('span');
-                    spn.classList.add('less-imp-text');
-                    spn.innerText = "End of tasks";
-                    spn.style.textAlign = "center";
-                    groupTasksContainer.appendChild(spn);
-
-                } else {
-                    console.log("No tasks found");
-                    const spn = document.createElement('span');
-                    spn.classList.add('less-imp-text');
-                    spn.innerText = "No tasks in this group yet.";
-                    // spn.style.textAlign = "center";
-                    // spn.style.width = "100%";
-                    // spn.style.backgroundColor = "red";
-                    groupTasksContainer.appendChild(spn);
-
-                }
-            } catch (error) {
-                console.error('Error fetching tasks:', error);
-            }
-        }
-
         async function deleteGroupTask(taskId, groupId, isUserAdmin) {
             try {
                 const response = await fetch('/delete-group-task', {
@@ -2239,6 +2247,31 @@
 
                 } else {
                     console.error('Error deleting task:', data.error);
+                }
+            } catch (error) {
+                console.error('Error deleting task:', error);
+            }
+        }
+
+        async function deleteGroup(groupId, isUserAdmin) {
+            try {
+                const response = await fetch('/delete-group', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ groupId: groupId })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    // Reload group tasks after deletion
+                    // const groupId = document.getElementById('create-group-task-btn').dataset.groupId;
+                    // console.log(groupId, isUserAdmin);
+                    // generateGrpTsk(groupId, isUserAdmin);
+                    return true;
+                } else {
+                    console.error('Error deleting task:', data.error);
+                    return false;
                 }
             } catch (error) {
                 console.error('Error deleting task:', error);
@@ -2307,12 +2340,28 @@
             const u_xp = document.querySelector('#u-xp');
             const u_hearts = document.querySelector('#u-hearts');
             const u_top10 = document.querySelector('#u-top10');
+            const join_date = document.querySelector('#profile-join-date');
+
 
             u_name.textContent = user.username;
             u_email.textContent = user.email;
+            u_social.textContent = `You've ${user.friends.length} friends and member in ${user.groups.length} groups.`;
 
-            
-            
+            const joiningDate = user.joinging_date;
+            const date = new Date(joiningDate);
+
+            // Assuming user's locale is stored in user.locale
+            const locale = user.locale || 'en-US'; // Default to 'en-US' if locale is not available
+            const options = { day: '2-digit', month: 'long', year: 'numeric' };
+
+            // Format the date using the user's locale
+            const formattedDate = date.toLocaleDateString(locale, options);
+
+            // Update the join_date element with the formatted date
+            join_date.textContent = formattedDate;
+
+
+
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -2322,7 +2371,7 @@
             updateNotifications();
             generateFriendsList('.group-member-add-list');
             // generateFriendsList('.friends-list');
-            generateUserGroupsList();
+            generateUserGroupsList("");
             setInterval(updateNotifications, 5000);
             setInterval(updateStats, 5000);
         });

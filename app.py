@@ -71,7 +71,8 @@ def createUser(username, password, email):
             [25.0,5.0,25.0,5.0,25.0,30.0],
             [60.0,10.0,60.0,10.0,60.0,30.0],
             [75.0,15.0,45.0,10.0,30.0,60.0]
-        ]
+        ], "joinging_date" : datetime.now()
+        
     }
 
     new_user = collection.insert_one(new_user)
@@ -97,14 +98,16 @@ def createRequest(from_user, to_user, type):
     # print(new_request)
     return new_request
 
-def createNotification(from_user, to_user, type):
+def createNotification(from_user, to_user, type, data=None):
     notification_types = {
         0:'Requested Accepted',
         1:'Request Rejected',
         2:'Removed you as a Friend',
         3:'Streak Sent',
         4:'Added you to Group',
-        5:'New Task Added to Group'
+        5:'New Task Added to Group',
+        6:f"{from_user} removed group - {data}",
+        7:"You have been removed from group - {data}"
     }
     collection = db['notifications']
     new_notification = {
@@ -137,6 +140,42 @@ def createGroup(name, leader, members, creation_date):
         createNotification(leader, member, 4)
     new_group = collection.insert_one(new_group)
     return new_group
+
+@app.route('/add-member-to-group', methods=['POST'])
+def insertNewMember():
+    try:
+        groups_collection = db["groups"]
+        # Get the selected friends and groupId from the request
+        selected_friends = request.form.get('selectedFriends')
+        selected_friends = json.loads(selected_friends)
+        print(selected_friends)
+        groupId = request.form.get('groupId')
+
+        # Check if the groupId exists in the groups collection
+        group = groups_collection.find_one({"_id": ObjectId(groupId)})
+        if not group:
+            return jsonify({'success': False, 'message': 'Group not found'}), 404
+
+        # Update the group document to add the selected friends to the 'members' array
+        members = group.get("members", [])
+        for friend in selected_friends:
+            if friend not in members:
+                members.append(friend)
+
+        # Update the group document with the modified 'members' array
+        result = groups_collection.update_one(
+            {"_id": ObjectId(groupId)},
+            {"$set": {"members": members}}
+        )
+
+        # Check if the group document was updated successfully
+        if result.modified_count > 0:
+            return jsonify({'success': True, 'message': 'Members added successfully'}), 200
+        else:
+            return jsonify({'success': False, 'message': 'Failed to add members to group'}), 500
+
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/check-username-availability', methods=['POST'])
 def check_username_available():
@@ -852,19 +891,36 @@ def insertNewGroup():
         return jsonify({'message': 'Failed to create group'}), 500
     
 @app.route('/get-user-groups/<mode>', methods=['POST'])
-def getUserGroups(mode):#
-    username = session.get('username')
-    groups_collection = db["groups"]
-    user_groups = []
-    if int(mode) == 1:
-        user_groups = list(groups_collection.find({"group_leader": username}))
-    else:
-        user_groups = list(groups_collection.find({"members": username}))
-    for group in user_groups:
-            group['_id'] = str(group['_id'])
-    return jsonify([session.get('username'),user_groups])
-    return jsonify(user_groups)
+def getUserGroups(mode):
+    try:
+        # Get the username from the session
+        username = session.get('username')
         
+        # Get the query from the form data
+        query = request.form.get('query')
+
+        # Access the groups collection
+        groups_collection = db["groups"]
+
+        # Determine the filter based on the mode
+        filter_query = {"members": username} if int(mode) == 2 else {"group_leader": username}
+
+        # Fetch user groups based on the filter
+        if query:  # If query is not empty, filter groups based on the query
+            user_groups = list(groups_collection.find({**filter_query, "name": {"$regex": query, "$options": "i"}}))
+        else:  # If query is empty, fetch all groups based on the filter
+            user_groups = list(groups_collection.find(filter_query))
+
+        # Convert ObjectId to string for JSON serialization
+        for group in user_groups:
+            group['_id'] = str(group['_id'])
+
+        # Return the response
+        return jsonify([username, user_groups])
+
+    except Exception as e:
+        # Handle any errors that occur during the process
+        return jsonify({'error': str(e)}), 500    
 
 @app.route("/get-friends-list", methods=["POST"])
 def getUserFriends():
@@ -897,7 +953,8 @@ def createTask(group_Id, group_name, task_name, task_completion_date, group_memb
             "task_name": task_name,
             "task_completion_date": task_completion_date,
             "creation_date": datetime.now(),
-            "members_status": {member: "pending" for member in group_members}
+            "members_status": {member: "pending" for member in group_members},
+            "task_status":"incomplete"
         }
         
         result = tasks_collection.insert_one(new_task)
@@ -985,6 +1042,12 @@ def removeMemberFromGroup():
                 {"$unset": {"members_status." + member_name: ""}}
             )
 
+            users_collection = db["users"]
+            users_collection.update_many(
+                {"username": member_name},  # Assuming member_name is the username of the user
+                {"$pull": {"groups": group["name"]}}  # Remove group name from groups array
+            )
+
             return jsonify({'message': 'Removed successfully from group and tasks'}), 200
         else:
             return jsonify({'message': 'Failed to remove group member'}), 500
@@ -1046,7 +1109,7 @@ def get_group_tasks():
         return jsonify({'message': 'Failed to fetch tasks for the group'}), 500
 
 @app.route('/delete-group-task', methods=['POST'])
-def delete_group_task():
+def deleteGroupTask():
     try:
         # Extract the task ID from the request
         task_id = request.json.get('task_id')
@@ -1063,6 +1126,52 @@ def delete_group_task():
         else:
             # Task not found or deletion unsuccessful
             return jsonify({'success': False, 'message': 'Task not found or deletion unsuccessful'}), 404
+    except Exception as e:
+        # Handle any errors that occur during the deletion process
+        return jsonify({'success': False, 'message': f'An error occurred: {str(e)}'}), 500
+
+@app.route('/delete-group', methods=['POST'])
+def deleteGroup():
+    try:
+        # Extract the group ID from the request
+        group_id = request.json.get('groupId')
+        
+        # Assuming you have a groups collection in your database
+        groups_collection = db["groups"]
+        
+        # Find the group document from the database using its ID
+        group = groups_collection.find_one({"_id": ObjectId(group_id)})
+        
+        if not group:
+            return jsonify({'success': False, 'message': 'Group not found'}), 404
+        
+        # Store group name
+        group_name = group.get('name')
+        
+        # Delete the group document from the database using its ID
+        result = groups_collection.delete_one({"_id": ObjectId(group_id)})
+        
+        if result.deleted_count == 1:
+            # Group deletion successful, remove group from users' groups arrays
+            users_collection = db["users"]
+            
+            # Iterate through members of the group and remove group from their groups arrays
+            members = group.get('members', [])
+            users_collection.update_many(
+                {"username": {"$in": members}},
+                {"$pull": {"groups": group_name}}
+            )
+            
+            tasks_collection = db["tasks"]
+            tasks_collection.delete_many({"group_id": ObjectId(group_id)})
+
+            for member in members:
+                createNotification(session.get('username'), member, 6, group_name)
+
+            return jsonify({'success': True, 'message': 'Group deleted successfully and removed from users'}), 200
+        else:
+            # Group not found or deletion unsuccessful
+            return jsonify({'success': False, 'message': 'Group not found or deletion unsuccessful'}), 404
     except Exception as e:
         # Handle any errors that occur during the deletion process
         return jsonify({'success': False, 'message': f'An error occurred: {str(e)}'}), 500

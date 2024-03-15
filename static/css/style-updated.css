@@ -490,7 +490,6 @@ hr {
     align-items: center;
     transition: all 0.3s ease;
     aspect-ratio: 1;
-    all: unset;
     color: var(--eel);
     /* background-color: var(--swan); */
     padding: 5px;
@@ -514,8 +513,7 @@ hr {
     justify-content: center;
     align-items: center;
     transition: all 0.3s ease;
-    aspect-ratio: 1;
-    all: unset;
+    /* aspect-ratio: 1; */
     color: var(--eel);
     /* background-color: var(--swan); */
     padding: 5px;
@@ -523,9 +521,8 @@ hr {
     width: fit-content;
     padding: 10px;
     font-size: var(--default-font-size);
-    transition: all 0.3s ease;
     cursor: pointer;
-    border-radius: 999px;
+    border-radius: var(--link-radius);
     background-color: var(--polar);
     /* height: 20px; width: 20px; */
     &:hover {

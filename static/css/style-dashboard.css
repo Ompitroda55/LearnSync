@@ -1754,3 +1754,95 @@ Help Menu
     /* align-items: center; */
 
 }
+
+.user-task-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+
+    & > input[type='text'] {
+        width: 90%;
+    }
+    /* background-color: orange; */
+}
+
+.asthetic-bar {
+    width: 5px;
+    background-color: var(--feather-green);
+    height: 30px;
+    border-radius: 99px;
+}
+
+.set-tsk-lvl {
+    all: unset;
+    display: flex;
+    font-size: var(--less-imp-font-size);
+    font-weight: 600;
+    padding: 3px;
+    border-radius: 999px;
+    aspect-ratio: 1;
+    /* box-shadow: 0 0 8px var(--feather-green); */
+    transition: all 0.3s ease;
+}
+
+.tsk-lvl-1 {
+    background-color: var(--feather-green);
+    color: var(--snow);
+    &:hover {
+        box-shadow: 0 0 12px var(--feather-green);
+        color: var(--feather-green);
+        background-color: var(--snow);
+    }
+}
+
+.tsk-lvl-2 {
+    background-color: var(--bee-mask);
+    color: var(--eel);
+    &:hover {
+        box-shadow: 0 0 15px var(--bee-mask);
+        color: var(--bee-mask);
+        background-color: var(--eel);
+    }
+}
+
+.tsk-lvl-3 {
+    background-color: var(--cardinal);
+    color: var(--snow);
+    &:hover {
+        background-color: var(--snow);
+        color: var(--cardinal);
+        box-shadow: 0 0 12px var(--cardinal);
+    }
+}
+
+.user-daily-tasks-container {
+    display: grid;
+    grid-template-rows: 1fr; /* Equal width columns */
+    gap: 10px;
+}
+
+.user-daily-tasks-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.user-daily-tasks-set {
+    display: flex;
+    /* flex: 1; */
+    flex-direction: column;
+    gap: 5px;
+    max-height: 40dvh;
+    overflow-y: auto;
+}
+
+.user-daily-tasks-set-con {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-daily-tasks-stats-con {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}

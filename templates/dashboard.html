@@ -204,12 +204,113 @@
                         <span class="secondary-heading">Your Daily Tasks</span>
                         <div class="user-daily-tasks ">
                             <div class="user-daily-tasks-container container-default">
-                                <div class="user-task-item">
-                                    
+                                <div class="user-daily-tasks-set-con">
+                                    <!-- <span class="secondary-heading">Set Your Tasks Here</span> -->
+                                    <div class="user-daily-tasks-set">
+                                    </div>
+                                    <div class="user-task-item smart-input-gen-container">
+                                        <div class="asthetic-bar"></div>
+                                        <input type="text" class="user-task-inp" placeholder="Add a task...">
+                                        <button class="set-tsk-lvl tsk-lvl-1">
+                                            <span class="material-symbols-outlined" style="font-size: 24px;">
+                                                stars
+                                            </span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="user-daily-tasks-info">
+                            <div class="secondary-heading">Your Tasks Overview</div>
+                            <div class="user-daily-tasks-stats-con">
+                                <div class="user-daily-tasks-total container-default">
 
+                                </div>
+                                <div class="user-daily-tasks-streak container-default">
+
+                                </div>
+                                <div class="user-daily-tasks-rank container-default">
+
+                                </div>
+                                <div class="user-daily-tasks-experience container-default">
+
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                // Add click event listener to the document and delegate it to the button
+                                document.addEventListener("click", function (event) {
+                                    var button = event.target.closest(".set-tsk-lvl");
+                                    if (button) {
+                                        var input = button.closest(".user-task-item").querySelector(".user-task-inp");
+                        
+                                        // Get the current class of the button
+                                        var currentClass = button.className;
+                                        // console.log("Current class: " + currentClass);
+                                        
+                                        // Extract the current level from the class
+                                        var currentLevelMatch = currentClass.match(/tsk-lvl-(\d+)/);
+                                        if (currentLevelMatch && currentLevelMatch.length > 1) {
+                                            var currentLevel = parseInt(currentLevelMatch[1]);
+                                            // console.log("Current level: " + currentLevel);
+                        
+                                            // Update the class to the next level or cycle back to 1 if already at 3
+                                            var nextLevel = currentLevel % 3 + 1;
+                                            // console.log("Next level: " + nextLevel);
+                                            button.classList.remove("tsk-lvl-" + currentLevel);
+                                            button.classList.add("tsk-lvl-" + nextLevel);
+                        
+                                            // Update the dataset attribute of the input element
+                                            input.dataset.level = nextLevel;
+                                            // console.log("Input dataset level: " + input.dataset.level);
+                                        } else {
+                                            // console.error("Failed to extract current level from class.");
+                                        }
+                                    }
+                                });
+                            });
+                        </script>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var colors = ['#13d1ff', '#19a5ff', '#fee719', '#fe4f19', '#f00c18'];
+                        
+                                var container = document.querySelector('.user-daily-tasks-set');
+                        
+                                for (var i = 0; i < 4; i++) {
+                                    // Create task item container
+                                    var taskItemContainer = document.createElement('div');
+                                    taskItemContainer.classList.add('user-task-item', 'smart-input-gen-container');
+                        
+                                    // Randomly select a color from the colors array
+                                    var randomColor = colors[Math.floor(Math.random() * colors.length)];
+                        
+                                    // Create aesthetic bar
+                                    var aestheticBar = document.createElement('div');
+                                    aestheticBar.classList.add('asthetic-bar');
+                                    aestheticBar.style.backgroundColor = randomColor;
+                        
+                                    // Create input field
+                                    var inputField = document.createElement('input');
+                                    inputField.setAttribute('type', 'text');
+                                    inputField.classList.add('user-task-inp');
+                                    inputField.setAttribute('placeholder', 'Add a task...');
+                        
+                                    // Create button
+                                    var button = document.createElement('button');
+                                    button.classList.add('set-tsk-lvl', 'tsk-lvl-1');
+                                    button.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px;">stars</span>';
+                        
+                                    // Append elements to task item container
+                                    taskItemContainer.appendChild(aestheticBar);
+                                    taskItemContainer.appendChild(inputField);
+                                    taskItemContainer.appendChild(button);
+                        
+                                    // Append task item container to the daily tasks container
+                                    container.appendChild(taskItemContainer);
+                                }
+                            });
+                        </script>
                         <div id="pomo-seq-info">
                             <div class="secondary-heading">Pomodoro Timer Sequences</div>
                             <a href="" class="info-btn" id="pomo-seq-info-link">
@@ -1293,10 +1394,10 @@
             event.preventDefault();
             const formData = new FormData(document.getElementById('user-pomodoro-form'));
             const response = await updateUserSequence(formData);
-            console.log(formData, "This is form data");
+
             updateSequences();
             // Convert FormData to object
-            // const sequences = {};
+            // const sequences = { };
             // for (const [key, value] of formData.entries()) {
             //     sequences[key] = value.split(',').map(Number); // Convert string to array of numbers
             // }
@@ -1322,11 +1423,11 @@
                 const pomodoroSelectorDiv = document.createElement('div');
                 pomodoroSelectorDiv.classList.add('pomodoro-selector');
                 pomodoroSelectorDiv.innerHTML = `
-                <input type="radio" name="time_opt" id="${sequenceIndex}" data-option="${sequenceIndex}" value="${sequenceIndex + 1}">
+            <input type="radio" name="time_opt" id="${sequenceIndex}" data-option="${sequenceIndex}" value="${sequenceIndex + 1}">
                 <label for="${sequenceIndex}">
                     <span class="material-symbols-outlined" id="clock-icon">pace</span>
                     ${sequenceIndex + 1}
-                    </label>
+                </label>
                 `;
                 // Sequence ${sequenceIndex + 1} - ${user_sequences[sequenceIndex].join('-')}
 

@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import bcrypt
 from bson.objectid import ObjectId
 from pymongo.mongo_client import MongoClient
@@ -9,6 +10,12 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
+
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 app = Flask(__name__)
 
@@ -708,20 +715,113 @@ def removeFriend(username):
     except Exception as e:
         return jsonify({'message': f'Failed to remove friend: {str(e)}'}), 500
 
-@app.route('/update-daily-task', methods=['POST'])
-def update_daily_tasks():
-    collection = db['users']
-    if request.method == 'POST':
-        username = session.get('username')
-        if username:
-            task_list = request.form.get('task')
-            updated_tasks = {'task': task_list, 'priority': 2, 'completed': 0, 'lastupdate': datetime.utcnow()} 
-            collection.update_one({'username': username}, {'$push': {'dailytasks': {'$each': updated_tasks}}})
-            return jsonify({'message': 'Tasks updated successfully'}), 200
+
+#def update_daily_tasks():
+#    collection = db['users']
+#    if request.method == 'POST':
+#        username = session.get('username')
+#        if username:
+#            task_list = request.form.get('task')
+#            updated_tasks = {'task': task_list, 'priority': 2, 'completed': 0, 'lastupdate': datetime.utcnow()} 
+#            collection.update_one({'username': username}, {'$push': {'dailytasks': {'$each': updated_tasks}}})
+#            return jsonify({'message': 'Tasks updated successfully'}), 200
+#        else:
+#            return jsonify({'message': 'Username not provided in the form data'}), 400
+#    else:
+#        return jsonify({'message': 'Method not allowed'}), 405
+# If modifying these scopes, delete the file token.json.
+    
+    #new updates
+SCOPES = ["https://www.googleapis.com/auth/calendar"]
+
+def get_calendar_service():
+    creds = None
+    if os.path.exists("token.json"):
+        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
         else:
-            return jsonify({'message': 'Username not provided in the form data'}), 400
-    else:
-        return jsonify({'message': 'Method not allowed'}), 405
+            flow = InstalledAppFlow.from_client_secrets_file(
+                "credentials.json", SCOPES
+            )
+            creds = flow.run_local_server(port=0)
+        with open("token.json", "w") as token:
+            token.write(creds.to_json())
+    return build("calendar", "v3", credentials=creds)
+
+@app.route('/update-daily-task', methods=["GET", "POST"])
+def update_daily_tasks():
+    if request.method == "POST":
+        task_description = request.form["task"]
+        start_date = request.form["start_date"]
+        start_time = request.form["start_time"]
+        duration = float(request.form["duration"])  # Convert duration to float
+        calendar_email = request.form["calendar_email"]  # Add calendar email field
+        if not (task_description and start_date and start_time and calendar_email):
+            return "All fields are required!"
+        
+        try:
+            # Parse date and time from form inputs
+            start_datetime = parse_date_time(start_date, start_time)
+
+            # Calculate end time based on duration
+            end_datetime = start_datetime + datetime.timedelta(hours=duration)
+            
+            calendar_service = get_calendar_service()
+            # Get calendar ID using calendar email
+            calendar_id = get_calendar_id(calendar_email)
+            event = {
+                'summary': task_description,
+                'description': 'Event Description',
+                'start': {
+                    'dateTime': start_datetime.strftime('%Y-%m-%dT%H:%M:%S'),
+                    'timeZone': 'Asia/Kolkata',  # Specify the time zone here
+                },
+                'end': {
+                    'dateTime': end_datetime.strftime('%Y-%m-%dT%H:%M:%S'),
+                    'timeZone': 'Asia/Kolkata',  # Specify the time zone here
+                },
+            }
+            calendar_service.events().insert(calendarId=calendar_id, body=event).execute()
+            return redirect(url_for("login"))
+        except HttpError as error:
+            print(error)
+            return f"An error occurred: {error}"
+    
+    # Provide the 'now' variable in the context for rendering the template
+    now = datetime.datetime.now()
+    #return render_template("deshbord.html", now=now)
+    return jsonify("task done",now=now)
+
+import datetime
+
+def parse_date_time(date_str, time_str):
+    # Parse date string in yyyy-mm-dd format
+    date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+
+    # Convert 24-hour time string to 12-hour time string
+    time_obj = datetime.datetime.strptime(time_str, "%H:%M").strftime("%I:%M %p")
+
+    # Parse time string in hh:mm am/pm format
+    time_obj = datetime.datetime.strptime(time_obj, "%I:%M %p")
+
+    # Combine date and time objects
+    date_time_obj = datetime.datetime.combine(date_obj.date(), time_obj.time())
+
+    return date_time_obj
+
+
+def get_calendar_id(calendar_email):
+    
+    mail = calendar_email
+    calendar_ids = {
+        mail : 'primary',
+        'example2@example.com': 'secondary_calendar_id',
+        # Add more email ID to calendar ID mappings as needed
+    }
+    return calendar_ids.get(calendar_email, 'primary')  # Default to primary if email not found
+
 
 # Function for sharing user stats with homepage
 def fetch_user_stats(user_id):

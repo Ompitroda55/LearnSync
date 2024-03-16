@@ -204,8 +204,8 @@
                         <span class="secondary-heading">Your Daily Tasks</span>
                         <div class="user-daily-tasks ">
                             <div class="user-daily-tasks-container container-default">
-                                <div class="user-daily-tasks-set-con">
-                                    <!-- <span class="secondary-heading">Set Your Tasks Here</span> -->
+                                <!--<div class="user-daily-tasks-set-con">
+                                    <span class="secondary-heading">Set Your Tasks Here</span>
                                     <div class="user-daily-tasks-set">
                                     </div>
                                     <div class="user-task-item smart-input-gen-container">
@@ -217,7 +217,25 @@
                                             </span>
                                         </button>
                                     </div>
-                                </div>
+                                </div>-->
+                                <h1>Add Task to Calendar</h1>
+                                <form action="/update-daily-task" method="post">
+                                    <label for="task">Task:</label><br>
+                                    <input type="text" id="task" name="task" required><br><br>
+                                    <label for="start_date">Start Date:</label><br>
+                                    <input type="date" id="start_date" name="start_date" required><br>
+                                    <label for="start_time">Start Time:</label><br>
+                                    <input type="time" id="start_time" name="start_time" required><br><br>
+                                    <label for="duration">Task Duration:</label><br>
+                                    <select id="duration" name="duration" required>
+                                        <option value="0.5">30 minutes</option>
+                                        <option value="1">1 hour</option>
+                                        <option value="1.5">1.5 hours</option>
+                                    </select><br><br>
+                                    <label for="calendar_email">Calendar Email:</label><br>
+                                    <input type="email" id="calendar_email" name="calendar_email" required><br><br>
+                                    <input type="submit" value="Add Task">
+                                </form>
                             </div>
                         </div>
                         <div class="user-daily-tasks-info">

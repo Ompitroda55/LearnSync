@@ -52,7 +52,7 @@ def createUser(username, password, email):
     
     # Hash the password
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
+    from datetime import datetime
     new_user = {
         "username": username,
         "password": hashed_password,
@@ -71,7 +71,14 @@ def createUser(username, password, email):
                 "task":"Daily Quest",
                 "priority":1,
                 "completed":0,
-                "lastupdate":datetime.now()
+                "lastupdate": datetime.now()
+            }
+        ],"daily_tasks_data": [
+            {"lastComplete" : datetime.now(),
+             "totalCompletes": [],
+             "longestStreak": [],
+             "userRank":0,
+             "experience":"rookie"
             }
         ],
         "pomodoro_sequences":[
@@ -1324,6 +1331,47 @@ def fetch_random_riddle():
     random_riddle = collection.find({}, {'_id': 0}).skip(random_index).limit(1)[0]
     return jsonify(random_riddle)
 
+@app.route('/get-user-daily-tasks', methods=['GET'])
+def get_user_daily_tasks():
+    # Assume you have the user's username as a query parameter
+    username = request.args.get('username')
+    collection = db['users']
+    user_document = collection.find_one({'username': username})
+
+    if user_document:
+        # Extract the daily tasks array from the user document
+        daily_tasks = user_document.get('dailytasks', [])
+
+        # Return the daily tasks array as JSON response
+        return jsonify({'daily_tasks': daily_tasks})
+    else:
+        return jsonify({'error': 'User not found'}), 404
+
+@app.route('/add-new-user-daily-task', methods=['POST'])
+def add_new_task():
+    collection = db['users']
+    # Get data from request args
+    username = request.args.get('username')
+    task_name = request.args.get('task')
+    priority = int(request.args.get('priority'))  # Convert to integer
+    completed = int(request.args.get('completed'))  # Convert to integer
+    last_update = datetime.now()
+
+    # Create a new task dictionary
+    new_task = {
+        'task': task_name,
+        'priority': priority,
+        'completed': completed,
+        'lastupdate': last_update
+    }
+
+    # Find the user document and update the dailytasks array
+    result = collection.update_one({'username': username}, {'$push': {'dailytasks': new_task}})
+
+    if result.modified_count > 0:
+        return jsonify({'message': 'Task added successfully'}), 200
+    else:
+        return jsonify({'error': 'Failed to add task'}), 500
 # 
 # Main() function of app
 # 

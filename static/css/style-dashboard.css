@@ -1832,7 +1832,7 @@ Help Menu
     /* flex: 1; */
     flex-direction: column;
     gap: 5px;
-    max-height: 40dvh;
+    height: 40dvh;
     overflow-y: auto;
 }
 
@@ -1845,4 +1845,18 @@ Help Menu
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
+}
+
+.tasks-set-act-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#add-user-daily-task, #save-user-daily-task {
+    /* font-size: 16px; */
+    &:hover {
+        background-color: var(--feather-green);
+        color: var(--snow);
+    }
 }

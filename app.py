@@ -1332,7 +1332,7 @@ def fetch_random_riddle():
     return jsonify(random_riddle)
 
 @app.route('/get-user-daily-tasks', methods=['GET'])
-def get_user_daily_tasks():
+def getUserDailyTask():
     # Assume you have the user's username as a query parameter
     username = request.args.get('username')
     collection = db['users']
@@ -1348,7 +1348,7 @@ def get_user_daily_tasks():
         return jsonify({'error': 'User not found'}), 404
 
 @app.route('/add-new-user-daily-task', methods=['POST'])
-def add_new_task():
+def addNewuserDailyTask():
     collection = db['users']
     # Get data from request args
     username = request.args.get('username')

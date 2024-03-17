@@ -209,6 +209,27 @@
                                     <span class="secondary-heading">Set Your Tasks Here </span>
 
                                     <div class="user-daily-tasks-set">
+                                        <div class="user-task-item smart-input-gen-container">
+                                            <div class="asthetic-bar"></div>
+                                            <input type="text" class="user-task-inp" placeholder="Add a task...">
+                                            <button class="set-tsk-lvl tsk-lvl-1">
+                                                <span class="material-symbols-outlined" style="font-size: 24px;">
+                                                    stars
+                                                </span>
+                                            </button>
+                                            <div class="tsk-actions-con">
+                                                <button class="save-user-tsk ui-button-2" disabled>
+                                                    <span class="material-symbols-outlined" style="font-size: 24px;">
+                                                        done
+                                                    </span>
+                                                </button>
+                                                <button class="del-user-tsk ui-button-2">
+                                                    <span class="material-symbols-outlined" style="font-size: 24px;">
+                                                        remove
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="tasks-set-act-btn">
                                         <button class="ui-button-3" id="add-user-daily-task">
@@ -222,15 +243,9 @@
                                             </span>
                                         </button>
                                     </div>
-                                    <!-- <div class="user-task-item smart-input-gen-container">
-                                        <div class="asthetic-bar"></div>
-                                        <input type="text" class="user-task-inp" placeholder="Add a task...">
-                                        <button class="set-tsk-lvl tsk-lvl-1">
-                                            <span class="material-symbols-outlined" style="font-size: 24px;">
-                                                stars
-                                            </span>
-                                        </button>
-                                    </div> -->
+                                    <!-- Script to add daily task -->
+
+
                                 </div>
                                 <!-- <h1>Add Task to Calendar</h1>
                                 <form action="/update-daily-task" method="post">
@@ -314,9 +329,7 @@
                                 var taskItemContainer = document.createElement('div');
                                 taskItemContainer.classList.add('user-task-item', 'smart-input-gen-container');
 
-                                // Randomly select a color from the colors array
                                 var randomColor = colors[Math.floor(Math.random() * colors.length)];
-
                                 // Create aesthetic bar
                                 var aestheticBar = document.createElement('div');
                                 aestheticBar.classList.add('asthetic-bar');
@@ -327,20 +340,55 @@
                                 inputField.setAttribute('type', 'text');
                                 inputField.classList.add('user-task-inp');
                                 inputField.setAttribute('placeholder', 'Add a task...');
+                                inputField.dataset.level = 1; // Set dataset attribute
 
-                                // Create button
-                                var button = document.createElement('button');
-                                button.classList.add('set-tsk-lvl', 'tsk-lvl-1');
-                                button.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px;">stars</span>';
+                                // Create set level button
+                                var setLevelButton = document.createElement('button');
+                                setLevelButton.classList.add('set-tsk-lvl', 'tsk-lvl-1');
+                                var setLevelIcon = document.createElement('span');
+                                setLevelIcon.classList.add('material-symbols-outlined');
+                                setLevelIcon.style.fontSize = '24px';
+                                setLevelIcon.textContent = 'stars';
+                                setLevelButton.appendChild(setLevelIcon);
+
+                                // Create button container
+                                var buttonContainer = document.createElement('div');
+                                buttonContainer.classList.add('tsk-actions-con');
+
+                                // Create save button
+                                var saveButton = document.createElement('button');
+                                saveButton.classList.add('save-user-tsk', 'ui-button-2');
+                                // saveButton.setAttribute('disabled', '');
+                                var saveButtonIcon = document.createElement('span');
+                                saveButtonIcon.classList.add('material-symbols-outlined');
+                                saveButtonIcon.style.fontSize = '24px';
+                                saveButtonIcon.textContent = 'done';
+                                saveButton.appendChild(saveButtonIcon);
+
+                                // Create delete button
+                                var deleteButton = document.createElement('button');
+                                deleteButton.classList.add('del-user-tsk', 'ui-button-2');
+                                var deleteButtonIcon = document.createElement('span');
+                                deleteButtonIcon.classList.add('material-symbols-outlined');
+                                deleteButtonIcon.style.fontSize = '24px';
+                                deleteButtonIcon.textContent = 'remove';
+                                deleteButton.appendChild(deleteButtonIcon);
+
+                                // Append elements to button container
+                                buttonContainer.appendChild(saveButton);
+                                buttonContainer.appendChild(deleteButton);
 
                                 // Append elements to task item container
                                 taskItemContainer.appendChild(aestheticBar);
                                 taskItemContainer.appendChild(inputField);
-                                taskItemContainer.appendChild(button);
+                                taskItemContainer.appendChild(setLevelButton);
+                                taskItemContainer.appendChild(buttonContainer);
 
                                 // Append task item container to the daily tasks container
                                 container.appendChild(taskItemContainer);
                             }
+
+
                             addUsrTskButton.addEventListener('click', function () {
                                 // Call the createTaskItem function when the button is clicked
                                 createTaskItem();
@@ -369,7 +417,7 @@
                                 }
                             }
                         </script>
-                        <script>
+                        <!-- <script>
                             document.addEventListener("DOMContentLoaded", function () {
                                 var colors = ['#13d1ff', '#19a5ff', '#fee719', '#fe4f19', '#f00c18'];
 
@@ -393,6 +441,7 @@
                                 inputField.setAttribute('type', 'text');
                                 inputField.classList.add('user-task-inp');
                                 inputField.setAttribute('placeholder', 'Add a task...');
+                                inputField.dataset.level = 1;
 
                                 // Create button
                                 var button = document.createElement('button');
@@ -408,7 +457,7 @@
                                 container.appendChild(taskItemContainer);
 
                             });
-                        </script>
+                        </script> -->
                         <div id="pomo-seq-info">
                             <div class="secondary-heading">Pomodoro Timer Sequences</div>
                             <a href="" class="info-btn" id="pomo-seq-info-link">

@@ -1860,3 +1860,42 @@ Help Menu
         color: var(--snow);
     }
 }
+
+.save-user-tsk {
+    &:hover {
+        background-color: var(--feather-green);
+        
+        color: var(--snow);
+    }
+
+    &:disabled {
+        color: var(--snow);
+        background-color: var(--swan);
+    }
+}
+
+.del-user-tsk {
+    &:hover {
+        background-color: var(--cardinal);
+        color: var(--snow);
+
+    }
+}
+
+.tsk-actions-con {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    border-radius: 99px;
+    border: var(--default-border-width) solid var(--swan);
+    transition: all 0.3s ease;
+    &:hover {
+        /* background-color: var(--macaw); */
+        border-color: var(--eel);
+        /* padding: 5px 50px; */
+        /* gap: 20px; */
+        /* width: 250px; */
+    }
+}

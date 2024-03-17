@@ -52,7 +52,6 @@ def createUser(username, password, email):
     
     # Hash the password
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    from datetime import datetime
     new_user = {
         "username": username,
         "password": hashed_password,
@@ -66,17 +65,10 @@ def createUser(username, password, email):
         ], 
         "groups": [],
         "friends": [],
-        "dailytasks": [
-            {
-                "task":"Daily Quest",
-                "priority":1,
-                "completed":0,
-                "lastupdate": datetime.now()
-            }
-        ],"daily_tasks_data": [
+        "daily_tasks_data": [
             {"lastComplete" : datetime.now(),
-             "totalCompletes": [],
-             "longestStreak": [],
+             "daysCompeletes":[],
+             "longestStreak": 0,
              "userRank":0,
              "experience":"rookie"
             }
@@ -91,6 +83,18 @@ def createUser(username, password, email):
 
     new_user = collection.insert_one(new_user)
     return new_user
+
+def createDailyTask():
+    collection = db["users"]
+    collection = db["dailys"]
+
+    newTask = {
+        "createdBy":session.get("user_id"),
+        "task_name": None,
+        "priority": 1,
+        "compeleted": 0,
+        "lastCompleted": 0
+    }
 
 # Fuction to Create Varous types of request
 def createRequest(from_user, to_user, type):
@@ -432,6 +436,7 @@ def login():
         user = collection.find_one({'username': username})
         session['username'] = user['username']
         session['user_id'] = str(user['_id'])
+        print(session['user_id'])
         # print(session.get('username'))
         # requests = get_requests_for_receiver(str(user['_id']))
         # print(requests)
@@ -614,9 +619,11 @@ def searchFlashcards():
 @app.route("/add-friend", methods=['POST'])
 def addFriend():
     user_id = session.get('user_id')
+    print(user_id)
     user = fetch_user_by_id(user_id)
+    print(user)
     friend_username = request.form['friend-username']
-    # print(friend_username)
+    print(friend_username)
     # print(user['username'] + "Is the user name")
     # result = db["users"].update_one({"_id": ObjectId(user_id)}, {"$push": {"friends": friend_username}})
     # print(result)
@@ -797,24 +804,22 @@ def update_daily_tasks():
             return f"An error occurred: {error}"
     
     # Provide the 'now' variable in the context for rendering the template
-    now = datetime.datetime.now()
+    now = datetime.now()
     #return render_template("deshbord.html", now=now)
     return jsonify("task done",now=now)
 
-import datetime
-
 def parse_date_time(date_str, time_str):
     # Parse date string in yyyy-mm-dd format
-    date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+    date_obj = datetime.strptime(date_str, "%Y-%m-%d")
 
     # Convert 24-hour time string to 12-hour time string
-    time_obj = datetime.datetime.strptime(time_str, "%H:%M").strftime("%I:%M %p")
+    time_obj = datetime.strptime(time_str, "%H:%M").strftime("%I:%M %p")
 
     # Parse time string in hh:mm am/pm format
-    time_obj = datetime.datetime.strptime(time_obj, "%I:%M %p")
+    time_obj = datetime.strptime(time_obj, "%I:%M %p")
 
     # Combine date and time objects
-    date_time_obj = datetime.datetime.combine(date_obj.date(), time_obj.time())
+    date_time_obj = datetime.combine(date_obj.date(), time_obj.time())
 
     return date_time_obj
 
@@ -1331,47 +1336,80 @@ def fetch_random_riddle():
     random_riddle = collection.find({}, {'_id': 0}).skip(random_index).limit(1)[0]
     return jsonify(random_riddle)
 
-@app.route('/get-user-daily-tasks', methods=['GET'])
-def getUserDailyTask():
-    # Assume you have the user's username as a query parameter
-    username = request.args.get('username')
-    collection = db['users']
-    user_document = collection.find_one({'username': username})
+# @app.route('/get-user-daily-tasks', methods=['GET'])
+# def getUserDailyTask():
+#     # Assume you have the user's username as a query parameter
+#     username = request.args.get('username')
+#     collection = db['users']
+#     user_document = collection.find_one({'username': username})
 
-    if user_document:
-        # Extract the daily tasks array from the user document
-        daily_tasks = user_document.get('dailytasks', [])
+#     if user_document:
+#         # Extract the daily tasks array from the user document
+#         daily_tasks = user_document.get('dailytasks', [])
 
-        # Return the daily tasks array as JSON response
-        return jsonify({'daily_tasks': daily_tasks})
-    else:
-        return jsonify({'error': 'User not found'}), 404
+#         # Return the daily tasks array as JSON response
+#         return jsonify({'daily_tasks': daily_tasks})
+#     else:
+#         return jsonify({'error': 'User not found'}), 404
 
-@app.route('/add-new-user-daily-task', methods=['POST'])
-def addNewuserDailyTask():
-    collection = db['users']
-    # Get data from request args
-    username = request.args.get('username')
-    task_name = request.args.get('task')
-    priority = int(request.args.get('priority'))  # Convert to integer
-    completed = int(request.args.get('completed'))  # Convert to integer
-    last_update = datetime.now()
+# @app.route('/save-user-daily-tasks', methods=['POST'])
+# def save_user_daily_tasks():
+#     try:
+#         collection = db['users']
+#         username = session.get('username')
+#         data = request.json
+#         tasks = data.get('tasks', [])
 
-    # Create a new task dictionary
-    new_task = {
-        'task': task_name,
-        'priority': priority,
-        'completed': completed,
-        'lastupdate': last_update
-    }
+#         for task in tasks:
+#             task_name = task.get('name')
+#             priority = task.get('priority')
+
+#             new_task = {
+#             'task': task_name,
+#             'priority': priority,
+#             'completed': 0,
+#             'lastupdate': 0
+#             }   
+#         # Process the tasks data as needed
+#         for task in tasks:
+#             task_name = task.get('name')
+#             task_priority = task.get('priority')
+
+#             result = collection.update_one({'username': username}, {'$push': {'dailytasks': new_task}})
+
+#             print(f'Task Name: {task_name}, Priority: {task_priority}')
+
+#         # Return a success response
+#         return jsonify({'message': 'Tasks received and processed successfully'}), 200
+#     except Exception as e:
+#         # Return an error response if there's an exception
+#         return jsonify({'error': str(e)}), 500
+
+# @app.route('/add-new-user-daily-task', methods=['POST'])
+# def addNewuserDailyTask():
+    
+#     # Get data from request args
+#     username = session.get('username')
+#     task_name = request.args.get('task')
+#     priority = int(request.args.get('priority'))  # Convert to integer
+#     completed = int(request.args.get('completed'))  # Convert to integer
+#     last_update = datetime.now()
+
+#     # Create a new task dictionary
+#     new_task = {
+#         'task': task_name,
+#         'priority': priority,
+#         'completed': completed,
+#         'lastupdate': last_update
+#     }
 
     # Find the user document and update the dailytasks array
-    result = collection.update_one({'username': username}, {'$push': {'dailytasks': new_task}})
+    # result = collection.update_one({'username': username}, {'$push': {'dailytasks': new_task}})
 
-    if result.modified_count > 0:
-        return jsonify({'message': 'Task added successfully'}), 200
-    else:
-        return jsonify({'error': 'Failed to add task'}), 500
+    # if result.modified_count > 0:
+    #     return jsonify({'message': 'Task added successfully'}), 200
+    # else:
+    #     return jsonify({'error': 'Failed to add task'}), 500
 # 
 # Main() function of app
 # 

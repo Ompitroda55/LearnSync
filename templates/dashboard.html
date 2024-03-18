@@ -209,7 +209,7 @@
                                     <span class="secondary-heading">Set Your Tasks Here </span>
 
                                     <div class="user-daily-tasks-set">
-                                        <div class="user-task-item smart-input-gen-container">
+                                        <!-- <div class="user-task-item smart-input-gen-container">
                                             <div class="asthetic-bar"></div>
                                             <input type="text" class="user-task-inp" placeholder="Add a task...">
                                             <button class="set-tsk-lvl tsk-lvl-1">
@@ -229,7 +229,9 @@
                                                     </span>
                                                 </button>
                                             </div>
-                                        </div>
+                                        </div> -->
+
+                                        <!-- <span class="less-imp-text" style="margin: 0 auto;">No Tasks Found. <a href="#" id="create-a-tsk">Create a Task.</a></span> -->
                                     </div>
                                     <div class="tasks-set-act-btn">
                                         <button class="ui-button-3" id="add-user-daily-task">
@@ -237,11 +239,7 @@
                                                 add_task
                                             </span> &nbsp;Add Task
                                         </button>
-                                        <button class="ui-button-2" id="save-user-daily-task">
-                                            <span class="material-symbols-outlined" style="font-size: 24px;">
-                                                save
-                                            </span>
-                                        </button>
+                                        
                                     </div>
                                     <!-- Script to add daily task -->
 
@@ -340,7 +338,7 @@
                                 inputField.setAttribute('type', 'text');
                                 inputField.classList.add('user-task-inp');
                                 inputField.setAttribute('placeholder', 'Add a task...');
-                                inputField.dataset.level = 1; // Set dataset attribute
+                                inputField.dataset.level = 1;
 
                                 // Create set level button
                                 var setLevelButton = document.createElement('button');
@@ -350,6 +348,10 @@
                                 setLevelIcon.style.fontSize = '24px';
                                 setLevelIcon.textContent = 'stars';
                                 setLevelButton.appendChild(setLevelIcon);
+
+                                setLevelButton.addEventListener('click', function () {
+                                    saveButton.disabled = false;
+                                });
 
                                 // Create button container
                                 var buttonContainer = document.createElement('div');
@@ -364,6 +366,21 @@
                                 saveButtonIcon.style.fontSize = '24px';
                                 saveButtonIcon.textContent = 'done';
                                 saveButton.appendChild(saveButtonIcon);
+                                saveButton.disabled = true;
+
+                                saveButton.addEventListener('click', async function () {
+                                    var inputValue = inputField.value;
+                                    var inputLevel = inputField.dataset.level;
+                                    saveButton.disabled = true;
+                                    console.log(inputValue, inputLevel);
+                                    createUserDailyTask(inputValue, inputLevel)
+                                        .then(taskId => {
+                                            taskItemContainer.dataset.task_Id = taskId;
+                                        })
+                                        .catch(error => {
+                                            console.error('Error creating daily task:', error);
+                                        });
+                                });
 
                                 // Create delete button
                                 var deleteButton = document.createElement('button');
@@ -373,6 +390,21 @@
                                 deleteButtonIcon.style.fontSize = '24px';
                                 deleteButtonIcon.textContent = 'remove';
                                 deleteButton.appendChild(deleteButtonIcon);
+
+                                deleteButton.addEventListener('click', function () {
+                                    taskItemContainer.remove();
+                                });
+
+                                inputField.addEventListener('input', function () {
+                                    console.log(inputField.value);
+                                    if (inputField.value.trim() === "") {
+                                        saveButton.disabled = true;
+                                        // console.log("Save button disabled");
+                                    } else {
+                                        saveButton.disabled = false;
+                                        // console.log("Save button enabled");
+                                    }
+                                });
 
                                 // Append elements to button container
                                 buttonContainer.appendChild(saveButton);
@@ -388,33 +420,244 @@
                                 container.appendChild(taskItemContainer);
                             }
 
+                            function createUserDailyTask(taskName, taskPriority) {
+                                const data = {
+                                    value: taskName,
+                                    level: taskPriority
+                                };
+
+                                return fetch('/create-user-daily-task', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(data)
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // Access the returned task ID from the response
+                                        const taskId = data.id;
+                                        console.log('Task ID:', taskId);
+                                        return taskId;
+                                        // Continue with further processing if needed
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        // Handle errors as needed
+                                    });
+                            }
 
                             addUsrTskButton.addEventListener('click', function () {
                                 // Call the createTaskItem function when the button is clicked
                                 createTaskItem();
                             });
 
-                            async function generateUserDailyTasks() {
+                            async function fetchUserDailyTasks() {
                                 try {
-                                    // Make a fetch request to the Flask application endpoint
-                                    const response = await fetch('/get-user-daily-tasks');
-
-                                    // Check if the response is successful (status code 200)
+                                    const response = await fetch('/fetch-user-daily-tasks', {
+                                        method: 'GET',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        }
+                                    });
                                     if (!response.ok) {
                                         throw new Error('Failed to fetch user daily tasks');
                                     }
+                                    const tasks = await response.json();
+                                    // Handle the fetched tasks
+                                    return tasks;
+                                    // Process tasks and update UI as needed
+                                } catch (error) {
+                                    console.error('Error fetching user daily tasks:', error);
+                                    // Handle errors as needed
+                                }
+                            }
 
-                                    // Parse the response JSON data
-                                    const data = await response.json();
+                            async function generateUserDailyTasks() {
+                                try {
+                                    var colors = ['#13d1ff', '#19a5ff', '#fee719', '#fe4f19', '#f00c18'];
 
-                                    // Access the data and generate user daily tasks as per your requirements
-                                    // For example:
-                                    data.forEach(task => {
-                                        createTaskItem(task); // Assuming createTaskItem function exists and creates a task item
-                                    });
+                                    var container = document.querySelector('.user-daily-tasks-set');
+
+                                    // Make a fetch request to the Flask application endpoint
+                                    const response = await fetchUserDailyTasks();
+                                    if (response.length > 0) {
+                                        response.forEach(task => {
+                                            var taskItemContainer = document.createElement('div');
+                                            taskItemContainer.classList.add('user-task-item', 'smart-input-gen-container');
+
+                                            var randomColor = colors[Math.floor(Math.random() * colors.length)];
+                                            // Create aesthetic bar
+                                            var aestheticBar = document.createElement('div');
+                                            aestheticBar.classList.add('asthetic-bar');
+                                            aestheticBar.style.backgroundColor = randomColor;
+
+                                            // Create input field
+                                            var inputField = document.createElement('input');
+                                            inputField.setAttribute('type', 'text');
+                                            inputField.classList.add('user-task-inp');
+                                            inputField.setAttribute('placeholder', 'Add a task...');
+                                            inputField.dataset.level = task.taskPriority;
+                                            inputField.value = task.taskName;
+
+                                            // Create set level button
+                                            var setLevelButton = document.createElement('button');
+                                            setLevelButton.classList.add('set-tsk-lvl', `tsk-lvl-${task.taskPriority}`);
+                                            var setLevelIcon = document.createElement('span');
+                                            setLevelIcon.classList.add('material-symbols-outlined');
+                                            setLevelIcon.style.fontSize = '24px';
+                                            setLevelIcon.textContent = 'stars';
+                                            setLevelButton.appendChild(setLevelIcon);
+
+                                            setLevelButton.addEventListener('click', function () {
+                                                saveButton.disabled = false;
+                                            });
+
+                                            // Create button container
+                                            var buttonContainer = document.createElement('div');
+                                            buttonContainer.classList.add('tsk-actions-con');
+
+                                            // Create save button
+                                            var saveButton = document.createElement('button');
+                                            saveButton.classList.add('save-user-tsk', 'ui-button-2');
+                                            // saveButton.setAttribute('disabled', '');
+                                            var saveButtonIcon = document.createElement('span');
+                                            saveButtonIcon.classList.add('material-symbols-outlined');
+                                            saveButtonIcon.style.fontSize = '24px';
+                                            saveButtonIcon.textContent = 'done';
+                                            saveButton.appendChild(saveButtonIcon);
+                                            saveButton.disabled = true;
+
+                                            saveButton.addEventListener('click', async function () {
+                                                var inputValue = inputField.value;
+                                                var inputLevel = inputField.dataset.level;
+                                                saveButton.disabled = true;
+                                                console.log(inputValue, inputLevel);
+                                                updateUserDailyTask(inputValue, inputLevel, task.taskId);
+                                            });
+
+                                            // Create delete button
+                                            var deleteButton = document.createElement('button');
+                                            deleteButton.classList.add('del-user-tsk', 'ui-button-2');
+                                            var deleteButtonIcon = document.createElement('span');
+                                            deleteButtonIcon.classList.add('material-symbols-outlined');
+                                            deleteButtonIcon.style.fontSize = '24px';
+                                            deleteButtonIcon.textContent = 'remove';
+                                            deleteButton.appendChild(deleteButtonIcon);
+
+                                            deleteButton.addEventListener('click', async function () {
+                                                await deleteUserDailyTask(task.taskId);
+                                                taskItemContainer.remove();
+                                            });
+
+                                            inputField.addEventListener('input', function () {
+                                                console.log(inputField.value);
+                                                if (inputField.value.trim() === "") {
+                                                    saveButton.disabled = true;
+                                                    // console.log("Save button disabled");
+                                                } else {
+                                                    saveButton.disabled = false;
+                                                    // console.log("Save button enabled");
+                                                }
+                                            });
+
+                                            // Append elements to button container
+                                            buttonContainer.appendChild(saveButton);
+                                            buttonContainer.appendChild(deleteButton);
+
+                                            // Append elements to task item container
+                                            taskItemContainer.appendChild(aestheticBar);
+                                            taskItemContainer.appendChild(inputField);
+                                            taskItemContainer.appendChild(setLevelButton);
+                                            taskItemContainer.appendChild(buttonContainer);
+
+                                            // Append task item container to the daily tasks container
+                                            container.appendChild(taskItemContainer); // Assuming createTaskItem function exists and creates a task item
+                                        });
+                                        var spanElement = document.createElement('span');
+                                        spanElement.classList.add('less-imp-text');
+                                        spanElement.style.margin = '0 auto';
+                                        spanElement.textContent = 'End-Of-List';
+                                        container.appendChild(spanElement);
+
+                                    } else {
+                                        var spanElement = document.createElement('span');
+                                        spanElement.classList.add('less-imp-text');
+                                        spanElement.style.margin = '0 auto';
+
+                                        // Create the text node
+                                        var textNode = document.createTextNode('No Tasks Found. ');
+
+                                        // Create the anchor element
+                                        var anchorElement = document.createElement('a');
+                                        anchorElement.setAttribute('href', '#');
+                                        anchorElement.setAttribute('id', 'create-a-tsk');
+                                        anchorElement.textContent = 'Create a Task.';
+                                        anchorElement.onclick = function () {
+                                            createTaskItem(); 
+                                            spanElement.style.display = 'none';
+                                        };
+
+                                        spanElement.appendChild(textNode);
+                                        spanElement.appendChild(anchorElement);
+
+                                        container.appendChild(spanElement);
+                                    }
                                 } catch (error) {
                                     console.error('Error fetching user daily tasks:', error);
                                 }
+                            }
+
+                            function updateUserDailyTask(taskName, taskPriority, taskId) {
+                                const data = {
+                                    value: taskName,
+                                    level: taskPriority,
+                                    id: taskId
+                                };
+
+                                return fetch('/update-user-daily-task', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(data)
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // Access the returned message from the response
+                                        const message = data.message;
+                                        console.log('Received Message:', message);
+                                        return message; // Return the received message
+                                        // Continue with further processing if needed
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        // Handle errors as needed
+                                    });
+                            }
+
+                            function deleteUserDailyTask(taskId) {
+                                const data = { id: taskId };
+
+                                return fetch('/delete-user-daily-task', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(data)
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // Access the received message from the response
+                                        const message = data.message;
+                                        console.log('Received Message:', message);
+                                        return message; // Return the received message
+                                        // Continue with further processing if needed
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        // Handle errors as needed
+                                    });
                             }
                         </script>
                         <!-- <script>
@@ -2631,6 +2874,7 @@
             generateFriendsList('.group-member-add-list');
             // generateFriendsList('.friends-list');
             generateUserGroupsList("");
+            generateUserDailyTasks();
             setInterval(updateNotifications, 5000);
             setInterval(updateStats, 5000);
         });

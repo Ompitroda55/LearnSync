@@ -84,17 +84,28 @@ def createUser(username, password, email):
     new_user = collection.insert_one(new_user)
     return new_user
 
-def createDailyTask():
-    collection = db["users"]
+def createDailyTask(task_name, task_priority):
+    # Select the collection
     collection = db["dailys"]
 
-    newTask = {
-        "createdBy":session.get("user_id"),
-        "task_name": None,
-        "priority": 1,
-        "compeleted": 0,
-        "lastCompleted": 0
+    # Create a new task document
+    new_task = {
+        "createdBy": ObjectId(session.get('user_id')),
+        "creationDate": datetime.now(),
+        "task_name": task_name,
+        "priority": task_priority,
+        "completed": 0,  # Assuming 0 means task is not completed, adjust as needed
+        "lastCompleted": 0  # Assuming initial value for lastCompleted, adjust as needed
     }
+
+    try:
+        # Insert the new task document into the collection
+        result = collection.insert_one(new_task)
+        print("New task created with ID:", result.inserted_id)
+        return result.inserted_id  # Return the ID of the newly inserted document
+    except Exception as e:
+        print("Error creating task:", e)
+        return None
 
 # Fuction to Create Varous types of request
 def createRequest(from_user, to_user, type):
@@ -1410,6 +1421,93 @@ def fetch_random_riddle():
     #     return jsonify({'message': 'Task added successfully'}), 200
     # else:
     #     return jsonify({'error': 'Failed to add task'}), 500
+
+@app.route('/create-user-daily-task', methods=['POST'])
+def createUserDailyTask():
+    try:
+        data = request.json
+        input_value = data.get('value')
+        input_level = int(data.get('level'))
+        # Process the data (for demonstration, simply return it)
+        task_id = str(createDailyTask(input_value, input_level))  # Call createDailyTask function and capture the returned ID
+        print(task_id)
+        return jsonify({
+            'id': task_id,  # Include the ID in the response
+            'value': input_value,
+            'level': input_level,
+            'message': 'Task created successfully'
+        })
+    
+    except Exception as e:
+        print(e)
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/fetch-user-daily-tasks', methods=['GET'])
+def fetchUserDailyTasks():
+    try:
+        # Select the collection
+        collection = db["dailys"]
+        
+        # Fetch user's daily tasks
+        user_id = ObjectId(session.get('user_id'))
+        tasks = list(collection.find({"createdBy": user_id}))
+        
+        # Format tasks for response
+        formatted_tasks = []
+        for task in tasks:
+            formatted_task = {
+                'taskId': str(task['_id']),
+                'taskName': task['task_name'],
+                'taskPriority': task['priority'],
+                'completed': task['completed']
+            }
+            formatted_tasks.append(formatted_task)
+        
+        # Return tasks as JSON response
+        return jsonify(formatted_tasks)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/update-user-daily-task', methods=['POST'])
+def updateUserDailyTask():
+    try:
+        collection = db['dailys']
+        data = request.json
+        task_name = data.get('value')
+        task_priority = data.get('level')
+        task_id = data.get('id')
+        
+        # Update the task in the database (replace this with your own logic)
+        # For demonstration, we'll assume updating the task name and priority in a MongoDB collection
+        collection.update_one(
+            {'_id': ObjectId(task_id)},
+            {'$set': {'task_name': task_name, 'priority': task_priority}}
+        )
+        
+        # Prepare the response
+        response = {'message': 'Task updated successfully'}
+        
+        return jsonify(response), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/delete-user-daily-task', methods=['POST'])
+def deleteUserDailyTask():
+    try:
+        collection = db['dailys']
+        data = request.json
+        task_id = data.get('id')
+        
+        collection.delete_one({'_id': ObjectId(task_id)})
+        
+        response = {'message': 'Task deleted successfully'}
+        
+        return jsonify(response), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 # 
 # Main() function of app
 # 

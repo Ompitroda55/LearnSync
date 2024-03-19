@@ -373,10 +373,10 @@
                                     var inputLevel = inputField.dataset.level;
                                     saveButton.disabled = true;
                                     console.log(inputValue, inputLevel);
+                                    generateUserDailyTasksToShow();
                                     createUserDailyTask(inputValue, inputLevel)
                                         .then(taskId => {
                                             taskItemContainer.dataset.task_Id = taskId;
-                                            generateUserDailyTasksToShow();
 
                                         })
                                         .catch(error => {
@@ -533,6 +533,8 @@
                                                 saveButton.disabled = true;
                                                 console.log(inputValue, inputLevel);
                                                 updateUserDailyTask(inputValue, inputLevel, task.taskId);
+                                                generateUserDailyTasksToShow();
+
                                             });
 
                                             // Create delete button
@@ -1565,7 +1567,9 @@
 
                         async function generateUserDailyTasksToShow() {
                             const response = await fetchUserDailyTasksToShow();
-
+                            var parentElement = document.querySelector('.daily-tasks-show');
+                            parentElement.textContent = "";
+                            var completedTasksElements = [];
                             if (response.length > 0) {
                                 response.forEach(task => {
                                     var taskDiv = document.createElement('div');
@@ -1595,6 +1599,32 @@
                                         console.log(tskId);
                                         await markDailyTaskAsComplete(tskId); // Call the function passing the button element as argument
                                         this.classList.toggle('daily-marked');
+                                        if (!this.classList.contains('daily-marked')) {
+                                            taskDiv.style.backgroundColor = 'var(--snow)';
+                                            taskDiv.style.Color = 'var(--snow)';
+                                            taskDiv.opacity = '0';
+
+                                            // If the 'daily-marked' class is not present, move the button to the end of its parent div
+                                            // 'this' refers to the button element being clicked
+                                            setTimeout(function () {
+
+                                                parentElement.removeChild(taskDiv);
+                                                taskDiv.style.backgroundColor = 'var(--polar)';
+                                                taskDiv.style.Color = 'var(--eel)';
+                                                parentElement.appendChild(taskDiv);
+                                            }, 0);
+                                        } else {
+                                            taskDiv.style.backgroundColor = 'var(--snow)';
+                                            taskDiv.style.Color = 'var(--snow)';
+
+
+                                            setTimeout(function () {
+                                                parentElement.removeChild(taskDiv);
+                                                taskDiv.style.backgroundColor = 'var(--polar)';
+                                                taskDiv.style.Color = 'var(--eel)';
+                                                parentElement.appendChild(taskDiv);
+                                            }, 0);
+                                        }
                                     });
 
                                     var span = document.createElement('span');
@@ -1613,12 +1643,20 @@
                                     taskDiv.appendChild(actionsDiv);
                                     taskDiv.appendChild(descriptionDiv);
 
-                                    // button.addEventListener('click', function () {
-                                    //     this.classList.toggle('daily-marked');
-                                    // });
-
+                                    if (task.completed == 0) {
+                                        parentElement.appendChild(taskDiv); // If task is not completed, append normally
+                                    } else {
+                                        completedTasksElements.push(taskDiv); // If task is completed, it will be moved to the end later
+                                    }
                                     // Append the taskDiv to the parent element with class .daily-task-show
-                                    var parentElement = document.querySelector('.daily-tasks-show');
+                                    // parentElement.appendChild(taskDiv);
+                                });
+                                const seq = document.createElement('div');
+                                seq.textContent = 'Completed-Items'; // Clear existing fields
+                                seq.className = 'less-imp-text';
+                                seq.style.margin = "0 auto";
+                                parentElement.appendChild(seq);
+                                completedTasksElements.forEach(function (taskDiv) {
                                     parentElement.appendChild(taskDiv);
                                 });
                             }

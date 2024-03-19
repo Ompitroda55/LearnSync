@@ -1081,7 +1081,7 @@ extras-container {
     overflow-y: auto;
     flex-direction: column;
     gap: 5px;
-    padding-top: 15px;
+    /* padding-top: 15px; */
     /* background-color: orange; */
     /* background-color: black; */
 }
@@ -1102,7 +1102,7 @@ extras-container {
 
 .daily-task:first-child {
     margin-top: 15px;
-    background-color: orange;
+    /* background-color: orange; */
 }
 
 .daily-task-actions {

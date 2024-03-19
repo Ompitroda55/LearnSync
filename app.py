@@ -1469,6 +1469,33 @@ def fetchUserDailyTasks():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/fetch-user-daily-tasks-to-show', methods=['GET'])
+def fetchUserDailyTasksToShow():
+    try:
+        # Select the collection
+        collection = db["dailys"]
+        
+        # Fetch user's daily tasks
+        user_id = ObjectId(session.get('user_id'))
+        tasks = list(collection.find({"createdBy": user_id}))
+        
+        # Format tasks for response
+        formatted_tasks = []
+        for task in tasks:
+            formatted_task = {
+                'taskId': str(task['_id']),
+                'taskName': task['task_name'],
+                'taskPriority': task['priority'],
+                'completed': task['completed']
+            }
+            formatted_tasks.append(formatted_task)
+        
+        # Return tasks as JSON response
+        return jsonify(formatted_tasks)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/update-user-daily-task', methods=['POST'])
 def updateUserDailyTask():
     try:
@@ -1508,6 +1535,38 @@ def deleteUserDailyTask():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+@app.route('/mark-daily-task-as-complete', methods=['POST'])
+def mark_task_as_complete():
+    try:
+        # Get the task ID from the request data
+        data = request.json
+        task_id = data.get('taskId')
+        collection = db['dailys']
+        # Search for the task in the database
+        task = collection.find_one({'_id': ObjectId(task_id)})
+        # print(task)
+        # Check if the task was found
+        if task:
+            # Toggle the completed status
+            completed_status = 1 if task.get('completed', 0) == 0 else 0
+
+            # Update the task's completed status
+            updated_task = collection.find_one_and_update(
+                {'_id': ObjectId(task_id)},
+                {'$set': {'completed': completed_status}},
+                # return_document=True
+            )
+
+            if updated_task:
+                return jsonify({'message': 'Task status toggled successfully'})
+            else:
+                return jsonify({'error': 'Failed to toggle task status'}), 500
+        else:
+            return jsonify({'error': 'Task not found'}), 404
+    except Exception as e:
+        # print(str(e))
+        return jsonify({'error': str(e)}), 500
 # 
 # Main() function of app
 # 

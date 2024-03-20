@@ -1,0 +1,114 @@
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+}
+
+.navbar {
+  padding: 10px 0;
+  color: white;
+  background-color: white;
+}
+
+.nav-container-links {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.logo1 {
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1svw;
+  justify-content: left;
+  min-width: 100%;
+  overflow: hidden;
+}
+
+/* .nav-links a {
+      background: transparent;
+      border: none;
+      margin: 30px auto 0;
+      display: block;
+      font-size: 20px;
+      outline: none;
+      position: relative;
+      transition: 0.3s;
+      padding: 10px;
+      color: var(--macaw);
+      text-decoration: none;
+      font-family: var(--main-font);
+  } */
+
+/* Style the pseudo-element :before */
+/* .nav-links a:before {
+      content: '';
+      border-bottom: 2px solid var(--macaw);
+      padding: 0 10px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: 0;
+      transition: 0.3s;
+  } */
+
+/*Hover effect for :before */
+/* .nav-links a:hover:before {
+      width: 100%;
+      padding: 0;
+  }  */
+
+/* .nav-links a{
+      text-decoration: none;
+      color: red;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-bottom: 2px solid transparent; /* Common bottom border initially transparent */
+/*transition: border-color 0.3s; /* Add transition for a smooth effect */ /*
+  }
+  
+  .nav-links:focus a,
+  .nav-links:active a {
+      border-bottom-color: red; /* Change the color for active link 
+  }*/
+hr {
+  border: 0;
+  height: 3px;
+  background-color: var(--macaw);
+  margin: 20px 0; /* Optional: Adjust the margin as needed */
+  width: 100%;
+}
+
+.nav-links a {
+  float: left;
+  display: block;
+  color: var(--wolf);
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  border-bottom: 3px solid transparent;
+  font-family: var(--logo-font);
+}
+
+.nav-links a:hover {
+  border-bottom: 3px solid var(--macaw);
+  color: var(--macaw);
+  font-family: var(--logo-font);
+}
+
+.nav-links a.active {
+  border-bottom: 3px solid var(--macaw);
+  color: var(--macaw);
+  font-family: var(--logo-font);
+}
+
+hr {
+  width: 94%;
+}

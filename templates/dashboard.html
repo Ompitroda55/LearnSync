@@ -372,8 +372,8 @@
                                     var inputValue = inputField.value;
                                     var inputLevel = inputField.dataset.level;
                                     saveButton.disabled = true;
-                                    console.log(inputValue, inputLevel);
-                                    generateUserDailyTasksToShow();
+                                    // console.log(inputValue, inputLevel);
+                                    await generateUserDailyTasksToShow();
                                     createUserDailyTask(inputValue, inputLevel)
                                         .then(taskId => {
                                             taskItemContainer.dataset.task_Id = taskId;
@@ -532,8 +532,8 @@
                                                 var inputLevel = inputField.dataset.level;
                                                 saveButton.disabled = true;
                                                 console.log(inputValue, inputLevel);
-                                                updateUserDailyTask(inputValue, inputLevel, task.taskId);
-                                                generateUserDailyTasksToShow();
+                                                await updateUserDailyTask(inputValue, inputLevel, task.taskId);
+                                                await generateUserDailyTasksToShow();
 
                                             });
 
@@ -1466,7 +1466,15 @@
                         </div>
                     </div>
                     <div class="daily-tasks-container  container-default" id="daily-tasks-container">
-                        <div class="secondary-heading">Daily Tasks</div>
+                        <div class="daily-tasks-container-wrapper">
+                            <span class="secondary-heading">Daily Tasks</span>
+                            <button id="send-streak-to-friends" class="ui-button-3">
+                                    <span class="material-symbols-outlined" style="font-size: 28px;">
+                                        bolt
+                                    </span>
+                                Send Streaks
+                            </button>
+                        </div>
                         <div class="daily-tasks-show">
                             <!-- <div class="daily-task">
                                 <div class="daily-task-difficulty">#Important</div>
@@ -1481,7 +1489,7 @@
                                     Task1 taski si njimprot
                                 </div>
                             </div> -->
-                            <script>
+                            <!-- <script>
                                 var button = document.querySelector('.mark-complete-daily-task');
 
                                 // Add event listener to the button
@@ -1489,7 +1497,7 @@
                                     // Toggle the 'daily-marked' class
                                     this.classList.toggle('daily-marked');
                                 });
-                            </script>
+                            </script> -->
                         </div>
                     </div>
                     <script>

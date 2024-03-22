@@ -1116,9 +1116,9 @@ extras-container {
     top: -20%;
     right: 5%;
     display: flex;
-    font-size: 10px;
+    font-size: 8px;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 400;
     border-radius: var(--border-radius);
     /* background-color: var(--diff-lvl-2); */
     padding: 2px 4px;
@@ -1928,5 +1928,26 @@ Help Menu
     background-color: var(--feather-green);
     &:hover {
         background-color: var(--cardinal);
+    }
+}
+
+.daily-tasks-container-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#send-streak-to-friends{
+    &:disabled {
+        color: var(--swan);
+    }
+    &:hover {
+        background-color: var(--bee-mask);
+        color: var(--eel);
+        font-weight: 600;
+
+        & .material-symbols-outlined {
+            color: var(--fox);
+        }
     }
 }

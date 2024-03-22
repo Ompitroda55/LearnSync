@@ -1557,9 +1557,11 @@ def mark_task_as_complete():
                 {'$set': {'completed': completed_status}},
                 # return_document=True
             )
-
+            user_id = ObjectId(session.get('user_id'))
             if updated_task:
-                return jsonify({'message': 'Task status toggled successfully'})
+                all_tasks_completed = all(task.get('completed', 0) == 1 for task in collection.find({'createdBy': user_id}))
+                print(all_tasks_completed)
+                return jsonify({'message': 'Task status toggled successfully', 'all_tasks_completed': all_tasks_completed})
             else:
                 return jsonify({'error': 'Failed to toggle task status'}), 500
         else:
@@ -1567,8 +1569,46 @@ def mark_task_as_complete():
     except Exception as e:
         # print(str(e))
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/create-streak', methods=['POST'])
+def createStreak():
+    try:
+        streaks_collection = db['streaks']
+        # Get data from the request
+        # data = request.json
+        # sender_id = data.get('sender_id')
+        # receiver_id = data.get('receiver_id')
+        # task_id = data.get('task_id')  # Optional, if you want to associate a task with the streak
+        # message = data.get('message')  # Optional message accompanying the streak
+
+        data = "O mere humsafar!"
+        sender_id = 'Villian Ek Tha'
+        receiver_id = "Dusra Villan Ko"
+        task_id = "Id Nahi mout milegi"  # Optional, if you want to associate a task with the streak
+        message = "Message nhi jahar milega " 
+
+        # Create a streak document
+        streak = {
+            'sender_id': sender_id,
+            'receiver_id': receiver_id,
+            'task_id': task_id,
+            'timestamp': datetime.date(),
+            'message': message
+        }
+
+        # Insert the streak document into the database
+        result = streaks_collection.insert_one(streak)
+
+        if result.inserted_id:
+            return jsonify({'message': 'Streak created successfully', 'streak_id': str(result.inserted_id)})
+        else:
+            return jsonify({'error': 'Failed to create streak'}), 500
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 # 
 # Main() function of app
 # 
 if __name__ == '__main__':
     app.run(debug=True, port=8888)
+    createStreak()

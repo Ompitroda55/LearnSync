@@ -1469,9 +1469,9 @@
                         <div class="daily-tasks-container-wrapper">
                             <span class="secondary-heading">Daily Tasks</span>
                             <button id="send-streak-to-friends" class="ui-button-3">
-                                    <span class="material-symbols-outlined" style="font-size: 28px;">
-                                        bolt
-                                    </span>
+                                <span class="material-symbols-outlined" style="font-size: 28px;">
+                                    bolt
+                                </span>
                                 Send Streaks
                             </button>
                         </div>
@@ -1501,52 +1501,52 @@
                         </div>
                     </div>
                     <script>
-                        function createDailyTask(task) {
-                            // Create elements
-                            var taskDiv = document.createElement('div');
-                            taskDiv.classList.add('daily-task');
-                            tadkDiv.dataset.isMarked = isMarked;
+                        // function createDailyTask(task) {
+                        //     // Create elements
+                        //     var taskDiv = document.createElement('div');
+                        //     taskDiv.classList.add('daily-task');
+                        //     tadkDiv.dataset.isMarked = isMarked;
 
-                            var difficultyDiv = document.createElement('div');
-                            difficultyDiv.classList.add('daily-task-difficulty');
-                            difficultyDiv.textContent = taskImportance == 1 ? "#Easy" : taskImportance == 2 ? "#Moderate" : taskImportance == 3 ? "#Difficult" : "Value Not Found";
+                        //     var difficultyDiv = document.createElement('div');
+                        //     difficultyDiv.classList.add('daily-task-difficulty');
+                        //     difficultyDiv.textContent = taskImportance == 1 ? "#Easy" : taskImportance == 2 ? "#Moderate" : taskImportance == 3 ? "#Difficult" : "Value Not Found";
 
-                            var actionsDiv = document.createElement('div');
-                            actionsDiv.classList.add('daily-task-actions');
+                        //     var actionsDiv = document.createElement('div');
+                        //     actionsDiv.classList.add('daily-task-actions');
 
-                            var button = document.createElement('button');
-                            button.classList.add('mark-complete-daily-task', 'ui-button-2');
-                            if (isMarked === true) {
-                                button.classList.add('daily-marked');
-                            }
-                            button.addEventListener('click', function () {
-                                markDailyTaskAsComplete(this); // Call the function passing the button element as argument
-                            });
+                        //     var button = document.createElement('button');
+                        //     button.classList.add('mark-complete-daily-task', 'ui-button-2');
+                        //     if (isMarked === true) {
+                        //         button.classList.add('daily-marked');
+                        //     }
+                        //     button.addEventListener('click', function () {
+                        //         markDailyTaskAsComplete(this); // Call the function passing the button element as argument
+                        //     });
 
-                            var span = document.createElement('span');
-                            span.classList.add('material-symbols-outlined');
-                            span.style.fontSize = '28px';
-                            span.textContent = 'done_all';
+                        //     var span = document.createElement('span');
+                        //     span.classList.add('material-symbols-outlined');
+                        //     span.style.fontSize = '28px';
+                        //     span.textContent = 'done_all';
 
-                            button.appendChild(span);
-                            actionsDiv.appendChild(button);
+                        //     button.appendChild(span);
+                        //     actionsDiv.appendChild(button);
 
-                            var descriptionDiv = document.createElement('div');
-                            descriptionDiv.classList.add('daily-task-description');
-                            descriptionDiv.textContent = taskDescription;
+                        //     var descriptionDiv = document.createElement('div');
+                        //     descriptionDiv.classList.add('daily-task-description');
+                        //     descriptionDiv.textContent = taskDescription;
 
-                            taskDiv.appendChild(difficultyDiv);
-                            taskDiv.appendChild(actionsDiv);
-                            taskDiv.appendChild(descriptionDiv);
+                        //     taskDiv.appendChild(difficultyDiv);
+                        //     taskDiv.appendChild(actionsDiv);
+                        //     taskDiv.appendChild(descriptionDiv);
 
-                            button.addEventListener('click', function () {
-                                this.classList.toggle('daily-marked');
-                            });
+                        //     button.addEventListener('click', function () {
+                        //         this.classList.toggle('daily-marked');
+                        //     });
 
-                            // Append the taskDiv to the parent element with class .daily-task-show
-                            var parentElement = document.querySelector('.daily-tasks-show');
-                            parentElement.appendChild(taskDiv);
-                        }
+                        //     // Append the taskDiv to the parent element with class .daily-task-show
+                        //     var parentElement = document.querySelector('.daily-tasks-show');
+                        //     parentElement.appendChild(taskDiv);
+                        // }
 
                         async function markDailyTaskAsComplete(taskId) {
                             try {
@@ -1561,6 +1561,7 @@
                                 if (response.ok) {
                                     const data = await response.json();
                                     console.log(data.message); // Log success message
+                                    return (data.all_tasks_completed);
                                     // Perform any additional actions if needed
                                 } else {
                                     const errorData = await response.json();
@@ -1573,16 +1574,42 @@
                             }
                         }
 
+                        var isTasksCompleted = false;
+                        var completedTaskList = [];
+                        var lengthOfTasks = 0;
+
+                        function awardDailyPoints() {
+
+                        }
+
+                        function countFrequency(arr, element) {
+                            let frequency = 0;
+                            for (let i = 0; i < arr.length; i++) {
+                                if (arr[i] === element) {
+                                    frequency++;
+                                }
+                            }
+                            return frequency;
+                        }
+
                         async function generateUserDailyTasksToShow() {
                             const response = await fetchUserDailyTasksToShow();
+                            isTasksCompleted = response[1];
                             var parentElement = document.querySelector('.daily-tasks-show');
                             parentElement.textContent = "";
                             var completedTasksElements = [];
-                            if (response.length > 0) {
-                                response.forEach(task => {
+                            var index = 0;
+                            lengthOfTasks = response[0].length;
+                            console.log(lengthOfTasks);
+                            if (response[0].length > 0) {
+                                response[0].forEach(task => {
+                                    completedTaskList.push(task.completed);
+                                    console.log(completedTaskList);
                                     var taskDiv = document.createElement('div');
                                     taskDiv.classList.add('daily-task');
-
+                                    taskDiv.dataset.idx = index;
+                                    taskDiv.dataset.isCompleted = task.completed;
+                                    index++;
                                     var difficultyDiv = document.createElement('div');
                                     difficultyDiv.classList.add('daily-task-difficulty');
                                     if (task.taskPriority == 1) {
@@ -1602,10 +1629,48 @@
                                     if (task.completed == 1) {
                                         button.classList.add('daily-marked');
                                     }
+
+
+                                    // if (isTasksCompleted == true) {
+                                    //     console.log("Tun Tun Mausi");
+                                    //     button.disabled = true;
+                                    //     button.classList.add('daily-disabled')
+                                    //     const elements = document.querySelectorAll('.mark-complete-daily-task');
+
+                                    //     // Loop through each element
+                                    //     elements.forEach(element => {
+                                    //         // Check your condition here
+                                    //         // For example, let's say the condition is whether the element has a specific data attribute
+                                    //         if (element.dataset.condition === 'true') {
+                                    //             // Add the daily-disabled class
+                                    //             element.classList.add('daily-disabled');
+                                    //         }
+                                    //     });
+                                    // }
+
                                     button.addEventListener('click', async function () {
                                         var tskId = task.taskId;
                                         console.log(tskId);
-                                        await markDailyTaskAsComplete(tskId); // Call the function passing the button element as argument
+                                        if(countFrequency(completedTaskList, 0) == 1) {
+                                            confirm("Jhonny Jhonny Yes Papa");
+                                        }
+                                        
+                                        if(taskDiv.dataset.isCompleted == 0) {
+                                            console.log(completedTaskList);
+                                            taskDiv.dataset.isCompleted = 1;
+                                            completedTaskList[taskDiv.dataset.idx] = 1;
+                                            console.log(completedTaskList);
+                                        } else {
+                                            console.log(completedTaskList);
+                                            taskDiv.dataset.isCompleted = 0;
+                                            completedTaskList[taskDiv.dataset.idx] = 0;
+                                            console.log(completedTaskList);
+                                        }
+                                        var isAllComplete = await markDailyTaskAsComplete(tskId);
+                                        console.log(countFrequency(completedTaskList, 0) + "is frequency/");
+                                        // if(isAllComplete == true) {
+                                        //     awardDailyPoints();
+                                        // }
                                         this.classList.toggle('daily-marked');
                                         if (!this.classList.contains('daily-marked')) {
                                             taskDiv.style.backgroundColor = 'var(--snow)';

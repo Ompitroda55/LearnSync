@@ -1478,6 +1478,8 @@ def fetchUserDailyTasksToShow():
         # Fetch user's daily tasks
         user_id = ObjectId(session.get('user_id'))
         tasks = list(collection.find({"createdBy": user_id}))
+    
+        all_tasks_completed = all(task.get('completed', 0) == 1 for task in collection.find({'createdBy': user_id}))
         
         # Format tasks for response
         formatted_tasks = []
@@ -1491,7 +1493,7 @@ def fetchUserDailyTasksToShow():
             formatted_tasks.append(formatted_task)
         
         # Return tasks as JSON response
-        return jsonify(formatted_tasks)
+        return jsonify(formatted_tasks, all_tasks_completed)
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -1560,7 +1562,7 @@ def mark_task_as_complete():
             user_id = ObjectId(session.get('user_id'))
             if updated_task:
                 all_tasks_completed = all(task.get('completed', 0) == 1 for task in collection.find({'createdBy': user_id}))
-                print(all_tasks_completed)
+                # print(all_tasks_completed)
                 return jsonify({'message': 'Task status toggled successfully', 'all_tasks_completed': all_tasks_completed})
             else:
                 return jsonify({'error': 'Failed to toggle task status'}), 500

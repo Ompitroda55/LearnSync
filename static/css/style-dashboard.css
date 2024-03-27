@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0");
 
 main-container {
-    /* background-color: aquamarine; */
     display: grid;
     grid-template-columns: auto 1fr;
     justify-content: center;
@@ -1931,6 +1930,14 @@ Help Menu
     }
 }
 
+.daily-disabled {
+    color: var(--swan);
+    background-color: var(--polar);
+    &:hover {
+        background-color: var(--hare);
+    }
+}
+
 .daily-tasks-container-wrapper {
     display: flex;
     flex-direction: row;
@@ -1950,4 +1957,8 @@ Help Menu
             color: var(--fox);
         }
     }
+}
+
+.mark-task-disabled {
+
 }

@@ -136,6 +136,7 @@ nav {
 
     z-index: 999;
 }
+
 #more-info-container:hover .more-content-container {
     display: flex;
 }
@@ -146,7 +147,8 @@ nav {
 }
 
 .show {
-    display: flex; /* Show the menu when the 'show' class is added */
+    display: flex;
+    /* Show the menu when the 'show' class is added */
 }
 
 main-content-wrapper {
@@ -283,12 +285,14 @@ content-container {
     /* background-color: red; */
     /* height: 100px; */
 }
+
 .user-pomo-suggestion-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 
 }
+
 .user-pomodoro-form-sequence {
     display: flex;
     flex-direction: column;
@@ -312,7 +316,7 @@ content-container {
 
 #addSequence:hover {
     background-color: var(--bee-mask);
-} 
+}
 
 #update-sequence-btn:hover {
     background-color: var(--feather-green);
@@ -443,12 +447,12 @@ content-container {
     background-color: var(--polar);
 }
 
-.home-pomodoro-timer-full  #time-colon {
+.home-pomodoro-timer-full #time-colon {
     font-size: 128px;
 }
 
-.home-pomodoro-timer-full  #time-min,
-.home-pomodoro-timer-full  #time-sec {
+.home-pomodoro-timer-full #time-min,
+.home-pomodoro-timer-full #time-sec {
     font-size: 128px;
     height: 164px;
     width: 164px;
@@ -526,12 +530,14 @@ content-container {
 }
 
 .member-select.checked {
-    background-color: var(--macaw); /* Change to desired color */
+    background-color: var(--macaw);
+    /* Change to desired color */
     color: var(--snow);
 }
 
 .member-select:hover {
-    background-color: var(--macaw); /* Change to desired color */
+    background-color: var(--macaw);
+    /* Change to desired color */
     color: var(--snow);
 }
 
@@ -562,6 +568,7 @@ content-container {
     flex: 1;
 
 }
+
 .group-view-tasks {
     display: flex;
     flex-direction: column;
@@ -613,7 +620,7 @@ content-container {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(24px); 
+    backdrop-filter: blur(24px);
     background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -625,7 +632,7 @@ content-container {
     gap: 10px;
     width: 676px;
     overflow-x: auto;
-    
+
 }
 
 .groups-list-item .simple-text {
@@ -701,6 +708,7 @@ content-container {
     gap: 5px;
     padding: 3px;
 }
+
 .created_at {
     background-color: var(--eel);
     color: var(--snow);
@@ -759,7 +767,8 @@ content-container {
     font-size: var(--less-imp-font-size);
 }
 
-.container-members-add, .container-members-remove {
+.container-members-add,
+.container-members-remove {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -776,8 +785,9 @@ content-container {
 
 .member-select label:before {} */
 
-.member-select input[type="checkbox"]:checked + label:after {
-    background-color: #66bb6a; /* Change to desired color */
+.member-select input[type="checkbox"]:checked+label:after {
+    background-color: #66bb6a;
+    /* Change to desired color */
 }
 
 .friend-form {
@@ -1161,7 +1171,7 @@ Help Menu
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content:flex-start;
+    justify-content: flex-start;
     gap: 10px;
 }
 
@@ -1181,18 +1191,23 @@ Help Menu
     height: fit-content;
     text-align: justify;
     position: absolute;
-    bottom: 24px; /* Position at the top of the parent div */
-    left: 50%; /* Horizontally center the element */
+    bottom: 24px;
+    /* Position at the top of the parent div */
+    left: 50%;
+    /* Horizontally center the element */
     transform: translateX(-50%);
     /* z-index: 99; */
     color: var(--eel);
     background-color: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px); /* Apply background blur */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Apply box shadow */
+    backdrop-filter: blur(10px);
+    /* Apply background blur */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /* Apply box shadow */
     font-size: var(--less-imp-font-size);
 }
 
-.container-profile-info, .info-general {
+.container-profile-info,
+.info-general {
     display: flex;
     grid-area: info;
     flex-direction: column;
@@ -1258,7 +1273,8 @@ Help Menu
     flex-direction: column;
 }
 
-.add-friends-container, .create-groups-container {
+.add-friends-container,
+.create-groups-container {
     display: flex;
     flex-direction: row;
     gap: 2px;
@@ -1272,29 +1288,36 @@ Help Menu
     position: relative;
     align-items: center;
 }
-.add-friends-container input[type="text"], #add-friend-btn, #create-group-btn {
-    all: unset;   
+
+.add-friends-container input[type="text"],
+#add-friend-btn,
+#create-group-btn {
+    all: unset;
 }
 
-.create-groups-container input[type="text"]{
-    all: unset;   
+.create-groups-container input[type="text"] {
+    all: unset;
 }
 
-#friend-username::placeholder, #group-name::placeholder {
+#friend-username::placeholder,
+#group-name::placeholder {
     color: var(--hare);
 }
 
-#friend-username, #group-name {
+#friend-username,
+#group-name {
     /* flex: 1; */
     flex: 1;
     border-bottom: 2px solid transparent;
 }
 
-#friend-username:focus, #group-name:focus {
+#friend-username:focus,
+#group-name:focus {
     border-bottom: 2px solid var(--wolf);
 }
 
-#add-friend-btn, #create-group-btn{
+#add-friend-btn,
+#create-group-btn {
     display: flex;
     align-items: center;
     /* background-color: red; */
@@ -1327,7 +1350,9 @@ Help Menu
     overflow-y: auto;
 }
 
-.grp-member-item, .group-member-item, .grp-exmember-item {
+.grp-member-item,
+.group-member-item,
+.grp-exmember-item {
     display: flex;
     font-weight: 800;
     flex-direction: row;
@@ -1337,7 +1362,8 @@ Help Menu
     padding: 5px 10px;
     align-items: center;
     justify-content: space-between;
-    transition: all 0.5s ease; /* Corrected transition property */
+    transition: all 0.5s ease;
+    /* Corrected transition property */
     box-shadow: none;
 }
 
@@ -1352,14 +1378,16 @@ Help Menu
     color: var(--eel);
 }
 
-.group-display-container {
+.group-display-container,
+.friend-display-container {
     /* background-color: orange; */
     display: flex;
     flex-direction: row;
 
 }
 
-.group-list {
+.group-list,
+.friend-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -1367,7 +1395,8 @@ Help Menu
     /* background-color: aqua; */
 }
 
-.group-list-container {
+.group-list-container,
+.friend-list-container {
     display: flex;
     /* background-color: greenyellow; */
     flex-direction: column;
@@ -1389,13 +1418,33 @@ Help Menu
     transition: all 0.3s ease;
 }
 
+.frnd-lst-item {
+    display: flex;
+    flex-direction: row;
+    /* background-color: orange; */
+    text-decoration: none;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    transition: all 0.3s ease;
+    border-bottom: var(--default-border-width) solid var(--swan);
+    align-items: center;
+    /* padding: 5px; */
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+        border-radius: var(--link-radius);
+        padding: 10px;
+    }
+}
+
 .grp-lst-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
     border-radius: var(--link-radius);
 }
 
-.grp-logo {
+.grp-logo, .frnd-logo {
     font-size: 24px;
     background-color: var(--feather-green);
     border-radius: 999px;
@@ -1417,19 +1466,22 @@ Help Menu
     flex: 1;
     padding: 5px;
 }
-.grp-name {
+
+.grp-name, .frnd-name {
     color: var(--eel);
     font-weight: 600;
     text-align: right;
     font-size: var(--default-font-size);
 }
+
 .grp-admin {
     color: var(--hare);
     text-align: right;
     font-size: var(--less-imp-font-size);
 }
 
-.group-details {
+.group-details,
+.friend-details {
     display: flex;
     /* flex: 1; */
     flex-direction: column;
@@ -1438,6 +1490,7 @@ Help Menu
     /* font-size: var(--less-imp-font-size); */
     /* border-left: var(--default-border-width) solid var(--hare); */
 }
+
 
 .empty-state {
     color: var(--hare);
@@ -1448,8 +1501,8 @@ Help Menu
     justify-content: center;
 }
 
-.selected-group-info {
-    display: none;
+.selected-group-info, .selected-friend-info {
+    display: flex;
     flex-direction: column;
     margin-left: 15px;
     gap: 10px;
@@ -1457,7 +1510,7 @@ Help Menu
     /* height: 350px; */
 }
 
-.group-header {
+.group-header, .friend-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -1465,7 +1518,7 @@ Help Menu
     /* background-color: orange; */
 }
 
-.group-title {
+.group-title, .friend-title {
     /* background-color: #66bb6a; */
     display: flex;
     flex-direction: column;
@@ -1478,6 +1531,7 @@ Help Menu
     background-color: transparent;
     color: var(--eel);
     transition: all 0.3s ease;
+
     &:hover {
         background-color: var(--swan);
         color: var(--eel);
@@ -1503,7 +1557,7 @@ Help Menu
     /* align-items: center; */
 }
 
-.group-task-item-main{
+.group-task-item-main {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -1526,7 +1580,7 @@ Help Menu
     /* width: fit-content; */
     /* max-width: 350px; */
     /* background-color: orange; */
-    
+
     max-height: 200px;
     overflow-y: auto;
 }
@@ -1559,12 +1613,15 @@ Help Menu
     border-radius: var(--link-radius);
     background-color: var(--polar);
     transition: all 0.3s ease;
+
     &:hover {
         background-color: var(--bee);
     }
+
     /* height: fit-content; */
     /* Your CSS styles for .grp-task-status */
 }
+
 .mark-as-complete {
     padding: 5px;
     display: flex;
@@ -1573,6 +1630,7 @@ Help Menu
     border-radius: var(--link-radius);
     background-color: var(--polar);
     transition: all 0.3s ease;
+
     &:hover {
         background-color: var(--feather-green);
         color: var(--snow);
@@ -1580,6 +1638,7 @@ Help Menu
 }
 
 .task-det-handle {
+
     /* Your CSS styles for .task-det-handle */
     &:hover {
         background-color: var(--macaw);
@@ -1614,7 +1673,8 @@ Help Menu
     justify-content: center;
 }
 
-.create-date, .complete-date {
+.create-date,
+.complete-date {
     font-size: var(--less-imp-font-size);
     font-weight: 800;
     border-radius: var(--link-radius);
@@ -1650,7 +1710,7 @@ Help Menu
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(24px); 
+    backdrop-filter: blur(24px);
     background-color: rgba(255, 255, 255, 0.1);
     z-index: 99;
 }
@@ -1679,7 +1739,7 @@ Help Menu
     flex-direction: column;
     gap: 10px;
     /* background-color: black; */
-    
+
 }
 
 /* .group-handle-con-back * {
@@ -1692,7 +1752,8 @@ Help Menu
     gap: 10px;
 }
 
-.group-handle-heading, .group-view-select {
+.group-handle-heading,
+.group-view-select {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -1755,6 +1816,7 @@ Help Menu
 .our-pomodoro-suggestions {
     flex: 1;
 }
+
 /* #view-member, #add-member  {
     all: unset;
     border-radius: var(--border-radius);
@@ -1783,9 +1845,10 @@ Help Menu
     align-items: center;
     gap: 10px;
 
-    & > input[type='text'] {
+    &>input[type='text'] {
         width: 90%;
     }
+
     /* background-color: orange; */
 }
 
@@ -1811,6 +1874,7 @@ Help Menu
 .tsk-lvl-1 {
     background-color: var(--feather-green);
     color: var(--snow);
+
     &:hover {
         box-shadow: 0 0 12px var(--feather-green);
         color: var(--feather-green);
@@ -1821,6 +1885,7 @@ Help Menu
 .tsk-lvl-2 {
     background-color: var(--bee-mask);
     color: var(--eel);
+
     &:hover {
         box-shadow: 0 0 15px var(--bee-mask);
         color: var(--bee-mask);
@@ -1831,6 +1896,7 @@ Help Menu
 .tsk-lvl-3 {
     background-color: var(--cardinal);
     color: var(--snow);
+
     &:hover {
         background-color: var(--snow);
         color: var(--cardinal);
@@ -1840,7 +1906,8 @@ Help Menu
 
 .user-daily-tasks-container {
     display: grid;
-    grid-template-rows: 1fr; /* Equal width columns */
+    grid-template-rows: 1fr;
+    /* Equal width columns */
     gap: 10px;
 }
 
@@ -1849,6 +1916,7 @@ Help Menu
     flex-direction: column;
     flex: 1;
 }
+
 .user-daily-tasks-set {
     display: flex;
     /* flex: 1; */
@@ -1875,7 +1943,9 @@ Help Menu
     align-items: center;
 }
 
-#add-user-daily-task, #save-user-daily-task {
+#add-user-daily-task,
+#save-user-daily-task {
+
     /* font-size: 16px; */
     &:hover {
         background-color: var(--feather-green);
@@ -1886,7 +1956,7 @@ Help Menu
 .save-user-tsk {
     &:hover {
         background-color: var(--feather-green);
-        
+
         color: var(--snow);
     }
 
@@ -1913,6 +1983,7 @@ Help Menu
     border-radius: 99px;
     border: var(--default-border-width) solid var(--swan);
     transition: all 0.3s ease;
+
     &:hover {
         /* background-color: var(--macaw); */
         border-color: var(--eel);
@@ -1925,6 +1996,7 @@ Help Menu
 .daily-marked {
     color: var(--snow);
     background-color: var(--feather-green);
+
     &:hover {
         background-color: var(--cardinal);
     }
@@ -1933,6 +2005,7 @@ Help Menu
 .daily-disabled {
     color: var(--swan);
     background-color: var(--polar);
+
     &:hover {
         background-color: var(--hare);
     }
@@ -1944,10 +2017,9 @@ Help Menu
     justify-content: space-between;
 }
 
-#send-streak-to-friends{
-    &:disabled {
-        color: var(--swan);
-    }
+#send-streak-to-friends {
+    background-color: transparent;
+
     &:hover {
         background-color: var(--bee-mask);
         color: var(--eel);
@@ -1957,7 +2029,102 @@ Help Menu
             color: var(--fox);
         }
     }
+
+    &:disabled {
+        cursor: not-allowed;
+        background-color: transparent;
+        color: var(--swan);
+
+        &:hover {
+            .material-symbols-outlined {
+                color: var(--swan);
+            }
+        }
+    }
 }
+
+.confirm-box-container {
+    /* display: none; */
+    display: flex;
+    opacity: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 0, 0, 0.272);
+    position: fixed;
+    top: 0px;
+    gap: 15px;
+    left: 0px;
+    height: 100dvh;
+    transition: all 300ms ease;
+    width: 100dvw;
+    transition: all 300ms ease;
+    background-color: rgba(255, 255, 255, 0.3);
+    /* Semi-transparent white */
+    backdrop-filter: blur(10px);
+    /* Add blur effect */
+    z-index: 1000;
+}
+
+.confirm-box-main {
+    display: flex;
+    /* border: none; */
+    max-width: 25dvw;
+    flex-direction: column;
+    padding: 0;
+    /* background-color: orange; */
+    overflow: hidden;
+}
+
+.confirm-box-actions {
+    display: flex;
+    /* background-color: red; */
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.confirm-box-content,
+.confirm-box-heading {
+    color: var(--eel);
+    text-align: center;
+    margin: 0px 10px 0 10px;
+}
+
+.confirm-box-heading {
+    font-weight: 800;
+    margin: 10px 0 0 0;
+}
+
+.confirm-box-actions {
+    margin: 5px 0 0 0;
+    border-top: var(--default-border-width) solid var(--swan);
+}
+
+.confirm-box-actions button {
+    all: unset;
+    cursor: pointer;
+    transition: all 300ms ease;
+    color: var(--macaw);
+    /* background-color: purple; */
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+}
+
+#confirm-box-cancel {
+    border-right: var(--default-border-width) solid var(--swan);
+
+    &:hover {
+        background-color: var(--cardinal);
+        color: var(--snow);
+    }
+}
+
+#confirm-box-confirm:hover {
+    background-color: var(--feather-green);
+    color: var(--snow);
+}
+
 
 /* .mark-task-disabled {
 

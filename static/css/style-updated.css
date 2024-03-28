@@ -452,6 +452,7 @@ hr {
 
 .smart-input-container > input[type=text] {
     all: unset;
+    transition: all 0.3s ease;
     border-bottom: 2px solid transparent;
     color: var(--eel);
 }

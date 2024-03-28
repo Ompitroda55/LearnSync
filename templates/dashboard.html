@@ -790,6 +790,172 @@
                         </div>
                         <div class="container-friends">
                             <div class="secondary-heading">Friends</div>
+                            <div class="friend-display-container container-default">
+                                <div class="friend-list">
+                                    <div class="friend-search smart-input-container">
+                                        <span class="material-symbols-outlined" style="font-size: 24px;">
+                                            search
+                                        </span>
+                                        <input type="text" name="" id="friend-search-input" placeholder="Search Friend">
+                                    </div>
+                                    <script>
+                                        const friendSearchInput = document.getElementById('friend-search-input');
+                                        friendSearchInput.addEventListener('keyup', function (event) {
+                                            // Call the function to generate user group list'
+                                            const searchText = groupSearchInput.value;
+                                            generateUserGroupsList(searchText);
+                                        });
+                                    </script>
+                                    <div class="friend-list-container">
+
+                                            <a class="frnd-lst-item" href="#">
+                                                <div class="frnd-logo">
+                                                    J
+                                                </div>
+                                                <div class="frnd-name">
+                                                    <span class="grp-name">Jacob's</span>
+                                                </div>
+                                            </a>
+                                            <a class="frnd-lst-item" href="#">
+                                                <div class="frnd-logo">
+                                                    J
+                                                </div>
+                                                <div class="frnd-name">
+                                                    <span class="grp-name">Jacob</span>
+                                                </div>
+                                            </a>
+                                            <a class="frnd-lst-item" href="#">
+                                                <div class="frnd-logo">
+                                                    J
+                                                </div>
+                                                <div class="frnd-name">
+                                                    <span class="grp-name">Jacob'</span>
+                                                </div>
+                                            </a>
+
+                                    </div>
+                                </div>
+                                <div class="friend-details">
+                                    <!-- <div class="empty-state">
+                                        Select a friend to view details
+                                    </div> -->
+                                    <div class="selected-friend-info">
+                                        <div class="friend-header">
+                                            <div class="friend-title">
+                                                <span class="grp-name" id="grp-name" style="text-align: left;">Jacob</span>
+
+                                            </div>
+                                            <!-- <button class="group-info ui-button" id="group-info-more">
+                                                <span class="material-symbols-outlined" style="font-size: 24px;">
+                                                    more_horiz
+                                                </span>
+                                            </button> -->
+                                            
+                                        </div>
+                                        <div class="group-task-list">
+                                            <div class="group-task-item ">
+                                                <div class="group-task-item-main">
+                                                    <span class="grp-task-name">
+                                                        <span class="grp-tsk-name">Task to do! Two thousand rupees are
+                                                            pending and that is why we lost every match</span>
+                                                    </span>
+                                                    <div class="grp-most-actions">
+                                                        <span class="grp-task-elapse less-imp-text">10mins left</span>
+                                                        <span class="grp-task-status">
+                                                            <span class="material-symbols-outlined"
+                                                                style="font-size: 24px;">
+                                                                progress_activity
+                                                            </span>
+                                                            50%
+                                                        </span>
+                                                        <button class="mark-as-complete  ui-button-2">
+                                                            <span class="material-symbols-outlined"
+                                                                style="font-size: 24px;">
+                                                                done_all
+                                                            </span>
+                                                        </button>
+                                                        <button class="del-grp-tsk ui-button-2">
+                                                            <span class="material-symbols-outlined"
+                                                                style="font-size: 24px;">
+                                                                delete
+                                                            </span>
+                                                        </button>
+                                                        <button class="task-det-handle ui-button-2">
+                                                            <span class="material-symbols-outlined"
+                                                                style="font-size: 24px;">
+                                                                expand_more
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="task-more-info info-popup">
+                                                    <!-- <span
+                                                            style="display: flex;flex-direction: row; align-items: center;font-weight: 600; gap: 5px; background-color: var(--feather-green); color: var(--snow); text-align: center; padding: 5px;">
+                                                            <span class="material-symbols-outlined"
+                                                                style="font-size: 24px; font-weight: 600; ">
+                                                                subtitles
+                                                            </span>Task Details
+                                                        </span> -->
+                                                    <div class="task-member-status">
+                                                        <div class="task-member">
+                                                            <span class="task-member-name">John Doe</span>
+                                                            <span class="material-symbols-outlined"
+                                                                style="font-size: 24px;">
+                                                                done_all
+                                                            </span>
+                                                        </div>
+                                                        <div class="task-member">
+                                                            <span class="task-member-name">John Doe</span>
+                                                            <span class="material-symbols-outlined"
+                                                                style="font-size: 24px;">
+                                                                done_all
+                                                            </span>
+                                                        </div>
+                                                        <div class="task-member">
+                                                            <span class="task-member-name">John Doe</span>
+                                                            <span class="material-symbols-outlined"
+                                                                style="font-size: 24px;">
+                                                                done_all
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="task-calendar">
+                                                        <span class="create-date">Mon, Feb 26, 2024</span>
+                                                        <span class="material-symbols-outlined"
+                                                            style="font-size: 18px;">
+                                                            width
+                                                        </span>
+                                                        <span class="complete-date">Tue, Feb 27, 2024</span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="group-tsk-crt-con smart-input-container">
+                                            <input type="text" name="" id="grp-tsk-add-field"
+                                                placeholder="Create a new task..." style="flex: 1;" />
+                                            <input type="date" id="date-task-completion" name="date" min="" max=""
+                                                required>
+                                            <button id="create-grp-task-btn" title="Add Task">
+                                                <span class="material-symbols-outlined" style="font-size: 24px;">
+                                                    add_task
+                                                </span>
+                                            </button>
+                                            <div class="alert-box-warn" id="group-tsk-crt-alert">
+                                                <span class="material-symbols-outlined"
+                                                    style="font-size: 24px; color: var(--cardinal);">
+                                                    warning
+                                                </span>
+                                                <span id="grp-tsk-warn">
+
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="container-friends-list container-default" id="container-friends-list">
 
@@ -1429,7 +1595,7 @@
                         }
 
                         // Call viewManager with 0 to show container-home by default
-                        viewManager(0);
+                        viewManager(2);
 
                         // Add event listeners to links to call viewManager with the corresponding position
                         linkIds.forEach((id, index) => {
@@ -1468,7 +1634,7 @@
                     <div class="daily-tasks-container  container-default" id="daily-tasks-container">
                         <div class="daily-tasks-container-wrapper">
                             <span class="secondary-heading">Daily Tasks</span>
-                            <button id="send-streak-to-friends" class="ui-button-3">
+                            <button id="send-streak-to-friends" class="ui-button-3" disabled>
                                 <span class="material-symbols-outlined" style="font-size: 28px;">
                                     bolt
                                 </span>
@@ -1501,53 +1667,6 @@
                         </div>
                     </div>
                     <script>
-                        // function createDailyTask(task) {
-                        //     // Create elements
-                        //     var taskDiv = document.createElement('div');
-                        //     taskDiv.classList.add('daily-task');
-                        //     tadkDiv.dataset.isMarked = isMarked;
-
-                        //     var difficultyDiv = document.createElement('div');
-                        //     difficultyDiv.classList.add('daily-task-difficulty');
-                        //     difficultyDiv.textContent = taskImportance == 1 ? "#Easy" : taskImportance == 2 ? "#Moderate" : taskImportance == 3 ? "#Difficult" : "Value Not Found";
-
-                        //     var actionsDiv = document.createElement('div');
-                        //     actionsDiv.classList.add('daily-task-actions');
-
-                        //     var button = document.createElement('button');
-                        //     button.classList.add('mark-complete-daily-task', 'ui-button-2');
-                        //     if (isMarked === true) {
-                        //         button.classList.add('daily-marked');
-                        //     }
-                        //     button.addEventListener('click', function () {
-                        //         markDailyTaskAsComplete(this); // Call the function passing the button element as argument
-                        //     });
-
-                        //     var span = document.createElement('span');
-                        //     span.classList.add('material-symbols-outlined');
-                        //     span.style.fontSize = '28px';
-                        //     span.textContent = 'done_all';
-
-                        //     button.appendChild(span);
-                        //     actionsDiv.appendChild(button);
-
-                        //     var descriptionDiv = document.createElement('div');
-                        //     descriptionDiv.classList.add('daily-task-description');
-                        //     descriptionDiv.textContent = taskDescription;
-
-                        //     taskDiv.appendChild(difficultyDiv);
-                        //     taskDiv.appendChild(actionsDiv);
-                        //     taskDiv.appendChild(descriptionDiv);
-
-                        //     button.addEventListener('click', function () {
-                        //         this.classList.toggle('daily-marked');
-                        //     });
-
-                        //     // Append the taskDiv to the parent element with class .daily-task-show
-                        //     var parentElement = document.querySelector('.daily-tasks-show');
-                        //     parentElement.appendChild(taskDiv);
-                        // }
-
                         async function markDailyTaskAsComplete(taskId) {
                             try {
                                 const response = await fetch('/mark-daily-task-as-complete', {
@@ -1595,6 +1714,11 @@
                         async function generateUserDailyTasksToShow() {
                             const response = await fetchUserDailyTasksToShow();
                             isTasksCompleted = response[1];
+                            if(isTasksCompleted) {
+                                var btn = document.querySelector('#send-streak-to-friends');
+                                btn.disabled = false;
+                            }
+                            console.log(isTasksCompleted);
                             var parentElement = document.querySelector('.daily-tasks-show');
                             parentElement.textContent = "";
                             var completedTasksElements = [];
@@ -1629,74 +1753,72 @@
                                     if (task.completed == 1) {
                                         button.classList.add('daily-marked');
                                     }
-
-
-                                    // if (isTasksCompleted == true) {
-                                    //     console.log("Tun Tun Mausi");
-                                    //     button.disabled = true;
-                                    //     button.classList.add('daily-disabled')
-                                    //     const elements = document.querySelectorAll('.mark-complete-daily-task');
-
-                                    //     // Loop through each element
-                                    //     elements.forEach(element => {
-                                    //         // Check your condition here
-                                    //         // For example, let's say the condition is whether the element has a specific data attribute
-                                    //         if (element.dataset.condition === 'true') {
-                                    //             // Add the daily-disabled class
-                                    //             element.classList.add('daily-disabled');
-                                    //         }
-                                    //     });
-                                    // }
+                                    if (isTasksCompleted == 1) {
+                                        button.disabled = true;
+                                        button.classList.add('daily-disabled');
+                                    }
 
                                     button.addEventListener('click', async function () {
                                         var tskId = task.taskId;
-                                        console.log(tskId);
-                                        if(countFrequency(completedTaskList, 0) == 1) {
-                                            confirm("Jhonny Jhonny Yes Papa");
-                                        }
-                                        
-                                        if(taskDiv.dataset.isCompleted == 0) {
-                                            console.log(completedTaskList);
-                                            taskDiv.dataset.isCompleted = 1;
-                                            completedTaskList[taskDiv.dataset.idx] = 1;
-                                            console.log(completedTaskList);
+                                        // console.log(tskId);
+                                        if (countFrequency(completedTaskList, 0) == 1 && taskDiv.dataset.isCompleted == 0) {
+                                            if (await createConfirmBox("Confirm Task Completion", "Once all tasks are completed and submitted, they will be disabled for today, scores will be finalized, and no further changes will be allowed. Are you sure?")) {
+                                                if (taskDiv.dataset.isCompleted == 0) {
+                                                    console.log(completedTaskList);
+                                                    taskDiv.dataset.isCompleted = 1;
+                                                    completedTaskList[taskDiv.dataset.idx] = 1;
+                                                    console.log(completedTaskList);
+                                                } else {
+                                                    console.log(completedTaskList);
+                                                    taskDiv.dataset.isCompleted = 0;
+                                                    completedTaskList[taskDiv.dataset.idx] = 0;
+                                                    console.log(completedTaskList);
+                                                }
+                                                var res = await markDailyTaskAsComplete(tskId);
+                                                console.log(res);
+                                                if (res) {
+                                                    var completeButtons = document.querySelectorAll('.mark-complete-daily-task');
+                                                    completeButtons.forEach(function (button) {
+                                                        button.disabled = true;
+                                                        button.classList.add('daily-disabled');
+                                                    });
+                                                    button.classList.toggle('daily-marked');
+                                                    console.log("Task Toggled");
+                                                    var btn = document.querySelector('#send-streak-to-friends');
+                                                    btn.disabled = false;
+                                                }
+                                            }
                                         } else {
-                                            console.log(completedTaskList);
-                                            taskDiv.dataset.isCompleted = 0;
-                                            completedTaskList[taskDiv.dataset.idx] = 0;
-                                            console.log(completedTaskList);
+                                            await markDailyTaskAsComplete(tskId);
+                                            // console.log(countFrequency(completedTaskList, 0) + "is frequency/");
+                                            // if(isAllComplete == true) {
+                                            //     awardDailyPoints();
+                                            // }
+                                            if (taskDiv.dataset.isCompleted == 0) {
+                                                console.log(completedTaskList);
+                                                taskDiv.dataset.isCompleted = 1;
+                                                completedTaskList[taskDiv.dataset.idx] = 1;
+                                                console.log(completedTaskList);
+                                            } else {
+                                                console.log(completedTaskList);
+                                                taskDiv.dataset.isCompleted = 0;
+                                                completedTaskList[taskDiv.dataset.idx] = 0;
+                                                console.log(completedTaskList);
+                                            }
+                                            this.classList.toggle('daily-marked');
                                         }
-                                        var isAllComplete = await markDailyTaskAsComplete(tskId);
-                                        console.log(countFrequency(completedTaskList, 0) + "is frequency/");
-                                        // if(isAllComplete == true) {
-                                        //     awardDailyPoints();
-                                        // }
-                                        this.classList.toggle('daily-marked');
                                         if (!this.classList.contains('daily-marked')) {
-                                            taskDiv.style.backgroundColor = 'var(--snow)';
-                                            taskDiv.style.Color = 'var(--snow)';
-                                            taskDiv.opacity = '0';
-
-                                            // If the 'daily-marked' class is not present, move the button to the end of its parent div
-                                            // 'this' refers to the button element being clicked
-                                            setTimeout(function () {
-
-                                                parentElement.removeChild(taskDiv);
-                                                taskDiv.style.backgroundColor = 'var(--polar)';
-                                                taskDiv.style.Color = 'var(--eel)';
-                                                parentElement.appendChild(taskDiv);
-                                            }, 0);
+                                            await parentElement.removeChild(taskDiv);
+                                            console.log("Clicked a tick task");
+                                            var firstChild = parentElement.firstChild;
+                                            console.log(firstChild);
+                                            await parentElement.insertBefore(taskDiv, firstChild);
+                                            taskDiv.style.backgroundColor = 'var(--polar)';
+                                            taskDiv.style.Color = 'var(--eel)';
                                         } else {
-                                            taskDiv.style.backgroundColor = 'var(--snow)';
-                                            taskDiv.style.Color = 'var(--snow)';
-
-
-                                            setTimeout(function () {
-                                                parentElement.removeChild(taskDiv);
-                                                taskDiv.style.backgroundColor = 'var(--polar)';
-                                                taskDiv.style.Color = 'var(--eel)';
-                                                parentElement.appendChild(taskDiv);
-                                            }, 0);
+                                            taskDiv.style.backgroundColor = 'var(--polar)';
+                                            taskDiv.style.Color = 'var(--eel)';
+                                            parentElement.appendChild(taskDiv);
                                         }
                                     });
 
@@ -1721,8 +1843,6 @@
                                     } else {
                                         completedTasksElements.push(taskDiv); // If task is completed, it will be moved to the end later
                                     }
-                                    // Append the taskDiv to the parent element with class .daily-task-show
-                                    // parentElement.appendChild(taskDiv);
                                 });
                                 const seq = document.createElement('div');
                                 seq.textContent = 'Completed-Items'; // Clear existing fields
@@ -1732,6 +1852,15 @@
                                 completedTasksElements.forEach(function (taskDiv) {
                                     parentElement.appendChild(taskDiv);
                                 });
+                            } else {
+                                var parentElement = document.querySelector('.daily-tasks-show');
+                                parentElement.textContent = "";
+
+                                var span = document.createElement('span');
+                                span.classList.add('less-imp-text');
+                                span.textContent = "No Tasks To Show";
+                                span.style.margin = "10px auto";
+                                parentElement.appendChild(span);
                             }
                         }
                         async function fetchUserDailyTasksToShow() {
@@ -1864,9 +1993,81 @@
                 </extras-container>
             </main-content-container>
         </main-content-wrapper>
-
     </main-container>
+    <!-- <div class="confirm-box-container">
+        <div class="confirm-box-main container-default">
+            <span class="confirm-box-heading">
+                Confirm Task Completion
+            </span>
+            <span class="confirm-box-content less-imp-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Eaque quisquam tenetur ipsa facilis sapiente hic corrupti doloremque aliquam omnis delectus?</span>
+            <div class="confirm-box-actions">
+                <button id="confirm-box-cancel" class="confirm-box-btn">Cancel</button>
+                <button id="confirm-box-confirm" class="confirm-box-btn">OK</button>
+            </div>
+        </div>
+    </div> -->
+    <script>
+        function createConfirmBox(heading, content) {
+            return new Promise((resolve, reject) => {
+                // Create elements for custom confirmation dialog
+                const container = document.createElement('div');
+                container.classList.add('confirm-box-container');
 
+                // Create main confirm box element
+                const confirmBoxMain = document.createElement('div');
+                confirmBoxMain.classList.add('confirm-box-main', 'container-default');
+
+                // Create heading element
+                const headingElement = document.createElement('span');
+                headingElement.classList.add('confirm-box-heading');
+                headingElement.textContent = heading;
+
+                // Create content element
+                const contentElement = document.createElement('span');
+                contentElement.classList.add('confirm-box-content', 'less-imp-text');
+                contentElement.textContent = content;
+
+                // Create actions container
+                const actionsContainer = document.createElement('div');
+                actionsContainer.classList.add('confirm-box-actions');
+
+                // Create cancel button
+                const cancelButton = document.createElement('button');
+                cancelButton.setAttribute('id', 'confirm-box-cancel');
+                cancelButton.classList.add('confirm-box-btn');
+                cancelButton.textContent = 'Cancel';
+
+                // Create confirm button
+                const confirmButton = document.createElement('button');
+                confirmButton.setAttribute('id', 'confirm-box-confirm');
+                confirmButton.classList.add('confirm-box-btn');
+                confirmButton.textContent = 'OK';
+
+                cancelButton.addEventListener('click', () => {
+                    resolve(false); // Resolve with false when Cancel button is clicked
+                    document.body.removeChild(container); // Remove the confirm box from the DOM
+                });
+                confirmButton.addEventListener('click', () => {
+                    resolve(true); // Resolve with true when OK button is clicked
+                    document.body.removeChild(container); // Remove the confirm box from the DOM
+                });
+
+                // Append elements
+                actionsContainer.appendChild(cancelButton);
+                actionsContainer.appendChild(confirmButton);
+                confirmBoxMain.appendChild(headingElement);
+                confirmBoxMain.appendChild(contentElement);
+                confirmBoxMain.appendChild(actionsContainer);
+                container.appendChild(confirmBoxMain);
+                document.body.appendChild(container);
+                container.style.opacity = '100';
+            });
+        }
+    </script>
+    <script>
+
+    </script>
     <script>
         var currentUser = null;
 
@@ -2544,8 +2745,8 @@
                 friendElement.innerHTML = `
                 <div class="friend-username">${friend}</div>
                 <div class="friend-actions">
-                    <button class=" send-streak" onclick="sendStreak('${friend}}')"><span class="material-symbols-outlined">bolt</span> Send Streak</button>
-                    <button class=" remove-friend" onclick="removeFriend('${friend}')"><span class="material-symbols-outlined">delete</span></button>
+                    <button class=" ui-button-3" onclick="sendStreak('${friend}}')"><span class="material-symbols-outlined">bolt</span> Send Streak Request</button>
+                    <button class=" ui-button-2" onclick="removeFriend('${friend}')"><span class="material-symbols-outlined" style="font-size = 28px;">delete</span></button>
                 </div>
                 `;
                 friendsContainer.appendChild(friendElement);

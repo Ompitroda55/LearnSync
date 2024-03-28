@@ -1506,15 +1506,12 @@ def updateUserDailyTask():
         task_name = data.get('value')
         task_priority = data.get('level')
         task_id = data.get('id')
-        
-        # Update the task in the database (replace this with your own logic)
-        # For demonstration, we'll assume updating the task name and priority in a MongoDB collection
+
         collection.update_one(
             {'_id': ObjectId(task_id)},
             {'$set': {'task_name': task_name, 'priority': task_priority}}
         )
         
-        # Prepare the response
         response = {'message': 'Task updated successfully'}
         
         return jsonify(response), 200

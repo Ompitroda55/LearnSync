@@ -802,164 +802,149 @@
                                         const friendSearchInput = document.getElementById('friend-search-input');
                                         friendSearchInput.addEventListener('keyup', function (event) {
                                             // Call the function to generate user group list'
-                                            const searchText = groupSearchInput.value;
-                                            generateUserGroupsList(searchText);
+                                            const searchText = friendSearchInput.value;
+                                            generateUserFriendsList(searchText);
                                         });
                                     </script>
                                     <div class="friend-list-container">
 
-                                            <a class="frnd-lst-item" href="#">
-                                                <div class="frnd-logo">
-                                                    J
-                                                </div>
-                                                <div class="frnd-name">
-                                                    <span class="grp-name">Jacob's</span>
-                                                </div>
-                                            </a>
-                                            <a class="frnd-lst-item" href="#">
-                                                <div class="frnd-logo">
-                                                    J
-                                                </div>
-                                                <div class="frnd-name">
-                                                    <span class="grp-name">Jacob</span>
-                                                </div>
-                                            </a>
-                                            <a class="frnd-lst-item" href="#">
-                                                <div class="frnd-logo">
-                                                    J
-                                                </div>
-                                                <div class="frnd-name">
-                                                    <span class="grp-name">Jacob'</span>
-                                                </div>
-                                            </a>
+                                        <!-- <a class="frnd-lst-item" href="#">
+                                            <div class="frnd-logo">
+                                                J
+                                            </div>
+                                            <div class="frnd-name">
+                                                <span class="grp-name">Jacob's</span>
+                                            </div>
+                                        </a>
+                                        <a class="frnd-lst-item" href="#">
+                                            <div class="frnd-logo">
+                                                J
+                                            </div>
+                                            <div class="frnd-name">
+                                                <span class="grp-name">Jacob</span>
+                                            </div>
+                                        </a>
+                                        <a class="frnd-lst-item" href="#">
+                                            <div class="frnd-logo">
+                                                J
+                                            </div>
+                                            <div class="frnd-name">
+                                                <span class="grp-name">Jacob'</span>
+                                            </div>
+                                        </a> -->
 
                                     </div>
                                 </div>
                                 <div class="friend-details">
-                                    <!-- <div class="empty-state">
+                                    <div class="empty-state" id="empty-state-friend">
                                         Select a friend to view details
-                                    </div> -->
+                                    </div>
+                                    
                                     <div class="selected-friend-info">
                                         <div class="friend-header">
                                             <div class="friend-title">
-                                                <span class="grp-name" id="grp-name" style="text-align: left;">Jacob</span>
-
+                                                <div class="frnd-title " style="display: flex; flex-direction: row;
+                                                align-items: center; gap: 10px;">
+                                                    <span class="frnd-name" id="frnd-name"
+                                                        style="text-align: left;">Jacob</span>
+                                                </div>
+                                            </div>
+                                            <div class="friend-information">
+                                                <span class="extra-info" id="frnd-email"></span>
+                                                <span class="less-imp-text" id="frnd-common"
+                                                    style="font-weight: 800;"></span>
                                             </div>
                                             <!-- <button class="group-info ui-button" id="group-info-more">
-                                                <span class="material-symbols-outlined" style="font-size: 24px;">
+                                                    <span class="material-symbols-outlined" style="font-size: 24px;">
                                                     more_horiz
                                                 </span>
                                             </button> -->
-                                            
+
                                         </div>
-                                        <div class="group-task-list">
-                                            <div class="group-task-item ">
-                                                <div class="group-task-item-main">
-                                                    <span class="grp-task-name">
-                                                        <span class="grp-tsk-name">Task to do! Two thousand rupees are
-                                                            pending and that is why we lost every match</span>
-                                                    </span>
-                                                    <div class="grp-most-actions">
-                                                        <span class="grp-task-elapse less-imp-text">10mins left</span>
-                                                        <span class="grp-task-status">
-                                                            <span class="material-symbols-outlined"
-                                                                style="font-size: 24px;">
-                                                                progress_activity
-                                                            </span>
-                                                            50%
-                                                        </span>
-                                                        <button class="mark-as-complete  ui-button-2">
-                                                            <span class="material-symbols-outlined"
-                                                                style="font-size: 24px;">
-                                                                done_all
-                                                            </span>
-                                                        </button>
-                                                        <button class="del-grp-tsk ui-button-2">
-                                                            <span class="material-symbols-outlined"
-                                                                style="font-size: 24px;">
-                                                                delete
-                                                            </span>
-                                                        </button>
-                                                        <button class="task-det-handle ui-button-2">
-                                                            <span class="material-symbols-outlined"
-                                                                style="font-size: 24px;">
-                                                                expand_more
-                                                            </span>
-                                                        </button>
+                                        <div class="friend-main">
+                                            <div class="temp-con">
+                                                <span class="less-imp-text">Streaks-Overview</span>
+                                                <div class="longest-streak">
+                                                    <img src="../static/resources/images/dashboard/streak-icon.png" alt=""
+                                                        class="friend-stats-icon">
+                                                    <div class="report-card-data">
+                                                        <span class="report-val" id="longest-streak">32</span>
+                                                        <span class="report-desc" id="longest-streak-desc">Longest Streak
+                                                            between you and
+                                                            {friend}</span>
                                                     </div>
                                                 </div>
-
-
-                                                <div class="task-more-info info-popup">
-                                                    <!-- <span
-                                                            style="display: flex;flex-direction: row; align-items: center;font-weight: 600; gap: 5px; background-color: var(--feather-green); color: var(--snow); text-align: center; padding: 5px;">
-                                                            <span class="material-symbols-outlined"
-                                                                style="font-size: 24px; font-weight: 600; ">
-                                                                subtitles
-                                                            </span>Task Details
-                                                        </span> -->
-                                                    <div class="task-member-status">
-                                                        <div class="task-member">
-                                                            <span class="task-member-name">John Doe</span>
-                                                            <span class="material-symbols-outlined"
-                                                                style="font-size: 24px;">
-                                                                done_all
-                                                            </span>
-                                                        </div>
-                                                        <div class="task-member">
-                                                            <span class="task-member-name">John Doe</span>
-                                                            <span class="material-symbols-outlined"
-                                                                style="font-size: 24px;">
-                                                                done_all
-                                                            </span>
-                                                        </div>
-                                                        <div class="task-member">
-                                                            <span class="task-member-name">John Doe</span>
-                                                            <span class="material-symbols-outlined"
-                                                                style="font-size: 24px;">
-                                                                done_all
-                                                            </span>
+                                            </div>
+                                            <div class="temp-con">
+                                                <span class="less-imp-text">Friend-Stats</span>
+                                                <div class="friend-report-card ">
+                                                    <div class="report-card-item">
+                                                        <img src="../static/resources/images/dashboard/streak-icon.png"
+                                                            alt="" class="friend-stats-icon">
+                                                        <div class="report-card-data">
+                                                            <span class="report-val" id="report-streak">32</span>
+                                                            <span class="report-desc">Longest Streak</span>
                                                         </div>
                                                     </div>
-                                                    <div class="task-calendar">
-                                                        <span class="create-date">Mon, Feb 26, 2024</span>
-                                                        <span class="material-symbols-outlined"
-                                                            style="font-size: 18px;">
-                                                            width
-                                                        </span>
-                                                        <span class="complete-date">Tue, Feb 27, 2024</span>
+                                                    <div class="report-card-item">
+                                                        <img src="../static/resources/images/dashboard/gems-icon.png" alt=""
+                                                            class="friend-stats-icon">
+                                                        <div class="report-card-data">
+                                                            <span class="report-val" id="report-gems">32</span>
+                                                            <span class="report-desc">Total XP</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="report-card-item">
+                                                        <img src="../static/resources/images/dashboard/heart-icon.png"
+                                                            alt="" class="friend-stats-icon">
+                                                        <div class="report-card-data">
+                                                            <span class="report-val" id="report-heart">32</span>
+                                                            <span class="report-desc">Hearts Collected</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="report-card-item">
+                                                        <img src="../static/resources/images/dashboard/leaderboard-icon.png"
+                                                            alt="" class="friend-stats-icon">
+                                                        <div class="report-card-data">
+                                                            <span class="report-val" id="report-leaderboard">32</span>
+                                                            <span class="report-desc">Top 10 finishes</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-
                                             </div>
-                                        </div>
-                                        <div class="group-tsk-crt-con smart-input-container">
-                                            <input type="text" name="" id="grp-tsk-add-field"
-                                                placeholder="Create a new task..." style="flex: 1;" />
-                                            <input type="date" id="date-task-completion" name="date" min="" max=""
-                                                required>
-                                            <button id="create-grp-task-btn" title="Add Task">
-                                                <span class="material-symbols-outlined" style="font-size: 24px;">
-                                                    add_task
-                                                </span>
-                                            </button>
-                                            <div class="alert-box-warn" id="group-tsk-crt-alert">
-                                                <span class="material-symbols-outlined"
-                                                    style="font-size: 24px; color: var(--cardinal);">
-                                                    warning
-                                                </span>
-                                                <span id="grp-tsk-warn">
+                                            <!-- <hr> -->
 
-                                                </span>
+                                            <!-- <hr> -->
+                                            <div class="temp-con">
+                                                <span class="less-imp-text">Actions-Zone</span>
+                                                <div class="friend-action">
+                                                    <button class="ui-button-3" id="frnd-rmv">
+                                                        <span class="material-symbols-outlined" style="font-size: 28px;">
+                                                            person_remove
+                                                        </span>&nbsp;Unfriend
+                                                    </button>
+                                                    <button class="ui-button-3" id="frnd-stk">
+                                                        <span class="material-symbols-outlined" style="font-size: 28px;">
+                                                            bolt
+                                                        </span>&nbsp;Send Request
+                                                    </button>
+                                                </div>
                                             </div>
+                                            <!-- <div class="friend-stats">
+                                                <div class="frnd-stat" id="frnd-streak"></div>
+                                                <div class="frnd-stat" id="frnd-xp"></div>
+                                                <div class="frnd-stat" id="frnd-hearts"></div>
+                                                <div class="frnd-stat" id="frnd-top"></div>
+                                            </div> -->
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="container-friends-list container-default" id="container-friends-list">
+                            <!-- <div class="container-friends-list container-default" id="container-friends-list">
 
-                            </div>
+                            </div> -->
                         </div>
                         <!-- <div class="container-daily-tasks container-default">
 
@@ -995,7 +980,7 @@
                                     </div>
                                 </div>
                                 <div class="group-details">
-                                    <div class="empty-state">
+                                    <div class="empty-state" id="group-empty-state">
                                         Select a group to view details
                                     </div>
                                     <div class="selected-group-info">
@@ -1480,7 +1465,7 @@
                                                 if (res) {
                                                     generateUserGroupsList("");
                                                     const groupHandleConBack = document.querySelector(".group-handle-con-back");
-                                                    const eS = document.querySelector(".empty-state");
+                                                    const eS = document.querySelector("#group-empty-state");
                                                     const groupContainer = document.querySelector(".selected-group-info");
                                                     groupHandleConBack.style.display = "none";
                                                     eS.style.display = "flex";
@@ -1714,7 +1699,7 @@
                         async function generateUserDailyTasksToShow() {
                             const response = await fetchUserDailyTasksToShow();
                             isTasksCompleted = response[1];
-                            if(isTasksCompleted) {
+                            if (isTasksCompleted) {
                                 var btn = document.querySelector('#send-streak-to-friends');
                                 btn.disabled = false;
                             }
@@ -2550,21 +2535,21 @@
             }
         }
 
-        function removeFriend(friendUsername) {
-            fetch(`/remove-friend/${friendUsername}`, {
+        async function removeFriend(friendUsername) {
+            const formData = new FormData();
+            formData.append('friend_username', friendUsername);
+
+            fetch('/remove-friend', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    // No need to specify 'Content-Type' for FormData
                 },
-                // Optionally, you can include additional data in the request body if needed
-                body: JSON.stringify({ friend_username: friendUsername })
+                body: formData
             })
                 .then(response => {
                     if (response.ok) {
                         updateStats();
-
-                        // Optionally, you can update the UI to reflect that the removal request has been sent
-                        // console.log('Removal request sent successfully');
+                        // Optionally update UI
                     } else {
                         console.error('Failed to send removal request');
                     }
@@ -2728,29 +2713,6 @@
             let userStats = getUserStats();
 
             let user = await getUser();
-
-            // console.log(user);
-            // user.then((data) => {
-            //     console.log(data)
-            // })
-            // console.log(user.username);
-
-            const friendsContainer = document.getElementById('container-friends-list');
-            friendsContainer.innerHTML = '';
-
-            // Iterate over the user's friends and create friend elements
-            user.friends.forEach(friend => {
-                const friendElement = document.createElement('div');
-                friendElement.classList.add('friend');
-                friendElement.innerHTML = `
-                <div class="friend-username">${friend}</div>
-                <div class="friend-actions">
-                    <button class=" ui-button-3" onclick="sendStreak('${friend}}')"><span class="material-symbols-outlined">bolt</span> Send Streak Request</button>
-                    <button class=" ui-button-2" onclick="removeFriend('${friend}')"><span class="material-symbols-outlined" style="font-size = 28px;">delete</span></button>
-                </div>
-                `;
-                friendsContainer.appendChild(friendElement);
-            });
 
             userStats.then((stats) => {
                 document.getElementById('streaks-stat').textContent = stats[0].streaks;
@@ -2974,22 +2936,6 @@
             }
         });
 
-        // async function getUserGroups(query = null) {
-        //     try {
-        //         const response = await fetch('/get-user-groups/2', {
-        //             method: 'POST'
-        //         });
-        //         if (!response.ok) {
-        //             throw new Error('Failed to fetch user groups');
-        //         }
-        //         const groups = await response.json();
-        //         return groups;
-        //     } catch (error) {
-        //         console.error('Error fetching user groups:', error);
-        //         return null;
-        //     }
-        // }
-
         async function getUserGroups(query = null) {
             try {
                 const formData = new FormData();
@@ -3116,7 +3062,7 @@
             const crtTaskBtn = document.getElementById("create-grp-task-btn");
             const groupContainer = document.querySelector(".selected-group-info");
             const taskListContainer = document.querySelector(".group-task-list");
-            const emptyHandler = document.querySelector(".empty-state");
+            const emptyHandler = document.querySelector("#group-empty-state");
             const groupName = document.getElementById("grp-name");
             const groupMembers = document.getElementById("grp-members");
             const groupManager = document.querySelector('.group-handle-con');
@@ -3317,6 +3263,7 @@
             // generateFriendsList('.friends-list');
             generateUserDailyTasksToShow();
             generateUserGroupsList("");
+            generateUserFriendsList("");
             generateUserDailyTasks();
             setInterval(updateNotifications, 5000);
             setInterval(updateStats, 5000);
@@ -3667,6 +3614,215 @@
             } catch (error) {
                 console.error('Error fetching tasks:', error);
             }
+        }
+
+        async function getUserFriends(query = null) {
+            try {
+                const formData = new FormData();
+                formData.append('query', query);
+
+                const response = await fetch('/get-user-friends/2', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user groups');
+                }
+
+                const groups = await response.json();
+                return groups;
+            } catch (error) {
+                console.error('Error fetching user groups:', error);
+                return null;
+            }
+        }
+
+        async function generateUserFriendsList(query = null) {
+            var colorCodes = ["#70d6ff", "#ff70a6", "#ff9770", "#ffd670", "#e9ff70", "#9381ff", "#7bf1a8"];
+
+            function getRandomColor() {
+                return colorCodes[Math.floor(Math.random() * colorCodes.length)];
+            }
+
+            const friends = await getUserFriends(query);
+
+            const container = document.querySelector('.friend-list-container');
+            container.innerHTML = "";
+            // container.textContent = "";
+            // console.log(groups.length);
+            // var currUser = groups[0];
+            // currentUser = groups[0];
+            console.log(friends + "This are my Friends");
+            function generateLogoText(text) {
+                // Split the input text into words
+                const words = text.trim().split(/\s+/);
+
+                // If there's only one word, use its first letter
+                if (words.length === 1) {
+                    return words[0].charAt(0).toUpperCase();
+                }
+
+                // If there are multiple words, use the first letters of the first two words
+                return words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase();
+            }
+            friends.forEach(friend => {
+                // Create div element for each group
+
+                var link = document.createElement("a");
+                link.setAttribute("class", "frnd-lst-item");
+                link.setAttribute("href", "#");
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    openFriendView(friend);
+                });
+
+                var logoDiv = document.createElement("div");
+                logoDiv.setAttribute("class", "frnd-logo");
+                logoDiv.textContent = generateLogoText(friend);
+                logoDiv.style.backgroundColor = getRandomColor();
+
+                // Create <div> for friend name
+                var nameDiv = document.createElement("div");
+                nameDiv.setAttribute("class", "frnd-name");
+
+                // Create <span> for friend's name
+                var nameSpan = document.createElement("span");
+                nameSpan.setAttribute("class", "grp-name");
+                nameSpan.textContent = friend;
+
+                // Append <span> to the <div> for friend name
+                nameDiv.appendChild(nameSpan);
+
+                // Append friend logo and name to the <a> element
+                link.appendChild(logoDiv);
+                link.appendChild(nameDiv);
+
+                // Append the <a> element to the container
+                container.appendChild(link);
+            });
+            console.log("Function Called and Execution Completed");
+        }
+        async function getFriendDetails(friend) {
+            try {
+                const formData = new FormData();
+                formData.append('friend', friend);
+
+                const response = await fetch('/get-friend-details', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user groups');
+                }
+
+                const friendData = await response.json();
+                return friendData;
+            } catch (error) {
+                console.error('Error fetching user groups:', error);
+                return null;
+            }
+        }
+        async function openFriendView(friendData) {
+            const friend = await getFriendDetails(friendData);
+            console.log(friend.friend);
+            const friendContainer = document.querySelector(".selected-friend-info")
+            const emptySate = document.querySelector('#empty-state-friend');
+            friendContainer.style.display = 'flex';
+            emptySate.style.display = "none";
+            const friendName = friendContainer.querySelector("#frnd-name");
+            const friendBio = friendContainer.querySelector('#frnd-common');
+            const friendEmail = friendContainer.querySelector('#frnd-email');
+            const friendStreaks = friendContainer.querySelector('#report-streak');
+            const friendGems = friendContainer.querySelector('#report-gems');
+            const friendHearts = friendContainer.querySelector('#report-heart');
+            const friendLeaderboard = friendContainer.querySelector('#report-leaderboard');
+            const longestStreak = friendContainer.querySelector('#longest-streak');
+            const longestStreakDesc = friendContainer.querySelector('#longest-streak-desc');
+
+            const rmvBtn = friendContainer.querySelector('#frnd-rmv');
+
+            const stkBtn = friendContainer.querySelector('#frnd-stk');
+
+            rmvBtn.addEventListener('click', async () => {
+                try {
+                    if (await createConfirmBox(`Confirm Remove ${friend.friend.username} as Friend?`, "When you unfriend someone, they'll get a notification saying you've removed them.")) {
+                        await removeFriend(friend.friend.username);
+                        await generateUserFriendsList("");
+                        friendContainer.style.display = "none";
+                        emptySate.style.display = "flex";
+
+                    }
+
+                } catch (error) {
+                    console.error('Error removing friend:', error);
+                }
+            });
+
+            stkBtn.addEventListener('click', async () => {
+                try {
+                    const friendUsername = stkBtn.dataset.username; // Assuming you store the friend's username in a data attribute
+                    await someAsyncFunction(friendUsername); // Replace someAsyncFunction with the function you want to call
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
+
+            const comFrnd = friend.common_friends;
+            const comGrps = friend.common_groups;
+
+            friendName.textContent = friend.friend.username;
+            // console.log(`You and ${friend.friend.username} have ${comFrnd} friend and ${comGrps} groups in common.`);
+            friendBio.textContent = `${friend.friend.username} and you share ${comFrnd} friend and ${comGrps} groups.`;
+            friendEmail.textContent = friend.friend.email;
+            friendStreaks.textContent = friend.friend.stats[0].streaks;
+            friendGems.textContent = friend.friend.stats[0].streaks;
+            friendHearts.textContent = friend.friend.stats[0].streaks;
+            friendLeaderboard.textContent = friend.friend.stats[0].streaks;
+            // longestStreak.textContent = friend.friend.daily_tasks_data[0].longestStreak;
+            longestStreak.textContent = 32;
+            longestStreakDesc.textContent = `Longest Streak between you and ${friend.friend.username}`
+
+
+            // alert("Button Clicked"+ group.name);
+            // const crtTaskCon = document.querySelector(".group-tsk-crt-con");
+            // const crtTaskBtn = document.getElementById("create-grp-task-btn");
+            // const groupContainer = document.querySelector(".selected-group-info");
+            // const taskListContainer = document.querySelector(".group-task-list");
+            // const emptyHandler = document.querySelector(".empty-state");
+            // const groupName = document.getElementById("grp-name");
+            // const groupMembers = document.getElementById("grp-members");
+            // const groupManager = document.querySelector('.group-handle-con');
+            // const isUserAdmin = currUser == group.group_leader ? true : false;
+
+            // groupManager.dataset.grpN = group.name;
+            // groupManager.dataset.grpI = group._id;
+            // // groupManager.dataset.grpN = group.name;
+            // groupManager.dataset.isUserAdmin = isUserAdmin;
+            // groupManager.dataset.members = group.members;
+
+
+
+            // if (isUserAdmin) {
+            //     crtTaskCon.style.display = 'flex';
+            //     crtTaskBtn.dataset.grpId = group._id;
+            //     crtTaskBtn.dataset.grpName = group.name;
+            //     crtTaskBtn.dataset.isUsrAdmin = isUserAdmin;
+            // } else {
+            //     crtTaskCon.style.display = 'none';
+            // }
+
+            // groupName.textContent = group.name;
+            // groupMembers.textContent = group.members.length + " members";
+            // groupContainer.style.display = "flex";
+            // emptyHandler.style.display = "none";
+            // const groupId = group._id;
+            // console.log(groupId, isUserAdmin);
+            // generateGroupTasks(groupId, isUserAdmin);
+            // generateGrpTsk(groupId, isUserAdmin);
+            // console.log("Hello this step reached!!!!!!!!")
+
         }
     </script>
 </body>

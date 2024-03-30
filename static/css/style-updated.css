@@ -560,6 +560,20 @@ hr {
     overflow: hidden;
 }
 
+.extra-info {
+    background-color: var(--polar);
+    font-size: var(--less-imp-font-size);
+    padding: 3px;
+    color: var(--hare);
+    border-radius: var(--border-radius);
+    font-weight: 800;
+    transition: all 0.3s ease;
+    &:hover {
+        background-color: var(--eel);
+        color: var(--snow);
+    }
+}
+
 @media only screen and (max-width: 425px) {
     :root {
         --logo-font-size: 24pt;

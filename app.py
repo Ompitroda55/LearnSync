@@ -60,7 +60,7 @@ def createUser(username, password, email):
             {
                 "streaks":0,
                 "gems":0,
-                "hearts":0
+                "hearts":0,
             }
         ], 
         "groups": [],
@@ -70,7 +70,8 @@ def createUser(username, password, email):
              "daysCompeletes":[],
              "longestStreak": 0,
              "userRank":0,
-             "experience":"rookie"
+             "experience":"rookie",
+             "highestRank":10000
             }
         ],
         "pomodoro_sequences":[
@@ -718,9 +719,11 @@ def closeNotification(notification_id):
     #     return jsonify({'message': 'Notification not found'}), 404
 
 # Function to send a removal request to a friend
-@app.route("/remove-friend/<username>", methods=['POST'])
-def removeFriend(username):
+@app.route("/remove-friend", methods=['POST'])
+def removeFriend():
     try:
+        friend_username = request.form.get('friend_username')
+        
         # Assuming you have a users collection in your database
         users_collection = db["users"]
         
@@ -729,12 +732,12 @@ def removeFriend(username):
         current_username = session.get('username')
         
         # Remove the friend from the current user's friend list
-        users_collection.update_one({"username": current_username}, {"$pull": {"friends": username}})
+        users_collection.update_one({"username": current_username}, {"$pull": {"friends": friend_username}})
         
         # Remove the current user from the friend's friend list
-        users_collection.update_one({"username": username}, {"$pull": {"friends": current_username}})
+        users_collection.update_one({"username": friend_username}, {"$pull": {"friends": current_username}})
         
-        createNotification(current_username, username, 2)
+        createNotification(current_username, friend_username, 2)
 
         return jsonify({'message': 'Friend removed successfully'}), 200
     except Exception as e:
@@ -864,6 +867,22 @@ def fetch_user_stats(user_id):
         # Return None if the user is not found
         return None
 
+def getUserByUsername(username):
+    collection = db["users"]
+    
+    # Query the user by username
+    user = collection.find_one({"username": username})
+    
+    # If user is found, remove _id and password fields
+    if user:
+        del user["_id"]
+        del user["password"]
+        del user["pomodoro_sequences"]
+        del user["dailytasks"]
+        return user
+    else:
+        return None
+
 @app.route('/getUserStats', methods=['POST'])
 def getUserStats():
     userId = session.get('user_id')
@@ -878,7 +897,7 @@ def getUserStats():
 
 @app.route('/getUser/<userId>', methods = ['POST'])
 def getUser(userId):
-    request_data = request.get_json()
+    # request_data = request.get_json()
     # user_id = request_data.get('userId')
     # print(request_data)
     user = db.users.find_one({"_id" : ObjectId(userId)})
@@ -1044,6 +1063,57 @@ def getUserGroups(mode):
     except Exception as e:
         # Handle any errors that occur during the process
         return jsonify({'error': str(e)}), 500    
+
+@app.route('/get-user-friends/<mode>', methods=['POST'])
+def getUserFriends1(mode):
+    try:
+        # Get the username from the session
+        userId = session.get('user_id')
+        user = db.users.find_one({"_id" : ObjectId(userId)})
+        # print(user.json()('friends'))
+        friend_list = user['friends']
+        
+        # Get the query from the form data
+        query = request.form.get('query')
+        if query:  # If query is not empty
+            matching_friends = [friend for friend in friend_list if query.lower() in friend.lower()]
+            return jsonify(matching_friends)
+        else:  # If query is empty
+            return jsonify(friend_list)
+
+    except Exception as e:
+        print(e)
+        # Handle any errors that occur during the process
+        return jsonify({'error': str(e)}), 500    
+
+@app.route('/get-friend-details', methods=['POST'])
+def getFriendDetails():
+    try:
+        friend_name = request.form.get('friend')
+        userId = session.get('user_id')
+        user = db.users.find_one({"_id" : ObjectId(userId)})  # Assuming you have a MongoDB database connection called 'db'
+        friend = getUserByUsername(friend_name)
+
+        user1_friends = list(user.get("friends", []))  # Convert to list
+        user2_friends = list(friend.get("friends", []))  # Convert to list
+        common_friends = len(set(user1_friends).intersection(user2_friends))  # Find intersection after converting to set
+
+        user1_groups = list(user.get("groups", []))  # Convert to list
+        user2_groups = list(friend.get("groups", []))  # Convert to list
+        common_groups = len(set(user1_groups).intersection(user2_groups))  # Find intersection after converting to set
+
+        data = {
+            "friend": friend,
+            "common_friends": common_friends,
+            "common_groups": common_groups
+        }
+        print(data)
+        return jsonify(data)
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+
+
 
 @app.route("/get-friends-list", methods=["POST"])
 def getUserFriends():
@@ -1478,6 +1548,8 @@ def fetchUserDailyTasksToShow():
         # Fetch user's daily tasks
         user_id = ObjectId(session.get('user_id'))
         tasks = list(collection.find({"createdBy": user_id}))
+    
+        all_tasks_completed = all(task.get('completed', 0) == 1 for task in collection.find({'createdBy': user_id}))
         
         # Format tasks for response
         formatted_tasks = []
@@ -1491,7 +1563,7 @@ def fetchUserDailyTasksToShow():
             formatted_tasks.append(formatted_task)
         
         # Return tasks as JSON response
-        return jsonify(formatted_tasks)
+        return jsonify(formatted_tasks, all_tasks_completed)
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -1504,15 +1576,12 @@ def updateUserDailyTask():
         task_name = data.get('value')
         task_priority = data.get('level')
         task_id = data.get('id')
-        
-        # Update the task in the database (replace this with your own logic)
-        # For demonstration, we'll assume updating the task name and priority in a MongoDB collection
+
         collection.update_one(
             {'_id': ObjectId(task_id)},
             {'$set': {'task_name': task_name, 'priority': task_priority}}
         )
         
-        # Prepare the response
         response = {'message': 'Task updated successfully'}
         
         return jsonify(response), 200
@@ -1560,7 +1629,7 @@ def mark_task_as_complete():
             user_id = ObjectId(session.get('user_id'))
             if updated_task:
                 all_tasks_completed = all(task.get('completed', 0) == 1 for task in collection.find({'createdBy': user_id}))
-                print(all_tasks_completed)
+                # print(all_tasks_completed)
                 return jsonify({'message': 'Task status toggled successfully', 'all_tasks_completed': all_tasks_completed})
             else:
                 return jsonify({'error': 'Failed to toggle task status'}), 500

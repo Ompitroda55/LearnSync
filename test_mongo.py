@@ -30,4 +30,26 @@ def createDailyTask(task_name, task_priority):
         print("Error creating task:", e)
         return None
 
-createDailyTask("Om's Task", 2)
+# createDailyTask("Om's Task", 2)
+    
+def findGroupsContainingMembers(member1, member2):
+    # Initialize an empty list to store the groups containing both members
+    matching_groups = []
+
+    # Query the groups collection
+    collection = db['groups']
+    groups = collection.find()
+
+    # Iterate through each group
+    for group in groups:
+        # Check if both members are present in the group's members list
+        if member1 in group['members'] and member2 in group['members']:
+            matching_groups.append(group)
+
+    return matching_groups[0]['name']
+
+# Example usage:
+member1 = "om"
+member2 = "om"
+matching_groups = findGroupsContainingMembers(member1, member2)
+print("Groups containing both members:", matching_groups)

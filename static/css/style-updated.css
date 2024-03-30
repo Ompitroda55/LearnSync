@@ -452,6 +452,7 @@ hr {
 
 .smart-input-container > input[type=text] {
     all: unset;
+    transition: all 0.3s ease;
     border-bottom: 2px solid transparent;
     color: var(--eel);
 }
@@ -557,6 +558,20 @@ hr {
 
     z-index: 999;
     overflow: hidden;
+}
+
+.extra-info {
+    background-color: var(--polar);
+    font-size: var(--less-imp-font-size);
+    padding: 3px;
+    color: var(--hare);
+    border-radius: var(--border-radius);
+    font-weight: 800;
+    transition: all 0.3s ease;
+    &:hover {
+        background-color: var(--eel);
+        color: var(--snow);
+    }
 }
 
 @media only screen and (max-width: 425px) {

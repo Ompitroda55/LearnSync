@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Circles Drawing with JavaScript</title>
+</head>
+<body>
+    <svg id="twoCirclesSVG" width="100" height="100">
+        <!-- Circles will be appended here -->
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:rgb(255,255,0);stop-opacity:1" />
+                <stop offset="75%" style="stop-color:rgb(255,0,0);stop-opacity:1" />
+                <stop offset="75%" style="stop-color:rgb(255,0,0);stop-opacity:0" />
+            </linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="30" fill="url(#gradient)" />
+    </svg>
+
+    <script>
+        // Function to create two circles and append them to the SVG
+        function drawTwoCircles(cx, cy, r1, r2, strokeColor, strokeWidth, fillColor) {
+            var svgns = "http://www.w3.org/2000/svg";
+            var svg = document.getElementById("twoCirclesSVG");
+            
+            // Draw the first circle
+            var circle1 = document.createElementNS(svgns, "circle");
+            circle1.setAttributeNS(null, "cx", cx);
+            circle1.setAttributeNS(null, "cy", cy);
+            circle1.setAttributeNS(null, "r", r1);
+            circle1.setAttributeNS(null, "stroke", strokeColor);
+            circle1.setAttributeNS(null, "stroke-width", strokeWidth);
+            circle1.setAttributeNS(null, "fill", fillColor);
+            svg.appendChild(circle1);
+
+            // Draw the second circle
+            var circle2 = document.createElementNS(svgns, "circle");
+            circle2.setAttributeNS(null, "cx", cx);
+            circle2.setAttributeNS(null, "cy", cy);
+            circle2.setAttributeNS(null, "r", r2);
+            circle2.setAttributeNS(null, "stroke", strokeColor);
+            circle2.setAttributeNS(null, "stroke-width", strokeWidth);
+            circle2.setAttributeNS(null, "fill", fillColor);
+            svg.appendChild(circle2);
+        }
+
+        // Call the function to draw the two circles
+        drawTwoCircles(50, 50, 40, 30, "black", 2, "transparent"); // Adjust parameters as needed
+    </script>
+</body>
+</html>

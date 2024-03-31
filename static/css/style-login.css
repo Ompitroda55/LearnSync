@@ -28,7 +28,7 @@ signup-overlay {
     justify-content: center;
 }
 
-login-overlay > * {
+login-overlay>* {
     box-sizing: border-box;
 }
 
@@ -36,11 +36,13 @@ login-overlay > * {
     display: flex;
     flex-direction: column;
     text-align: center;
-    max-width: fit-content;
+    max-width: 40dvw;
     min-width: 400px;
+    height: 60dvh;
     align-items: center;
     justify-content: center;
     gap: 3svh;
+
     /* height: 100svh; */
 
     /* background-color: azure; */
@@ -62,20 +64,95 @@ login-overlay > * {
     margin-bottom: 15px;
 }
 
-.login-container input {
+.sup-username {
+    input {
+        all: unset;
+    }
+}
+
+.sup-username,
+.sup-password,
+.sup-notpass,
+.sup-email {
+    input {
+        all: unset;
+    }
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    text-align: left;
+    color: var(--wolf);
+    transition: all 300ms ease;
+    background-color: var(--snow);
+    font-family: var(--main-font);
+    border-radius: var(--link-radius);
+    border: var(--default-border-width) solid var(--swan);
+    box-shadow: 0px 4px 1px var(--swan);
+
+    &:focus-within {
+        border-color: var(--feather-green);
+        color: var(--eel);
+        box-shadow: 0px 4px 1px var(--hare);
+
+        #username-state {
+            background-color: var(--polar);
+            color: var(--hare);
+        }
+
+    }
+}
+
+.sup-email input {
+    font-size: 18px;
+}
+
+.ui-button-3:disabled {
+    background-color: var(--polar);
+    color: var(--snow);
+}
+
+#username-state,
+#password-state,
+#notpassword-state,
+#email-state {
+    transition: all 600ms ease;
+    background-color: transparent;
+    border-radius: var(--border-radius);
+    color: var(--swan);
+}
+
+#username {
+    transition: all 300ms ease;
+}
+
+#password {
+    flex: 1;
+}
+
+/* .login-container input {
     padding: 10px 0;
     text-align: left;
-    color: var(--macaw);
+    color: var(--wolf);
     background-color: var(--snow);
     font-family: var(--main-font);
     border-radius: var(--link-radius);
     box-shadow: 0px 6px 1px var(--hare);
-    border: 1px solid var(--swan);
+    border: var(--default-border-width) solid var(--swan);
     width: 100%;
     padding: 10px;
     font-size: var(--normal-font-size);
+    transition: all 300ms ease;
     margin-bottom: 10px;
-}
+    outline: none;
+    &:focus {
+        border-color: var(--feather-green);
+        color: var(--eel);
+    box-shadow: 0px 8px 1px var(--swan);
+
+    }
+} */
 
 .login-container .link-secondary {
     text-decoration: none;
@@ -116,24 +193,39 @@ login-overlay > * {
     flex-direction: column;
 }
 
-#step1, #step2 {
+#step1,
+#step2 {
     display: flex;
 }
-#prev-button, #next-button {
-    all: unset;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+
+#prev-button,
+#next-button {
+    background-color: transparent;
+    color: var(--wolf);
+
+    &:hover {
+        background-color: var(--swan);
+        color: var(--eel);
+    }
 }
 
 .nav-form {
-    display: flex;
+    border: var(--default-border-width) solid transparent;
+    border-radius: 999px;
+    transition: all 300ms ease;
+    display: flex !important;
+    flex-direction: row;
+
     /* background-color: black; */
-    justify-content: space-between;
-    width: 100%;
+    /* justify-content: space-between; */
+    &:hover {
+        border-color: var(--swan);
+        /* background-color: var(--foot-green); */
+    }
+
+    /* width: 100%; */
 }
 
-#otp-field,
 #verify-otp {
     display: flex;
     position: fixed;
@@ -141,6 +233,54 @@ login-overlay > * {
     width: fit-content;
     padding: 5px;
 }
+
 #verify-email:hover {
     background-color: var(--mask-green);
+}
+
+.otp-fields {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 80%;
+
+    /* padding: 10px; */
+    align-items: center;
+    justify-content: center;
+
+    >* {
+        transition: all 0.3s ease;
+    }
+
+    >input {
+        /* width: 15px;
+        height: ; */
+        height: 30px;
+        color: var(--eel);
+        font-weight: 800;
+        text-align: center;
+        background-color: var(--snow);
+        font-family: var(--main-font);
+        border-radius: 15px;
+        border: var(--default-border-width) solid var(--swan);
+        box-shadow: 0px 4px 1px var(--swan);
+        aspect-ratio: 1;
+        font-size: var(--default-font-size);
+
+        /* background-color: orange; */
+        &:focus {
+            background-color: var(--foot-green);
+            outline-color: var(--hare);
+        }
+    }
+}
+
+.send-mail-btn {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    &:hover {
+        background-color: var(--feather-green);
+        color: var(--snow);
+    }
 }

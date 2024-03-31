@@ -13,8 +13,8 @@
     /* --used for footer */
     /* --eel: #4b4b4b;
     --snow: #ffffff; */
-    --eel: #ffffff;
-    --snow: #4b4b4b;
+    /* --eel: #ffffff;
+    --snow: #4b4b4b; */
 
 
     /* Secondary Colours */
@@ -548,6 +548,10 @@ hr {
     }
     /* width: 15px; */
     /* height: 15px; */
+    &:disabled {
+        background-color: var(--polar);
+        color: var(--swan);
+    }
 }
 
 .info-popup {

@@ -19,16 +19,27 @@
 <body>
     <!-- Code for Login Overlay Displayed -->
     <login-overlay id="login-overlay">
-        <a id="close-login" class="ui-button">Close</a>
+        <!-- <a id="close-login" class="ui-button">Close</a> -->
+        <button class="ui-button-2" id="close-login">
+            <span class="material-symbols-outlined" style="font-size: 28px;">
+                close
+                </span>
+        </button>
         <form action="/login" id="form-login" method="post">
             <div class="login-container">
                 <div class="heading">Login</div>
-                <input type="text" name="username" id="username" placeholder="Username">
-                <input type="password" name="password" id="password" placeholder="Password">
-                <a href="#" class="link-secondary" id="submit-link">Login</a>
-                <div class="alert-box" id="alert-login-form">Oh O! Invalid Username</div>
-                <!-- <a href="#" class="link-secondary">Google</a> -->
-                <div class="link-primary" id="signup-link" style="display: none;">Signup Instead</div>
+                <div class="sup-username">
+                    <input type="text" name="username" id="username" placeholder="Username">
+                </div>
+                <div class="sup-password" style="position: relative;">
+                    <input type="password" name="password" id="password" placeholder="Password">
+                    <div class="alert-box-warn">
+                        <span class="material-symbols-outlined" style="font-size: 28px; color: var(--cardinal);">
+                            error
+                        </span><span id="alert-box-span"></span>
+                    </div>
+                </div>
+                <a href="#" class="link-primary" id="submit-link">Login</a>
             </div>
         </form>
     </login-overlay>
@@ -221,6 +232,106 @@
                 fetchRandomRiddle();
             });
         });
+    </script>
+    <script>
+        window.addEventListener('scroll', function () {
+    var scrollPosition = window.scrollY;
+    var navHeight = document.querySelector('.nav').offsetHeight;
+    var navElement = document.querySelector('.nav');
+
+    if (scrollPosition > navHeight) {
+        navElement.classList.add('nav-border');
+    } else {
+        navElement.classList.remove('nav-border');
+    }
+});
+
+window.addEventListener('scroll', function () {
+    var targetElement = document.getElementById('target-1');
+    var targetElement1 = document.getElementById('target-2');
+    // Get the height from the top of the page
+    var elementHeightFromTop = targetElement.offsetTop;
+    var elementHeightFromTop1 = targetElement1.offsetTop;
+
+    // Get the current scroll position from the top of the page
+    var currentScroll = window.pageYOffset;
+
+    if (currentScroll > elementHeightFromTop - 60 && currentScroll < elementHeightFromTop1 - 60) {
+        document.getElementById('top-get-started').style.display = 'block';
+    } else {
+        document.getElementById('top-get-started').style.display = 'none';
+    }
+    console.log('Element height from top of the page: ' + elementHeightFromTop + ' pixels');
+    console.log('Current scroll position from the top: ' + currentScroll + ' pixels');
+});
+
+document.getElementById('open-login').addEventListener('click', function() {
+    // Show the overlay
+    document.getElementById('login-overlay').style.display = 'flex';
+
+    // Disable all focusable elements
+});
+
+document.getElementById('close-login').addEventListener('click', function() {
+    // Hide the overlay
+    document.getElementById('login-overlay').style.display = 'none';
+
+    // Enable all focusable elements
+});
+
+AOS.init();
+
+// Login Logic for Page
+async function checkCredentials(username, password) {
+    const requestBody = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+
+    const response = await fetch('/check-credentials', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: requestBody
+    });
+
+    const data = await response.json();
+    return data.message;
+}
+
+
+document.querySelector('#submit-link').addEventListener('click', async function (e) {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const isCredsValid = await checkCredentials(username, password);
+    console.log(isCredsValid);
+    const alertBox = document.querySelector(".alert-box-warn");
+    const alertBoxSpan = document.querySelector("#alert-box-span");
+    const signupLink = document.getElementById('signup-link');
+
+    if (isCredsValid === 'Valid Creds') {
+        document.getElementById('form-login').submit();
+    } else if (isCredsValid === 'Incorrect Password') {
+        alertBox.style.display = 'flex';
+        alertBoxSpan.textContent = 'Incorrect Password';
+        setTimeout(function () {
+            alertBox.style.display = 'none';
+        }, 3000)
+    } else if (isCredsValid === 'Username not available') {
+        alertBox.style.display = 'flex';
+        alertBoxSpan.textContent = 'Username not found';
+        setTimeout(function () {
+            alertBox.style.display = 'none';
+        }, 3000)
+        // signupLink.style.display = 'flex';
+    } else {
+        alertBox.style.display = 'flex';
+        alertBoxSpan.textContent = 'Invalid State! Reload Page.';
+        setTimeout(function () {
+            alertBox.style.display = 'none';
+        }, 3000)
+    }
+});
+
     </script>
 </body>
 

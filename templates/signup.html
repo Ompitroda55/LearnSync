@@ -13,6 +13,7 @@
     <signup-overlay id="signup-overlay">
         <!-- <button id="close-login" class="link-tertiary">Close</button> -->
         <form id="signup-form">
+
             <div class="login-container">
                 <div class="heading">Signup</div>
                 <div id="step1" class="form-step">
@@ -23,10 +24,8 @@
                             check
                         </span>
                     </div>
+
                     <script>
-
-
-
                         document.querySelector("#username").addEventListener('input', async function () {
                             var state = document.querySelector('#username-state');
                             var passCon = document.querySelector('.sup-password');
@@ -35,10 +34,9 @@
                             var notPass = document.querySelector('#not-pass');
 
                             console.log(await checkUsername(this.value.trim()));
-                            if (await checkUsername(this.value) == true && this.value.trim() != "") {
+                            if (await checkUsername(this.value) == true && this.value.trim() != "" && !this.value.includes(' ') && this.value.length < 12) {
                                 console.log("Valid Input");
                                 state.style.backgroundColor = 'var(--feather-green)';
-                                state.style.color = "var(--snow)";
                                 pass.disabled = false;
                                 notPass.disabled = false;
                                 passCon.style.backgroundColor = "var(--snow)";
@@ -138,7 +136,6 @@
                         document.querySelector("#not-pass").addEventListener('input', async function () {
                             var state = document.querySelector('#notpassword-state');
                             var passCon = document.querySelector('.sup-notpass');
-                            var uiBtns = document.querySelectorAll('.ui-button-3');
 
                             var pass = document.querySelector('#password');
                             var notPass = document.querySelector('#not-pass');
@@ -147,27 +144,28 @@
                                 console.log("Valid Password");
                                 state.style.backgroundColor = 'var(--feather-green)';
                                 state.style.color = "var(--snow)";
-                                uiBtns[1].style.opacity = '1';
+                                document.querySelector('#state-button').style.opacity = '1';
+
 
 
                             } else if (this.value.trim() == "") {
                                 state.style.backgroundColor = "var(--polar)";
                                 state.style.color = "var(--swan)";
-                                uiBtns.forEach(element => {
-                                    element.style.opacity = '0';
-                                });
+                                document.querySelector('#state-button').style.opacity = '0';
+
+
 
                             } else {
                                 state.style.backgroundColor = "var(--cardinal)";
                                 state.style.color = "var(--snow)";
-                                uiBtns.forEach(element => {
-                                    element.style.opacity = '0';
-                                });
+                                document.querySelector('#state-button').style.opacity = '0';
+
 
                             }
 
                         });
                     </script>
+                    <span class="less-imp-text" style="max-width: 80%;">Usernames are unique identifiers that can contain special characters, alphabets, or numbers but not spaces. They must be less than 12 characters in length.</span>
                     <span class="less-imp-text" style="max-width: 80%;">Password must be at least 8 characters with <u>a
                             uppercase, a lowercase, a digit, and a special character</u>.</span>
                     <!-- <span>or continue with</span> 
@@ -181,119 +179,11 @@
                             check
                         </span>
                     </div>
-                    <button class="ui-button-3 send-mail-btn"><span class="material-symbols-outlined" style="font-size: 28px;" id="send-mail-icon">
+                    <button class="ui-button-3 send-mail-btn"><span class="material-symbols-outlined"
+                            style="font-size: 28px;" id="send-mail-icon">
                             outgoing_mail
                         </span>&nbsp;Get OTP</button>
-                    <script>
-                        const sendMailBtn = document.querySelector(".send-mail-btn");
-                        const sendMailIcon = document.getElementById("send-mail-icon");
 
-                        sendMailBtn.addEventListener("click", async function () {
-                            var email = document.querySelector("#email").value;
-                            var emailCon = document.querySelector(".sup-email");
-                            var otpTip = document.querySelector("#otp-tip");
-                            sendMailIcon.textContent = "pending";
-                            const otp = await verifyEmail(email);
-                            this.style.position = "absolute";
-                            this.style.left = "-9999px";
-
-                            emailCon.style.backgroundColor = "var(--polar)";
-                            emailCon.style.color = "var(--swan)";
-                            emailCon.style.cursor = "pointer";
-                            email.disabled = true;
-                            otpTip.style.display="flex";
-                            // alert(otp);
-                            if (otp) {
-                                console.log(otp);
-                                const otpFields = document.querySelector('.otp-fields');
-                                otpFields.style.display = 'flex';
-                                for (let i = 1; i <= 6; i++) {
-                                    var inputField = document.getElementById('otp-field-' + i);
-                                    inputField.style.opacity = "1";
-                                }
-                            }
-
-                            // Code to execute when the send-mail-btn is clicked
-                        });
-
-                        function validateEmail(email) {
-                            // Regular expression pattern for validating email addresses
-                            var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                            return regex.test(email);
-                        }
-                        document.querySelector("#email").addEventListener('input', async function () {
-                            var state = document.querySelector('#email-state');
-                            var passCon = document.querySelector('.sup-password');
-                            var getOTPBtn = document.querySelector('.send-mail-btn');
-                            getOTPBtn.style.display = 'none';
-                            var pass = document.querySelector('#password');
-                            var notPass = document.querySelector('#not-pass');
-                            var otpTip = document.querySelector('#otp-tip');
-
-                            // console.log(await checkUsername(this.value.trim()));
-                            console.log("****************************************************************");
-
-                            console.log(validateEmail(this.value.trim()));
-                            console.log(this.value.trim() != "");
-                            console.log(await checkEmail(this.value.trim()) == true);
-                            console.log("****************************************************************");
-
-                            // console.log(validateEmail(this.value.trim()) && this.value.trim() != "" && await checkEmail(this.value.trim()) == 'true');
-                            if (validateEmail(this.value.trim()) && this.value.trim() != "" && await checkEmail(this.value.trim()) == true) {
-                                console.log("Valid Email");
-                                state.style.backgroundColor = 'var(--feather-green)';
-                                state.style.color = "var(--snow)";
-                                // var otpField = document.querySelector(".otp-fields");
-                                // otpField.style.display = "flex";
-                                // for (var i = 1; i <= 6; i++) {
-                                //     var inputField = document.getElementById('otp-field-' + i);
-                                //     inputField.style.opacity = "1";
-                                var styleElement = document.createElement('style');
-
-                                // Define your CSS rule with !important
-                                var cssRule = '.send-mail-btn { display: flex !important; opacity: 1 !important; }';
-
-                                // Append the CSS rule to the style element's innerHTML
-                                styleElement.innerHTML = cssRule;
-
-                                // Append the style element to the document's head
-                                document.head.appendChild(styleElement);
-                                // }
-                                getOTPBtn.style.display = "flex";
-                                getOTPBtn.style.opacity = "1";
-                                // otpTip.style.display = 'flex';
-
-                            } else if (this.value.trim() == "") {
-                                state.style.backgroundColor = "var(--polar)";
-                                state.style.color = "var(--swan)";
-                                for (var i = 1; i <= 6; i++) {
-                                    var inputField = document.getElementById('otp-field-' + i);
-                                    inputField.style.opacity = "0";
-
-                                }
-                                getOTPBtn.style.display = "none";
-                                getOTPBtn.style.opacity = "0";
-                                otpTip.style.display = 'none';
-
-
-                            } else {
-                                state.style.backgroundColor = "var(--cardinal)";
-                                state.style.color = "var(--snow)";
-
-                                for (var i = 1; i <= 6; i++) {
-                                    var inputField = document.getElementById('otp-field-' + i);
-                                    inputField.style.opacity = "0";
-
-                                }
-                                getOTPBtn.style.display = "none";
-                                getOTPBtn.style.opacity = "0";
-                                otpTip.style.display = 'none';
-
-                            }
-
-
-                        });
-                    </script>
                     <div class="otp-fields">
                         <input type="text" maxlength="1" id="otp-field-1"
                             onkeyup="moveToNextField(event, 'otp-field-2')">
@@ -309,8 +199,32 @@
                     </div>
 
                     <span id="otp-tip" class="less-imp-text">Enter OTP sent to your Email address.</span>
-
+                    <div class="signup-link-con">
+                        <div class="alert-box-warn">
+                            <span class="material-symbols-outlined" style="font-size: 28px; color: var(--cardinal);">
+                                error
+                            </span><span id="alert-box-span"></span>
+                        </div>
+                        <button class="link-primary" id="signup-link">Signup</button>
+                    </div>
                     <script>
+                        document.querySelector("#signup-link").addEventListener("click", function () {
+                            // nago mago;
+                            var res = verifyOtp(receivedOTP);
+                            if (res == false) {
+                                var alertbox = document.querySelector('.alert-box-warn');
+                                var alertSpan = document.querySelector('#alert-box-span');
+                                alertSpan.textContent = "Invalid OTP";
+                                alertbox.style.display = 'flex';
+                                for (let i = 1; i <= 6; i++) {
+                                    document.getElementById('otp-field-' + i).value = '';
+                                }
+                                setTimeout(function () {
+                                    alertbox.style.display = 'none';
+                                }, 3000)
+                            }
+                        });
+
                         function moveToNextField(event, nextFieldId) {
                             var maxLength = parseInt(event.target.getAttribute('maxlength'));
                             var currentLength = event.target.value.length;
@@ -321,30 +235,50 @@
                     </script>
                 </div>
                 <div class="nav-form">
-                    <button id="prev-button" class="ui-button-3">
-                        <span class="material-symbols-outlined" style="font-size: 28px;">
-                            arrow_back
-                        </span>
 
-                    </button>
-                    <button id="next-button" class="ui-button-3">
+                    <button id="state-button" class="ui-button-2">
                         <span class="material-symbols-outlined" style="font-size: 28px;">
                             arrow_forward
                         </span>
                     </button>
                     <script>
-                        document.querySelector("#next-button").addEventListener('click', function () {
-                            var uiBtns = document.querySelectorAll('.ui-button-3');
-                            uiBtns[0].style.display = "flex";
-                            uiBtns[0].style.opacity = "1";
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var currentState = 0;
+                            const steps = document.querySelectorAll('.form-step');
+                            steps[0].style.display = 'none';
+                            steps[1].style.display = 'none';
+                            viewManager(0); // show first form
+                            document.querySelector('#state-button').style.opacity = '0';
 
-                        });
-                        document.querySelector("#prev-button").addEventListener('click', function () {
-                            var step = document.querySelector('.form-step-2');
-                            step.classList.remove('form-step-2');
-                            step.classList.add('form-step');
-                        });
+
+                            function viewManager(viewStep = null) {
+                                const stateButton = document.querySelector('#state-button');
+                                const stateButtonSpan = stateButton.querySelector('.material-symbols-outlined');
+                                const steps = document.querySelectorAll('.form-step');
+                                if (viewStep == 0) {
+                                    currentState = 0;
+                                    steps[0].style.display = 'flex';
+                                    steps[1].style.display = 'none';
+                                    stateButtonSpan.textContent = "arrow_forward";
+
+                                } else {
+                                    currentState = 1;
+                                    steps[1].style.display = 'flex';
+                                    steps[0].style.display = 'none';
+                                    stateButtonSpan.textContent = "arrow_back";
+                                }
+                            }
+                            document.querySelector("#state-button").addEventListener('click', function () {
+                                if (currentState == 0) {
+                                    viewManager(1);
+                                } else {
+                                    viewManager(0);
+                                }
+                            });
+                        })
+
                     </script>
+
                 </div>
             </div>
         </form>
@@ -363,46 +297,121 @@
                     // Or perform client-side validation before submitting the form data
                 });
             });
+
+            var receivedOTP = 0;
+            const sendMailBtn = document.querySelector(".send-mail-btn");
+            const sendMailIcon = document.getElementById("send-mail-icon");
+
+            sendMailBtn.addEventListener("click", async function () {
+                var email = document.querySelector("#email").value;
+                var emailCon = document.querySelector(".sup-email");
+                var otpTip = document.querySelector("#otp-tip");
+                sendMailIcon.textContent = "pending";
+                const otp = await verifyEmail(email);
+                receivedOTP = otp;
+                this.style.position = "absolute";
+                this.style.left = "-9999px";
+                var link = document.querySelector("#signup-link");
+                console.log(link);
+                link.style.display = "block";
+
+                emailCon.style.backgroundColor = "var(--polar)";
+                emailCon.style.color = "var(--swan)";
+                emailCon.style.cursor = "pointer";
+                email.disabled = true;
+                otpTip.style.display = "flex";
+                // alert(otp);
+                if (otp) {
+                    console.log(otp);
+                    const otpFields = document.querySelector('.otp-fields');
+                    otpFields.style.display = 'flex';
+                    for (let i = 1; i <= 6; i++) {
+                        var inputField = document.getElementById('otp-field-' + i);
+                        inputField.style.opacity = "1";
+                    }
+                }
+
+                // Code to execute when the send-mail-btn is clicked
+            });
+
+            function validateEmail(email) {
+                // Regular expression pattern for validating email addresses
+                var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return regex.test(email);
+            }
+
+
+
+            document.querySelector("#email").addEventListener('input', async function () {
+                var state = document.querySelector('#email-state');
+                var passCon = document.querySelector('.sup-password');
+                var getOTPBtn = document.querySelector('.send-mail-btn');
+                getOTPBtn.style.display = 'none';
+                var pass = document.querySelector('#password');
+                var notPass = document.querySelector('#not-pass');
+                var otpTip = document.querySelector('#otp-tip');
+
+                // console.log(await checkUsername(this.value.trim()));
+                console.log("****************************************************************");
+
+                console.log(validateEmail(this.value.trim()));
+                console.log(this.value.trim() != "");
+                console.log(await checkEmail(this.value.trim()) == true);
+                console.log("****************************************************************");
+
+                // console.log(validateEmail(this.value.trim()) && this.value.trim() != "" && await checkEmail(this.value.trim()) == 'true');
+                if (validateEmail(this.value.trim()) && this.value.trim() != "" && await checkEmail(this.value.trim()) == true) {
+                    console.log("Valid Email");
+                    state.style.backgroundColor = 'var(--feather-green)';
+                    state.style.color = "var(--snow)";
+
+                    var styleElement = document.createElement('style');
+
+                    var cssRule = '.send-mail-btn { display: flex !important; opacity: 1 !important; }';
+
+                    styleElement.innerHTML = cssRule;
+
+                    document.head.appendChild(styleElement);
+                    // }
+                    getOTPBtn.style.display = "flex";
+                    getOTPBtn.style.opacity = "1";
+                    // otpTip.style.display = 'flex';
+
+                } else if (this.value.trim() == "") {
+                    state.style.backgroundColor = "var(--polar)";
+                    state.style.color = "var(--swan)";
+                    for (var i = 1; i <= 6; i++) {
+                        var inputField = document.getElementById('otp-field-' + i);
+                        inputField.style.opacity = "0";
+
+                    }
+                    getOTPBtn.style.display = "none";
+                    getOTPBtn.style.opacity = "0";
+                    otpTip.style.display = 'none';
+
+
+                } else {
+                    state.style.backgroundColor = "var(--cardinal)";
+                    state.style.color = "var(--snow)";
+
+                    for (var i = 1; i <= 6; i++) {
+                        var inputField = document.getElementById('otp-field-' + i);
+                        inputField.style.opacity = "0";
+
+                    }
+                    getOTPBtn.style.display = "none";
+                    getOTPBtn.style.opacity = "0";
+                    otpTip.style.display = 'none';
+
+                }
+
+
+            });
         </script>
     </signup-overlay>
     <!-- <script src="../static/js/signup.js"></script> -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const formSteps = document.querySelectorAll('.form-step');
-            let currentStep = 0;
-            updateNavButtons();
 
-            document.querySelector('#prev-button').addEventListener('click', function (e) {
-                e.preventDefault();
-                currentStep = Math.max(0, currentStep - 1);
-                updateNavButtons();
-            });
-
-            document.querySelector('#next-button').addEventListener('click', function (e) {
-                e.preventDefault();
-                currentStep = Math.min(formSteps.length - 1, currentStep + 1);
-                updateNavButtons();
-            });
-
-            function updateNavButtons() {
-                formSteps.forEach((step, index) => {
-                    step.style.display = index === currentStep ? 'flex' : 'none';
-                });
-
-                const prevButton = document.querySelector('#prev-button');
-                const nextButton = document.querySelector('#next-button');
-                // const signupLinkButton = document.querySelector('#signup-link');
-
-                prevButton.disabled = currentStep === 0;
-                nextButton.disabled = currentStep === formSteps.length - 1;
-
-                // if (currentStep === formSteps.length - 1) {
-                //     signupLinkButton.disabled = false;
-                // } else {
-                //     signupLinkButton.disabled = true;
-                // }
-            }
-        });
 
 
         async function checkUsername(username) {
@@ -445,6 +454,7 @@
         function verifyOtp(otp) {
 
             event.preventDefault(); // Prevent default form submission behavior
+            console.log(otp + "This is otp inside me.");
             var OTP = '';
             // Loop through each OTP field and concatenate its value
             for (var i = 1; i <= 6; i++) {
@@ -479,38 +489,14 @@
                         console.error('Error:', error);
                         alert("An error occurred while submitting the form.");
                     });
+                return true;
             } else {
                 // OTP verification failed
                 // Show error message or take appropriate action
-                alert('Invalid OTP. Please try again.');
+                return false;
             }
 
         }
-
-        // document.querySelector('#signup-link').addEventListener('click', async function (e) {
-        //     e.preventDefault();
-        //     const username = document.getElementById('username').value;
-        //     const password = document.getElementById('password').value;
-        //     const not_pass = document.getElementById('not-pass').value;
-        //     const email = document.getElementById('email').value;
-        //     // const isUsernameAvailable = await checkUsername(username);
-        //     // const isEmailAvailable = await checkEmail(email);
-
-        //     // if (isEmailAvailable && isUsernameAvailable && password === not_pass) { console.log('Username is available and passwords match. Submitting form...'); }
-
-        //     if (password === not_pass) {
-        //         // alert("Tumhara otp hain..." + otp);
-
-        //         // verifyOtp(otp);
-
-        //     } else if (!isUsernameAvailable) {
-        //         alert('Username already exists. Please choose a different username.');
-        //     } else if (!isEmailAvailable) {
-        //         alert('Email already exists. Please choose a different email.');
-        //     } else if (password !== not_pass) {
-        //         alert('Passwords do not match. Please re-enter your passwords.');
-        //     }
-        // });
 
         document.addEventListener('DOMContentLoaded', function () {
             var passCon = document.querySelector('.sup-password');

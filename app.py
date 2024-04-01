@@ -499,24 +499,24 @@ def insertFlashCard():
 
 # Function to Handle Signup
 
-@app.route('/sign-up', methods=['GET'])
+@app.route('/sign-up', methods=['POST','GET'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
 
-        # user = createUser(username, password, email)
+        user = createUser(username, password, email)
 
-        # collection = db["users"]
-        # user = collection.find_one({'username': username})
-        # session['username'] = user['username']
-        # session['user_id'] = str(user['_id'])
-        # # user_id = str(user.inserted_id)
-        # # user = fetch_user_by_id(user_id)
-        # # print(user)
-        # user = collection.find_one({'username': username})
-        # return render_template('dashboard.html', user=user)
+        collection = db["users"]
+        user = collection.find_one({'username': username})
+        session['username'] = user['username']
+        session['user_id'] = str(user['_id'])
+        # user_id = str(user.inserted_id)
+        # user = fetch_user_by_id(user_id)
+        # print(user)
+        user = collection.find_one({'username': username})
+        return render_template('dashboard.html', user=user)
         print("I am Called")
         # return render_template('home_alt.html')
     else:

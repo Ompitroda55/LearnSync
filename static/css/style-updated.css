@@ -432,6 +432,8 @@ hr {
     gap: 5px;
     background-color: var(--snow);
     position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     top: -100px;
     border-radius: var(--link-radius);
     border: none;

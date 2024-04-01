@@ -85,6 +85,7 @@ login-overlay>* {
     text-align: left;
     color: var(--wolf);
     transition: all 300ms ease;
+    gap: 5px;
     background-color: var(--snow);
     font-family: var(--main-font);
     border-radius: var(--link-radius);
@@ -178,15 +179,23 @@ login-overlay>* {
     position: absolute;
     top: 20px;
     left: 20px;
-    background-color: var(--cardinal);
+    background-color: var(--polar);
     /* box-shadow: 0px 6px 1px var(--cardinal-mask); */
     width: fit-content;
     padding: 5px;
+    transition: all 500ms ease;
+    .material-symbols-outlined {
+        color: var(--cardinal);
+    }
+    &:hover {
+        background-color: var(--cardinal);
+        .material-symbols-outlined {
+            color: var(--snow);
+        }
+    }
 }
 
-#close-login:hover {
-    background-color: var(--cardinal-light);
-}
+
 
 .form-step {
     display: none;
@@ -278,9 +287,27 @@ login-overlay>* {
 .send-mail-btn {
     display: none !important;
     align-items: center;
+    justify-content: center;
     padding: 5px;
     &:hover {
         background-color: var(--feather-green);
         color: var(--snow);
     }
 }
+
+#signup-link {
+    display: none;
+    /* display: flex; */
+    /* flex-direction: row; */
+    border: 3px solid var(--swan);
+    /* align-items: center; */
+    /* text-align: center; */
+}
+
+.signup-link-con {
+    position: relative;
+}
+
+/* .alert-box-warn {
+    top: -50px !important;
+} */

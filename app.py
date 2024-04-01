@@ -11,6 +11,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
 
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -263,82 +264,87 @@ def checkCredentials():
 
 @app.route('/send-verification-email', methods=['POST'])
 def send_verification_email():
-    # Get email and generate OTP
-    data = request.get_json()
-    email = data.get('email')
-    # print(email)
-    otp = str(random.randint(100000, 999999))
+    try:
+        # Get email and generate OTP
+        data = request.get_json()
+        email = data.get('email')
+        # print(email)
+        otp = str(random.randint(100000, 999999))
 
-    # Construct HTML content for the email
-    subject = 'Email Verification Mail'
-    html_content = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{subject}</title>
-        <style>
-            body {{
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #ffffff;
-            }}
-            .container {{
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                background-color: #58cc02;
-                color: #ffffff;
-                padding: 20px;
-            }}
-            .logo {{
-                font-size: 2.5rem;
-                font-family: 'Varela Round', sans-serif;
-                font-weight: 800;
-                margin-bottom: 20px;
-            }}
-            .subject {{
-                font-size: 1.5rem;
-                font-family: 'Poppins', sans-serif;
-                margin-bottom: 20px;
-            }}
-            .text {{
-                font-size: 1rem;
-                font-family: 'Poppins', sans-serif;
-            }}
-            #email, #otp {{
-                font-weight: 600;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <span class="logo">LearnSync</span>
-            <span class="subject">{subject}</span>
-            <div class="text">Your OTP for email <span id="email">{email}</span> is <span id="otp">{otp}</span>.</div>
-        </div>
-    </body>
-    </html>
-    """.format(subject=subject, email=email, otp=otp)
+        # Construct HTML content for the email
+        subject = 'Email Verification Mail'
+        html_content = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>{subject}</title>
+            <style>
+                body {{
+                    margin: 0;
+                    padding: 0;
+                    font-family: Arial, sans-serif;
+                    background-color: #ffffff;
+                }}
+                .container {{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: #58cc02;
+                    color: #ffffff;
+                    padding: 20px;
+                }}
+                .logo {{
+                    font-size: 2.5rem;
+                    font-family: 'Varela Round', sans-serif;
+                    font-weight: 800;
+                    margin-bottom: 20px;
+                }}
+                .subject {{
+                    font-size: 1.5rem;
+                    font-family: 'Poppins', sans-serif;
+                    margin-bottom: 20px;
+                }}
+                .text {{
+                    font-size: 1rem;
+                    font-family: 'Poppins', sans-serif;
+                }}
+                #email, #otp {{
+                    font-weight: 600;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <span class="logo">LearnSync</span>
+                <span class="subject">{subject}</span>
+                <div class="text">Your OTP for email <span id="email">{email}</span> is <span id="otp">{otp}</span>.</div>
+            </div>
+        </body>
+        </html>
+        """.format(subject=subject, email=email, otp=otp)
 
-    # Create MIME message
-    msg = MIMEMultipart()
-    msg['From'] = 'taccovan001@gmail.com'
-    msg['To'] = email
-    msg['Subject'] = subject
-    msg.attach(MIMEText(html_content, 'html'))
+        # Create MIME message
+        msg = MIMEMultipart()
+        msg['From'] = 'taccovan001@gmail.com'
+        msg['To'] = email
+        msg['Subject'] = subject
+        msg.attach(MIMEText(html_content, 'html'))
 
-    # Connect to SMTP server and send email
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login('taccovan001@gmail.com', 'zrntrzoqwjgdhjzs')  # Update with your email password
-    server.sendmail(email, email, msg.as_string())
-    server.quit()
+        # Connect to SMTP server and send email
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login('taccovan001@gmail.com', 'zrntrzoqwjgdhjzs')  # Update with your email password
+        server.sendmail(email, email, msg.as_string())
+        server.quit()
 
-    return jsonify({'otp': otp})
+        return jsonify({'otp': otp})
+
+    except Exception as e:
+        # If an exception occurs, return an error response
+        return jsonify({'error': str(e)})
 
 def createFlashCard(name, category, hashtags_list, flashcard_data, user_name):
     collection = db["flashcards"]
@@ -492,26 +498,27 @@ def insertFlashCard():
 #
 
 # Function to Handle Signup
-import sendMail
-@app.route('/sign-up', methods=['POST','GET'])
+
+@app.route('/sign-up', methods=['GET'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
 
-        user = createUser(username, password, email)
+        # user = createUser(username, password, email)
 
-        collection = db["users"]
-        user = collection.find_one({'username': username})
-        session['username'] = user['username']
-        session['user_id'] = str(user['_id'])
-        # user_id = str(user.inserted_id)
-        # user = fetch_user_by_id(user_id)
-        # print(user)
-        user = collection.find_one({'username': username})
-        return render_template('dashboard.html', user=user)
-        return render_template('home_alt.html')
+        # collection = db["users"]
+        # user = collection.find_one({'username': username})
+        # session['username'] = user['username']
+        # session['user_id'] = str(user['_id'])
+        # # user_id = str(user.inserted_id)
+        # # user = fetch_user_by_id(user_id)
+        # # print(user)
+        # user = collection.find_one({'username': username})
+        # return render_template('dashboard.html', user=user)
+        print("I am Called")
+        # return render_template('home_alt.html')
     else:
         return render_template('signup.html')
 

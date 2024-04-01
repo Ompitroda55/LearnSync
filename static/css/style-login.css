@@ -239,7 +239,7 @@ login-overlay>* {
 }
 
 .otp-fields {
-    display: flex;
+    display: none;
     flex-direction: row;
     gap: 10px;
     width: 80%;
@@ -276,7 +276,7 @@ login-overlay>* {
 }
 
 .send-mail-btn {
-    display: flex;
+    display: none !important;
     align-items: center;
     padding: 5px;
     &:hover {

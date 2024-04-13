@@ -1182,9 +1182,12 @@ def getUserFriends1(mode):
 def getFriendDetails():
     try:
         friend_name = request.form.get('friend')
+        print(friend_name)
         userId = session.get('user_id')
         user = db.users.find_one({"_id" : ObjectId(userId)})  # Assuming you have a MongoDB database connection called 'db'
         friend = getUserByUsername(friend_name)
+        # print(friend)
+        print(user)
 
         user1_friends = list(user.get("friends", []))  # Convert to list
         user2_friends = list(friend.get("friends", []))  # Convert to list

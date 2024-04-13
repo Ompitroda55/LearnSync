@@ -2095,7 +2095,7 @@ Help Menu
 .confirm-box-main {
     display: flex;
     /* border: none; */
-    max-width: 25dvw;
+    max-width: 20dvw;
     flex-direction: column;
     padding: 0;
     /* background-color: orange; */
@@ -2253,7 +2253,6 @@ align-items: center;
     font-size: var(--less-imp-font-size);
     color: var(--eel);
     font-weight: 800;
-    color: var(--hare);
 }
 
 .friend-stats-icon{

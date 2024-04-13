@@ -211,20 +211,25 @@
 
 .link-secondary {
     text-decoration: none;
-    background-color: var(--macaw);
-    color: var(--snow);
+    background-color: var(--snow);
+    color: var(--macaw);
     font-family: var(--main-font);
     padding: 10px;
     border-radius: var(--link-radius);
     box-shadow: 0px 6px 1px var(--macaw-mask-light);
     transition: background-color.2s ease-in-out;
-    /* border: 3px solid var(--swan); */
+    border: 3px solid var(--swan);
     width: 100%;
     text-align: center;
     cursor: pointer;
+    white-space: no-wrap;
     font-size: var(--sub-heading-font-size);
     max-width: fit-content;
     min-width: 10svw;
+    &:hover {
+        background-color: var(--macaw);
+        color: var(--snow);
+    }
 }
 
 .link-secondary:hover {
@@ -367,7 +372,7 @@
     border: var(--default-border-width) solid var(--swan);
     border-radius: var(--border-radius);
     padding: 15px;
-    max-width: 960px;
+    max-width: 720px;
     background-color: var(--snow);
 }
 

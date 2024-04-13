@@ -49,7 +49,27 @@ def findGroupsContainingMembers(member1, member2):
     return matching_groups[0]['name']
 
 # Example usage:
-member1 = "om"
-member2 = "om"
-matching_groups = findGroupsContainingMembers(member1, member2)
-print("Groups containing both members:", matching_groups)
+import pandas as pd
+import numpy as np
+
+# Generate sample data
+np.random.seed(0)  # for reproducibility
+
+# Generate random Pomodoro sequences
+num_sequences = 1000
+sequences = []
+ratings = []
+
+for _ in range(num_sequences):
+    sequence_length = np.random.randint(1, 7)  # Random sequence length between 1 and 6
+    sequence = ','.join(str(np.random.randint(1, 61)) for _ in range(sequence_length))  # Generate sequence
+    sequences.append(sequence)
+    # Generate random rating for each sequence
+    ratings.append(np.random.randint(1, 6))
+
+# Create DataFrame
+data = pd.DataFrame({'Pomodoro Sequence': sequences, 'Rating': ratings})
+
+# Save data to CSV
+data.to_csv('sample_pomodoro_data.csv', index=False)
+

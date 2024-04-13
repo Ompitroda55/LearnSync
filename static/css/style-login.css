@@ -76,6 +76,7 @@ login-overlay>* {
 .sup-email {
     input {
         all: unset;
+        width: 250px !important;
     }
 
     display: flex;
@@ -179,9 +180,10 @@ login-overlay>* {
     position: absolute;
     top: 20px;
     left: 20px;
-    background-color: var(--polar);
+    color: var(--snow);
+    background-color: var(--cardinal);
     /* box-shadow: 0px 6px 1px var(--cardinal-mask); */
-    width: fit-content;
+    width: fit-content !important;
     padding: 5px;
     transition: all 500ms ease;
     .material-symbols-outlined {

@@ -10,18 +10,80 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
-
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
+import tensorflow as tf
+import matplotlib.pyplot as plt
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+import time
 
 app = Flask(__name__)
 
 app.secret_key = secrets.token_hex(24)
 
+def suggest_pomodoro_sequence(user_usage_hours, collection, tolerance=5):
+    # Filter data based on user's total usage hours with tolerance
+
+    close_entries = collection.find({
+        'Total Usage Hours': {'$gte': user_usage_hours - tolerance, '$lte': user_usage_hours + tolerance}
+    })
+
+    # Convert MongoDB cursor to DataFrame
+    close_data = pd.DataFrame(list(close_entries))
+
+    # If no close entries found, return None
+    if len(close_data) == 0:
+        return None
+
+    # Group by sequence and calculate average rating for each sequence
+    sequence_ratings = close_data.groupby('Pomodoro Sequence')['Rating'].mean().reset_index()
+
+    # Sort sequences based on average rating
+    sorted_sequences = sequence_ratings.sort_values(by='Rating', ascending=False)
+
+    # If no sequences found, return None
+    if len(sorted_sequences) == 0:
+        return None
+
+    # Select the top rated sequence
+    top_sequence = sorted_sequences.iloc[0]['Pomodoro Sequence']
+
+    # Calculate average sequence
+    average_sequence = [int(x) for x in top_sequence.split(',')]
+
+    return average_sequence
+
+def build_model(input_shape):
+    model = tf.keras.Sequential([
+        tf.keras.layers.Input(shape=(input_shape,)),
+        tf.keras.layers.Dense(64, activation='relu'),
+        tf.keras.layers.Dense(32, activation='relu'),
+        tf.keras.layers.Dense(1)
+    ])
+    model.compile(optimizer='adam', loss='mse')
+    return model
+
+def train_model(model, X_train, y_train, epochs=50, batch_size=32):
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
+
+@app.route('/get-ai-suggestion')
+def getAISuggestion():
+    # suggested_sequence = suggest_pomodoro_sequence(60, db['suggestions_data'], tolerance=5)
+    suggested_sequence = suggest_pomodoro_sequence(session.get('pomo_hours'), db['suggestions_data'], tolerance=5)
+    sleeps = [3,7,5,4,6]
+    time.sleep(random.choice(sleeps))
+    if suggested_sequence:
+        return jsonify({'suggested_sequence': suggested_sequence})
+    else:
+        return jsonify({'error': 'No suitable sequence found within the specified tolerance'})
 
 class User:
     def __init__(self, userId):
@@ -79,12 +141,34 @@ def createUser(username, password, email):
             [25.0,5.0,25.0,5.0,25.0,30.0],
             [60.0,10.0,60.0,10.0,60.0,30.0],
             [75.0,15.0,45.0,10.0,30.0,60.0]
-        ], "joinging_date" : datetime.now()
-        
+        ], "joinging_date" : datetime.now(),
+        "pomodoro_usage_hours" : 0.0
     }
 
     new_user = collection.insert_one(new_user)
     return new_user
+
+@app.route('/add-time-to-user', methods=['POST'])
+def add_time_to_user():
+    # Get the data from the request
+    data = request.json
+
+    # Extract the variable value
+    variable = data['variable']
+
+    # Assuming you have a function to find and update the user in the database
+    # Here's a sample implementation
+    username = session.get('username')
+    user = db.users.find_one({"username": username})
+    if user:
+        # Update the user's pomodoro_usage_hours
+        user['pomodoro_usage_hours'] += variable
+        # Update the user's joining_date if needed
+        # Assuming you have a function to update the user in the database
+        db.users.update_one({"username": username}, {"$set": user})
+        return jsonify({"message": "User's time updated successfully"})
+    else:
+        return jsonify({"error": "User not found"})
 
 def createDailyTask(task_name, task_priority):
     # Select the collection
@@ -454,7 +538,8 @@ def login():
         user = collection.find_one({'username': username})
         session['username'] = user['username']
         session['user_id'] = str(user['_id'])
-        print(session['user_id'])
+        session['pomo_hours'] = int(user['pomodoro_usage_hours'])
+        # print(session['user_id'])
         # print(session.get('username'))
         # requests = get_requests_for_receiver(str(user['_id']))
         # print(requests)

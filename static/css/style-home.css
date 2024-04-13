@@ -305,7 +305,7 @@ hr {
     }
 
     .intro {
-        flex-direction: column-reverse;
+        flex-direction: column;
     }
 
     .features {

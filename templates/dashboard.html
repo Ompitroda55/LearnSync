@@ -737,6 +737,133 @@
                             </div>
                             <div class="our-pomodoro-suggestions">
                                 <div class="secondary-heading">LearnSync's Suggestions</div>
+                                <div class="suggestion-con">
+                                    <button class="ui-button-3" id="ai-btn" style="width: 200px; padding: 10px;">
+                                        <span class="material-symbols-outlined" style="font-size: 28px;">
+                                            experiment
+                                        </span>&nbsp;
+                                        <span class="ai-text" style="white-space: nowrap;">Suggest a Sequence</span>
+                                    </button>
+
+                                    <div id="pomodoro-suggestion">
+                                        <span id="suggested_seq">
+                                            1, 2, 3, 4, 5, 6
+                                        </span>
+                                        <button class="ui-button-3" id="add-suggestion">
+                                            <span class="material-symbols-outlined" style="font-size: 28px;">
+                                                alarm_on
+                                            </span>&nbsp;Add</button>
+                                    </div>
+                                </div>
+                                <span class="less-imp-text"
+                                    style="align-items: center; display: flex; flex-direction: row; text-align: center;">LearnSync
+                                    employs AI to suggest study sequences based on >users usage hours and ratings.
+                                    Pomodoro suggestion feature is beta. Results may vary.</span>
+                                <script>
+                                    var arr = [];
+                                    function addAISequence(text) {
+                                        const container = document.querySelector('.user-pomodoro-form-sequence');
+                                        const sequenceInput = document.createElement('input');
+                                        sequenceInput.type = 'text';
+                                        sequenceInput.name = `sequence[]`; // Set unique name for each input field
+                                        sequenceInput.value = text;
+                                        container.appendChild(sequenceInput);
+                                        const updateSequenceBtn = document.getElementById('update-sequence-btn');
+
+                                        // Create a new click event
+                                        const clickEvent = new Event('click');
+
+                                        // Dispatch the click event on the update-sequence-btn element
+                                        updateSequenceBtn.dispatchEvent(clickEvent);
+                                    }
+
+                                    // Add a click event listener to the button
+                                    document.getElementById('add-suggestion').addEventListener('click', function (event) {
+                                        // This function will be called when the button is clicked
+
+                                        var string = arr.join(', ');
+                                        // console.log(string);
+                                        addAISequence(string);
+                                        // You can add your desired functionality here
+                                    });
+
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        document.getElementById('ai-btn').addEventListener('click', async function () {
+                                            applyStyles();
+                                            var data = await sendFetchRequest();
+                                            const conSpan = document.querySelector("#suggested_seq");
+                                            const mainCon = document.querySelector("#pomodoro-suggestion");
+                                            mainCon.style.opacity = '1';
+                                            conSpan.innerHTML = data.suggested_sequence;
+                                            arr = data.suggested_sequence;
+                                            revertStyles();
+
+                                        });
+                                    });
+
+                                    function sendFetchRequest() {
+                                        return new Promise((resolve, reject) => {
+                                            fetch('/get-ai-suggestion', {
+                                                method: 'GET',
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            })
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        throw new Error('Network response was not ok');
+                                                    }
+                                                    return response.json();
+                                                })
+                                                .then(data => {
+                                                    resolve(data); // Resolve the promise with the received data
+                                                })
+                                                .catch(error => {
+                                                    console.error('There was a problem with the fetch operation:', error);
+                                                    reject(error); // Reject the promise with the error
+                                                });
+                                        });
+                                    }
+
+                                    function applyStyles() {
+                                        var button = document.getElementById('ai-btn');
+                                        var span = button.querySelector('span.material-symbols-outlined');
+                                        var textSpan = button.querySelector('span.ai-text');
+
+                                        button.classList.add('ai-button');
+                                        span.textContent = "linked_services";
+                                        textSpan.textContent = "Generating";
+                                    }
+
+                                    function revertStyles() {
+                                        var button = document.getElementById('ai-btn');
+                                        var span = button.querySelector('span.material-symbols-outlined');
+                                        var textSpan = button.querySelector('span.ai-text');
+
+                                        button.classList.remove('ai-button');
+                                        span.textContent = 'experiment';
+                                        textSpan.textContent = "Suggest a Sequence";
+                                    }
+
+                                    function changeBackground() {
+                                        var button = document.getElementById('ai-btn');
+                                        var span = button.querySelector('span.material-symbols-outlined');
+                                        var orgSpan = span.textContent;
+                                        var textSpan = button.querySelector('span.ai-text');
+                                        var orgTxt = textSpan.textContent;
+
+
+                                        button.classList.add('ai-button');
+                                        span.textContent = "linked_services";
+                                        textSpan.textContent = "Generating";
+
+                                        setTimeout(function () {
+                                            button.classList.remove('ai-button');
+                                            span.textContent = orgSpan;
+                                            textSpan.textContent = orgTxt;
+                                        }, 10000);
+                                    }
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -839,7 +966,7 @@
                                     <div class="empty-state" id="empty-state-friend">
                                         Select a friend to view details
                                     </div>
-                                    
+
                                     <div class="selected-friend-info">
                                         <div class="friend-header">
                                             <div class="friend-title">
@@ -865,11 +992,12 @@
                                             <div class="temp-con">
                                                 <span class="less-imp-text">Streaks-Overview</span>
                                                 <div class="longest-streak">
-                                                    <img src="../static/resources/images/dashboard/streak-icon.png" alt=""
-                                                        class="friend-stats-icon">
+                                                    <img src="../static/resources/images/dashboard/streak-icon.png"
+                                                        alt="" class="friend-stats-icon">
                                                     <div class="report-card-data">
                                                         <span class="report-val" id="longest-streak">32</span>
-                                                        <span class="report-desc" id="longest-streak-desc">Longest Streak
+                                                        <span class="report-desc" id="longest-streak-desc">Longest
+                                                            Streak
                                                             between you and
                                                             {friend}</span>
                                                     </div>
@@ -887,8 +1015,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="report-card-item">
-                                                        <img src="../static/resources/images/dashboard/gems-icon.png" alt=""
-                                                            class="friend-stats-icon">
+                                                        <img src="../static/resources/images/dashboard/gems-icon.png"
+                                                            alt="" class="friend-stats-icon">
                                                         <div class="report-card-data">
                                                             <span class="report-val" id="report-gems">32</span>
                                                             <span class="report-desc">Total XP</span>
@@ -919,12 +1047,14 @@
                                                 <span class="less-imp-text">Actions-Zone</span>
                                                 <div class="friend-action">
                                                     <button class="ui-button-3" id="frnd-rmv">
-                                                        <span class="material-symbols-outlined" style="font-size: 28px;">
+                                                        <span class="material-symbols-outlined"
+                                                            style="font-size: 28px;">
                                                             person_remove
                                                         </span>&nbsp;Unfriend
                                                     </button>
                                                     <button class="ui-button-3" id="frnd-stk">
-                                                        <span class="material-symbols-outlined" style="font-size: 28px;">
+                                                        <span class="material-symbols-outlined"
+                                                            style="font-size: 28px;">
                                                             bolt
                                                         </span>&nbsp;Send Request
                                                     </button>
@@ -1580,7 +1710,7 @@
                         }
 
                         // Call viewManager with 0 to show container-home by default
-                        viewManager(2);
+                        viewManager(3);
 
                         // Add event listeners to links to call viewManager with the corresponding position
                         linkIds.forEach((id, index) => {
@@ -2081,10 +2211,7 @@
         let user_sequences;
         async function initializeUserSequences() {
             try {
-                let user = await getUser(); // Assuming getUser is an asynchronous function
-                // console.log(user.username);
-                // Your code that uses the user object goes here
-                // For example:
+                let user = await getUser();
                 userSequences = user.pomodoro_sequences;
                 // console.log("user sequences", userSequences);
                 // console.log("user sequences", userSequences);
@@ -2278,38 +2405,40 @@
             timeDisplaySec.textContent = `${seconds.toString().padStart(2, '0')}`;
         }
 
-        // function startTimer() {
-        //     startButton.disabled = true;
-        //     stopButton.disabled = false;
-        //     resetButton.disabled = false;
-        //     const startTime = new Date().getTime();
-        //     const endTime = startTime + (secondsLeft * 1000);
-        //     localStorage.setItem('endTime', endTime);
-        //     timerInterval = setInterval(() => {
-        //         const now = new Date().getTime();
-        //         secondsLeft = Math.round((endTime - now) / 1000);
-        //         updateTime();
-        //         if (secondsLeft <= 0) {
-        //             clearInterval(timerInterval);
-        //             if (isWorkTime) {
-        //                 secondsLeft = 300; // 5 minutes break
-        //                 isWorkTime = false;
-        //             } else {
-        //                 secondsLeft = 1500; // 25 minutes work time
-        //                 isWorkTime = true;
-        //             }
-        //             localStorage.removeItem('endTime');
-        //             startButton.disabled = false;
-        //             stopButton.disabled = true;
-        //         }
-        //     }, 1000);
-        // }
+        function addTimeToUser(variable) {
+            variable = variable / 60;
+            // Data to be sent in the request
+            const data = { variable: variable };
+
+            // Fetch POST request
+            fetch('/add-time-to-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data) // Convert data to JSON format
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Response:', data);
+                    // Handle response data
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
 
         function startTimer() {
             startButton.disabled = true;
             stopButton.disabled = false;
             resetButton.disabled = false;
             let startTime = new Date().getTime();
+            var currentTIme = timeSequence[sequenceIndex]*1;
             // sequenceIndex = 0; // Initialize index for the time sequence
             let endTime = startTime + (timeSequence[sequenceIndex] * 60 * 1000); // Use the first value in the sequence
             localStorage.setItem('endTime', endTime);
@@ -2322,6 +2451,7 @@
                     const timerSound = document.getElementById('timer-sound');
                     timerSound.play();
                     console.log('timerSound played!');
+                    addTimeToUser(currentTIme);
                 }
 
                 if (secondsLeft <= 0) {
@@ -3783,45 +3913,6 @@
             // longestStreak.textContent = friend.friend.daily_tasks_data[0].longestStreak;
             longestStreak.textContent = 32;
             longestStreakDesc.textContent = `Longest Streak between you and ${friend.friend.username}`
-
-
-            // alert("Button Clicked"+ group.name);
-            // const crtTaskCon = document.querySelector(".group-tsk-crt-con");
-            // const crtTaskBtn = document.getElementById("create-grp-task-btn");
-            // const groupContainer = document.querySelector(".selected-group-info");
-            // const taskListContainer = document.querySelector(".group-task-list");
-            // const emptyHandler = document.querySelector(".empty-state");
-            // const groupName = document.getElementById("grp-name");
-            // const groupMembers = document.getElementById("grp-members");
-            // const groupManager = document.querySelector('.group-handle-con');
-            // const isUserAdmin = currUser == group.group_leader ? true : false;
-
-            // groupManager.dataset.grpN = group.name;
-            // groupManager.dataset.grpI = group._id;
-            // // groupManager.dataset.grpN = group.name;
-            // groupManager.dataset.isUserAdmin = isUserAdmin;
-            // groupManager.dataset.members = group.members;
-
-
-
-            // if (isUserAdmin) {
-            //     crtTaskCon.style.display = 'flex';
-            //     crtTaskBtn.dataset.grpId = group._id;
-            //     crtTaskBtn.dataset.grpName = group.name;
-            //     crtTaskBtn.dataset.isUsrAdmin = isUserAdmin;
-            // } else {
-            //     crtTaskCon.style.display = 'none';
-            // }
-
-            // groupName.textContent = group.name;
-            // groupMembers.textContent = group.members.length + " members";
-            // groupContainer.style.display = "flex";
-            // emptyHandler.style.display = "none";
-            // const groupId = group._id;
-            // console.log(groupId, isUserAdmin);
-            // generateGroupTasks(groupId, isUserAdmin);
-            // generateGrpTsk(groupId, isUserAdmin);
-            // console.log("Hello this step reached!!!!!!!!")
 
         }
     </script>

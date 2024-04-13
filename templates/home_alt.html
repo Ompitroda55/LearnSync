@@ -19,13 +19,19 @@
 <body>
     <!-- Code for Login Overlay Displayed -->
     <login-overlay id="login-overlay">
-        <a id="close-login" class="ui-button">Close</a>
+        <a id="close-login" class="ui-button-3"><span class="material-symbols-outlined">
+            close
+            </span></a>
         <form action="/login" id="form-login" method="post">
             <div class="login-container">
                 <div class="heading">Login</div>
-                <input type="text" name="username" id="username" placeholder="Username">
-                <input type="password" name="password" id="password" placeholder="Password">
-                <a href="#" class="link-secondary" id="submit-link">Login</a>
+                <div class="sup-username">
+                    <input type="text" name="username" id="username" placeholder="Username">
+                </div>
+                <div class="sup-password" data-style="inactive">
+                    <input type="password" name="password" id="password" placeholder="Password">
+                </div>
+                <a href="#" class="link-primary" id="submit-link">Login</a>
                 <div class="alert-box" id="alert-login-form">Oh O! Invalid Username</div>
                 <!-- <a href="#" class="link-secondary">Google</a> -->
                 <div class="link-primary" id="signup-link" style="display: none;">Signup Instead</div>
@@ -62,7 +68,7 @@
                     learning!</span>
                 <div class="header-intro-right-links">
                     <a href="/sign-up" class="link-primary" id="target-1">Get Started</a>
-                    <a class="link-secondary" id="open-login">I already have an account</a>
+                    <a class="link-secondary" id="open-login">Already have a Account</a>
                 </div>
             </div>
         </div>

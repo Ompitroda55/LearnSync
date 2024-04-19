@@ -11,6 +11,71 @@
 
 <body>
     <main-container>
+        <div class="ratings-panel-con">
+            <div class="ratings-panel-main container-default">
+                <span class="secondary-heading">Rate Your Pomodoro Session</span>
+                <div class="rate-con">
+                    <button class="rating ui-button-2" id="rate-1">😢</button>
+                    <button class="rating ui-button-2" id="rate-2">😞</button>
+                    <button class="rating ui-button-2" id="rate-3">😐</button>
+                    <button class="rating ui-button-2" id="rate-4">😊</button>
+                    <button class="rating ui-button-2" id="rate-5">😄</button>
+                </div>
+                <span class="less-imp-text" style="text-align: center; max-width: 70%;">Your Pomodoro session ratings
+                    contribute to our analysis, enabling us to suggest effective timer sequences for other users'
+                    productivity enhancement. Thank you.</span>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Get all rating buttons
+                const ratingButtons = document.querySelectorAll(".rating");
+
+                // Add click event listener to each rating button
+                ratingButtons.forEach(function (button) {
+                    button.addEventListener("click", function () {
+                        // Get the parent element with the class 'ratings-panel-con'
+                        const ratingsPanelCon = document.querySelector(".ratings-panel-con");
+
+                        ratingsPanelCon.style.display = "none";
+                    });
+                });
+            });
+            document.addEventListener("DOMContentLoaded", function () {
+                const ratingButtons = document.querySelectorAll(".rating");
+                const panel = document.querySelector(".ratings-panel-con");
+
+                ratingButtons.forEach(function (button) {
+                    button.addEventListener("click", function () {
+                        const panel = document.querySelector(".ratings-panel-con");
+                        let seq = panel.getAttribute('data-sequence')
+                        console.log(seq);
+                        const rating = parseInt(button.id.split("-")[1]); // Extract the rating number from the button ID
+
+                        fetch('/user-pomo-rating', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ rating: rating, sequence: seq })
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log('Rating sent successfully:', data);
+                            })
+                            .catch(error => {
+                                console.error('Error sending rating:', error);
+                            });
+                    });
+                });
+            });
+
+        </script>
         <nav>
             <div class="logo" id="sidebar-logo" style="text-align: center;">LearnSync</div>
             <hr>
@@ -127,7 +192,6 @@
 
         </script>
         <main-content-wrapper>
-
             <main-content-container>
                 <content-container>
                     <div class="container-home" id="container-home" data-aos="fade-up" data-aos-duration="1000">
@@ -377,7 +441,6 @@
                                     createUserDailyTask(inputValue, inputLevel)
                                         .then(taskId => {
                                             taskItemContainer.dataset.task_Id = taskId;
-
                                         })
                                         .catch(error => {
                                             console.error('Error creating daily task:', error);
@@ -1056,7 +1119,7 @@
                                                         <span class="material-symbols-outlined"
                                                             style="font-size: 28px;">
                                                             bolt
-                                                        </span>&nbsp;Send Request
+                                                        </span>&nbsp;Start Streak
                                                     </button>
                                                 </div>
                                             </div>
@@ -2075,7 +2138,90 @@
                     </div>
                     <div class="friends-list-side container-default" id="friends-list-side">
                         <div class="secondary-heading">Streaks with Friends</div>
+                        <div class="friends-list-side-con">
+                            <div class="streak-item">
+                                <span class="friend-name simple-text">Tonny</span>
+                                <div class="streak-item-right">
+                                    <span class="material-symbols-outlined"
+                                        style=" padding: 5px ;border-radius: var(--link-radius);color: var(--cardinal-light); font-size: 24px;">
+                                        rocket_launch
+                                    </span>
+                                    <span class="streak-length" style="font-size: 18px; font-weight: 800;">99</span>
+                                    <button class="ui-button-2" id="send-strk-button">
+                                        <span class=" material-symbols-outlined">
+                                            bolt
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <script>
+                        function generateFriendStreakItems(friends) {
+                            const friendsListCon = document.querySelector('.friends-list-side-con');
+
+                            friends.forEach(friend => {
+                                // Create streak item container
+                                const streakItem = document.createElement('div');
+                                streakItem.classList.add('streak-item');
+
+                                // Create friend name span
+                                const friendNameSpan = document.createElement('span');
+                                friendNameSpan.classList.add('friend-name', 'simple-text');
+                                friendNameSpan.textContent = friend.name;
+
+                                // Create streak item right container
+                                const streakItemRight = document.createElement('div');
+                                streakItemRight.classList.add('streak-item-right');
+
+                                // Create rocket icon span
+                                const rocketIconSpan = document.createElement('span');
+                                rocketIconSpan.classList.add('material-symbols-outlined');
+                                rocketIconSpan.style.padding = '5px';
+                                rocketIconSpan.style.borderRadius = 'var(--link-radius)';
+                                rocketIconSpan.style.color = 'var(--cardinal-light)';
+                                rocketIconSpan.style.fontSize = '24px';
+                                rocketIconSpan.textContent = 'rocket_launch';
+
+                                // Create streak length span
+                                const streakLengthSpan = document.createElement('span');
+                                streakLengthSpan.classList.add('streak-length');
+                                streakLengthSpan.style.fontSize = '18px';
+                                streakLengthSpan.style.fontWeight = '800';
+                                streakLengthSpan.textContent = friend.streakLength;
+
+                                // Create send streak button
+                                const sendStreakButton = document.createElement('button');
+                                sendStreakButton.classList.add('ui-button-2');
+                                sendStreakButton.id = 'send-strk-button';
+
+                                // Create bolt icon span inside the button
+                                const boltIconSpan = document.createElement('span');
+                                boltIconSpan.classList.add('material-symbols-outlined');
+                                boltIconSpan.textContent = 'bolt';
+
+                                // Append elements to their respective parents
+                                sendStreakButton.appendChild(boltIconSpan);
+                                streakItemRight.appendChild(rocketIconSpan);
+                                streakItemRight.appendChild(streakLengthSpan);
+                                streakItemRight.appendChild(sendStreakButton);
+
+                                streakItem.appendChild(friendNameSpan);
+                                streakItem.appendChild(streakItemRight);
+
+                                friendsListCon.appendChild(streakItem);
+                            });
+                        }
+                        // Example friends data
+                        const friendslist = [
+                            { name: 'Friend 1', streakLength: 99 },
+                            { name: 'Friend 2', streakLength: 75 },
+                            { name: 'Friend 3', streakLength: 120 }
+                        ];
+                        generateFriendStreakItems(friendslist);
+
+                    </script>
+
                     <script>
                         document.getElementById("friend-username").addEventListener("input", async function () {
                             var username = this.value;
@@ -2088,18 +2234,10 @@
 
                             } else {
                                 var res = await checkUsername(username);
-                                // console.log(res);
                                 if (res) {
                                     document.getElementById("send-btn-frnd").style.color = "var(--feather-green)";
-
-                                    // document.getElementById("friend-search-status").textContent = "Found";
-                                    // document.getElementById("friend-search-status").style.backgroundColor = "var(--feather-green)";
-                                    // alert("User Found");
                                 } else {
                                     document.getElementById("send-btn-frnd").style.color = "var(--cardinal)";
-
-                                    // document.getElementById("friend-search-status").textContent = "Not Found";
-                                    // document.getElementById("friend-search-status").style.backgroundColor = "var(--cardinal)";
                                 }
                             }
                         });
@@ -2108,6 +2246,7 @@
                 </extras-container>
             </main-content-container>
         </main-content-wrapper>
+
     </main-container>
     <!-- <div class="confirm-box-container">
         <div class="confirm-box-main container-default">
@@ -2184,6 +2323,36 @@
 
     </script>
     <script>
+        function sendStreak(friendName) {
+            // Define the data to be sent in the request body
+            const data = {
+                friend_name: friendName
+            };
+
+            // Configure the Fetch API request
+            fetch('/send-streak', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)  // Convert data object to JSON string
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();  // Parse the JSON response
+                })
+                .then(data => {
+                    console.log('Streak sent successfully:', data);
+                    // Handle success response as needed
+                })
+                .catch(error => {
+                    console.error('Error sending streak:', error);
+                    // Handle error as needed
+                });
+        }
+
         var currentUser = null;
 
         // Function to toggle active class of side navigation
@@ -2213,36 +2382,11 @@
             try {
                 let user = await getUser();
                 userSequences = user.pomodoro_sequences;
-                // console.log("user sequences", userSequences);
-                // console.log("user sequences", userSequences);
-                // userSequences = [
-                //     [25, 5, 25, 5, 25, 30],
-                //     [60, 10, 60, 10, 60, 30],
-                //     [55, 15, 45, 10, 30, 60]
-                // ]
-                // console.log(userSequences[1] + "Thsi si is is is isi si ");
                 return userSequences;
-
-                // Now you can use the user object and its properties
-                // Start your timer or perform any other operations based on the user data
             } catch (error) {
                 console.error('Error initializing user:', error);
             }
         }
-
-
-
-        // user_sequences.then(result => {
-        //     // Iterate over each array in the result
-        //     result.forEach((sequence, index) => {
-        //         console.log(`Sequence ${index + 1}:`, sequence);
-        //         // Access elements of each sequence array
-        //         sequence.forEach((element, subIndex) => {
-        //             console.log(`Element ${subIndex + 1}:`, element);
-        //         }); 
-        //     });
-        // });
-        // console.log("user sequences", user_sequences);
 
         let isWorkTime = true;
         let secondsLeft;
@@ -2254,42 +2398,13 @@
         async function updateSequences() {
             user_sequences = await initializeUserSequences();
             sequencesLength = user_sequences.length;
-            // console.log("sequences length", sequencesLength);
-            // console.log(user_sequences[0]);
-            // user_sequences.then(result => {
-            //     user_sequences = result;
-            //     // document.getElementById('homo').textContent = result[1][sequenceIndex];
-            // });
             generateSequenceFields();
             generatePomodoroSelectors();
         }
 
-        // function updateSequences() {
-        //     try {
-        //         user_sequences = initializeUserSequences();
-        //         sequencesLength = user_sequences.length;
-        //         // user_sequences = result;
-        //         // user_sequences.then(result => {
-        //         //     sequencesLength = result.length;
-        //         //     // document.getElementById('homo').textContent = result[1][sequenceIndex];
-
-        //         //     // generateSequenceFields();
-        //         // });
-        //         generatePomodoroSelectors();
-        //         generateSequenceFields();
-        //     } catch (error) {
-        //         console.error('Error updating sequences:', error);
-        //     }
-        // }
-
         function generateSequenceFields() {
             const container = document.querySelector('.user-pomodoro-form-sequence');
             container.innerHTML = ''; // Clear existing fields
-            // const seq = document.createElement('div');
-            // seq.textContent = 'Your Sequences '; // Clear existing fields
-            // seq.className = 'secondary-heading';
-            // container.appendChild(seq);
-            // Loop through the user_sequences and generate input fields
             user_sequences.forEach((sequence, index) => {
                 const sequenceInput = document.createElement('input');
                 sequenceInput.type = 'text';
@@ -2332,35 +2447,19 @@
             }
         }
 
-        // Add event listener to "Update" link to send POST request to /update-user-sequences
-        // const updateSequenceBtn = document.getElementById('update-sequence-btn');
         document.getElementById('update-sequence-btn').addEventListener('click', async function (event) {
             event.preventDefault();
             const formData = new FormData(document.getElementById('user-pomodoro-form'));
             const response = await updateUserSequence(formData);
 
             updateSequences();
-            // Convert FormData to object
-            // const sequences = { };
-            // for (const [key, value] of formData.entries()) {
-            //     sequences[key] = value.split(',').map(Number); // Convert string to array of numbers
-            // }
-
-            // console.log(sequences);
-
-            // Send POST request to /update-user-sequences
-
         });
-        // 
-        // 
-        // 
 
         function generatePomodoroSelectors() {
             const pomodoroSelectorContainer = document.querySelector('.container-pomodoro-selector');
 
             // Clear any existing pomodoro selector elements
             pomodoroSelectorContainer.innerHTML = '';
-
             // Loop through the number of sequences and generate radio buttons
             for (let i = 0; i < sequencesLength; i++) {
                 const sequenceIndex = i;
@@ -2435,12 +2534,16 @@
 
         function startTimer() {
             startButton.disabled = true;
+            const panel = document.querySelector(".ratings-panel-con");
             stopButton.disabled = false;
             resetButton.disabled = false;
             let startTime = new Date().getTime();
-            var currentTIme = timeSequence[sequenceIndex]*1;
-            // sequenceIndex = 0; // Initialize index for the time sequence
-            let endTime = startTime + (timeSequence[sequenceIndex] * 60 * 1000); // Use the first value in the sequence
+            let ts = timeSequence.join(", ");
+            console.log(ts);
+            panel.setAttribute('data-sequence', ts);
+            console.log(timeSequence);
+            var currentTIme = timeSequence[sequenceIndex] * 1;
+            let endTime = startTime + (timeSequence[sequenceIndex] * 60 * 1000);
             localStorage.setItem('endTime', endTime);
             timerInterval = setInterval(() => {
                 const now = new Date().getTime();
@@ -2457,7 +2560,13 @@
                 if (secondsLeft <= 0) {
                     clearInterval(timerInterval);
                     // Move to the next value in the time sequence
+                    if (sequenceIndex + 1 == timeSequence.length) {
+                        panel.style.display = 'flex';
+                    }
                     sequenceIndex++;
+                    if (sequenceIndex == timeSequence.length) {
+                        sequenceIndex = 0;
+                    }
                     timeDisplayMin.textContent = `${timeSequence[sequenceIndex].toString().padStart(2, '0')}`;
 
                     // Check if we have reached the end of the sequence
@@ -3804,6 +3913,7 @@
                 link.setAttribute("href", "#");
                 link.addEventListener('click', function (event) {
                     event.preventDefault();
+                    console.log(friend);
                     openFriendView(friend);
                 });
 
@@ -3836,6 +3946,7 @@
         async function getFriendDetails(friend) {
             try {
                 const formData = new FormData();
+                console.log(friend + " Friend ko send kr rahe hai");
                 formData.append('friend', friend);
 
                 const response = await fetch('/get-friend-details', {
@@ -3854,9 +3965,35 @@
                 return null;
             }
         }
+
+        async function createAStreak(friendName) {
+            data = { 'friend_name': friendName }
+            console.log(data)
+            fetch('/create-streak', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Streak created successfully:', data);
+                })
+                .catch(error => {
+                    console.error('Error creating streak:', error);
+                });
+        }
+
         async function openFriendView(friendData) {
+            console.log("Friend Data " + friendData);
             const friend = await getFriendDetails(friendData);
-            console.log(friend.friend);
+
             const friendContainer = document.querySelector(".selected-friend-info")
             const emptySate = document.querySelector('#empty-state-friend');
             friendContainer.style.display = 'flex';
@@ -3874,6 +4011,11 @@
             const rmvBtn = friendContainer.querySelector('#frnd-rmv');
 
             const stkBtn = friendContainer.querySelector('#frnd-stk');
+            console.log(friend.friend.streaks_with);
+            console.log(friend);
+            if (friend.friend.streaks_with.includes(friend.username)) {
+                stkBtn.disabled = true;
+            }
 
             rmvBtn.addEventListener('click', async () => {
                 try {
@@ -3882,9 +4024,7 @@
                         await generateUserFriendsList("");
                         friendContainer.style.display = "none";
                         emptySate.style.display = "flex";
-
                     }
-
                 } catch (error) {
                     console.error('Error removing friend:', error);
                 }
@@ -3892,8 +4032,11 @@
 
             stkBtn.addEventListener('click', async () => {
                 try {
-                    const friendUsername = stkBtn.dataset.username; // Assuming you store the friend's username in a data attribute
-                    await someAsyncFunction(friendUsername); // Replace someAsyncFunction with the function you want to call
+                    const friendUsername = friend.friend.username;
+                    console.log(friendUsername); // Assuming you store the friend's username in a data attribute
+                    if (await createConfirmBox("Confirm Starting Streak", "This will send a create a streak between you two. Are you sure of it?")) {
+                        await createAStreak(friendUsername); // Replace someAsyncFunction with the function you want to call
+                    }
                 } catch (error) {
                     console.error('Error:', error);
                 }
@@ -3907,8 +4050,8 @@
             friendBio.textContent = `${friend.friend.username} and you share ${comFrnd} friend and ${comGrps} groups.`;
             friendEmail.textContent = friend.friend.email;
             friendStreaks.textContent = friend.friend.stats[0].streaks;
-            friendGems.textContent = friend.friend.stats[0].streaks;
-            friendHearts.textContent = friend.friend.stats[0].streaks;
+            friendGems.textContent = friend.friend.stats[0].gems;
+            friendHearts.textContent = friend.friend.stats[0].hearts;
             friendLeaderboard.textContent = friend.friend.stats[0].streaks;
             // longestStreak.textContent = friend.friend.daily_tasks_data[0].longestStreak;
             longestStreak.textContent = 32;

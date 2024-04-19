@@ -76,8 +76,7 @@ def train_model(model, X_train, y_train, epochs=50, batch_size=32):
 
 @app.route('/get-ai-suggestion')
 def getAISuggestion():
-    # suggested_sequence = suggest_pomodoro_sequence(60, db['suggestions_data'], tolerance=5)
-    suggested_sequence = suggest_pomodoro_sequence(session.get('pomo_hours'), db['suggestions_data'], tolerance=5)
+    suggested_sequence = suggest_pomodoro_sequence(session.get('total_usage_hours'), db['suggestions_data'], tolerance=5)
     sleeps = [3,7,5,4,6]
     time.sleep(random.choice(sleeps))
     if suggested_sequence:
@@ -128,6 +127,7 @@ def createUser(username, password, email):
         ], 
         "groups": [],
         "friends": [],
+        "streaks_with": [],
         "daily_tasks_data": [
             {"lastComplete" : datetime(1900, 1, 1),
              "daysCompletes":[],
@@ -218,7 +218,8 @@ def createNotification(from_user, to_user, type, data=None):
         0:'Requested Accepted',
         1:'Request Rejected',
         2:'Removed you as a Friend',
-        3:'Streak Sent',
+        3:'Streak Started!',
+        8:'Sent Daily Streak',
         4:'Added you to Group',
         5:'New Task Added to Group',
         6:f"{from_user} removed group - {data}",
@@ -534,17 +535,12 @@ def login():
     collection = db["users"]
     if request.method == 'POST':
         username = request.form.get('username')
-        # print(username, password)
         user = collection.find_one({'username': username})
         session['username'] = user['username']
         session['user_id'] = str(user['_id'])
-        session['pomo_hours'] = int(user['pomodoro_usage_hours'])
-        # print(session['user_id'])
-        # print(session.get('username'))
-        # requests = get_requests_for_receiver(str(user['_id']))
-        # print(requests)
-        # print(user)
-        # user_object = User(user['_id'])
+        session['total_usage_hours'] = int(user['pomodoro_usage_hours'])
+
+
         return render_template('dashboard.html', user=user)
     else:
         return render_template('home_alt.html')
@@ -601,6 +597,7 @@ def signup():
         # # user = fetch_user_by_id(user_id)
         # # print(user)
         user = collection.find_one({'username': username})
+        session['total_usage_hours'] = int(user['pomodoro_usage_hours'])
         # return render_template('dashboard.html', user=user)
         # print("I am Called")
         return render_template('home_alt.html')
@@ -835,112 +832,6 @@ def removeFriend():
     except Exception as e:
         return jsonify({'message': f'Failed to remove friend: {str(e)}'}), 500
 
-
-#def update_daily_tasks():
-#    collection = db['users']
-#    if request.method == 'POST':
-#        username = session.get('username')
-#        if username:
-#            task_list = request.form.get('task')
-#            updated_tasks = {'task': task_list, 'priority': 2, 'completed': 0, 'lastupdate': datetime.utcnow()} 
-#            collection.update_one({'username': username}, {'$push': {'dailytasks': {'$each': updated_tasks}}})
-#            return jsonify({'message': 'Tasks updated successfully'}), 200
-#        else:
-#            return jsonify({'message': 'Username not provided in the form data'}), 400
-#    else:
-#        return jsonify({'message': 'Method not allowed'}), 405
-# If modifying these scopes, delete the file token.json.
-    
-    #new updates
-SCOPES = ["https://www.googleapis.com/auth/calendar"]
-
-def get_calendar_service():
-    creds = None
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                "credentials.json", SCOPES
-            )
-            creds = flow.run_local_server(port=0)
-        with open("token.json", "w") as token:
-            token.write(creds.to_json())
-    return build("calendar", "v3", credentials=creds)
-
-@app.route('/update-daily-task', methods=["GET", "POST"])
-def update_daily_tasks():
-    if request.method == "POST":
-        task_description = request.form["task"]
-        start_date = request.form["start_date"]
-        start_time = request.form["start_time"]
-        duration = float(request.form["duration"])  # Convert duration to float
-        calendar_email = request.form["calendar_email"]  # Add calendar email field
-        if not (task_description and start_date and start_time and calendar_email):
-            return "All fields are required!"
-        
-        try:
-            # Parse date and time from form inputs
-            start_datetime = parse_date_time(start_date, start_time)
-
-            # Calculate end time based on duration
-            end_datetime = start_datetime + datetime.timedelta(hours=duration)
-            
-            calendar_service = get_calendar_service()
-            # Get calendar ID using calendar email
-            calendar_id = get_calendar_id(calendar_email)
-            event = {
-                'summary': task_description,
-                'description': 'Event Description',
-                'start': {
-                    'dateTime': start_datetime.strftime('%Y-%m-%dT%H:%M:%S'),
-                    'timeZone': 'Asia/Kolkata',  # Specify the time zone here
-                },
-                'end': {
-                    'dateTime': end_datetime.strftime('%Y-%m-%dT%H:%M:%S'),
-                    'timeZone': 'Asia/Kolkata',  # Specify the time zone here
-                },
-            }
-            calendar_service.events().insert(calendarId=calendar_id, body=event).execute()
-            return redirect(url_for("login"))
-        except HttpError as error:
-            print(error)
-            return f"An error occurred: {error}"
-    
-    # Provide the 'now' variable in the context for rendering the template
-    now = datetime.now()
-    #return render_template("deshbord.html", now=now)
-    return jsonify("task done",now=now)
-
-def parse_date_time(date_str, time_str):
-    # Parse date string in yyyy-mm-dd format
-    date_obj = datetime.strptime(date_str, "%Y-%m-%d")
-
-    # Convert 24-hour time string to 12-hour time string
-    time_obj = datetime.strptime(time_str, "%H:%M").strftime("%I:%M %p")
-
-    # Parse time string in hh:mm am/pm format
-    time_obj = datetime.strptime(time_obj, "%I:%M %p")
-
-    # Combine date and time objects
-    date_time_obj = datetime.combine(date_obj.date(), time_obj.time())
-
-    return date_time_obj
-
-
-def get_calendar_id(calendar_email):
-    
-    mail = calendar_email
-    calendar_ids = {
-        mail : 'primary',
-        'example2@example.com': 'secondary_calendar_id',
-        # Add more email ID to calendar ID mappings as needed
-    }
-    return calendar_ids.get(calendar_email, 'primary')  # Default to primary if email not found
-
-
 # Function for sharing user stats with homepage
 def fetch_user_stats(user_id):
     # Connect to MongoDB
@@ -970,7 +861,6 @@ def getUserByUsername(username):
         del user["_id"]
         del user["password"]
         del user["pomodoro_sequences"]
-        del user["dailytasks"]
         return user
     else:
         return None
@@ -1182,9 +1072,12 @@ def getUserFriends1(mode):
 def getFriendDetails():
     try:
         friend_name = request.form.get('friend')
+        print(friend_name + " This is friend name")
         userId = session.get('user_id')
-        user = db.users.find_one({"_id" : ObjectId(userId)})  # Assuming you have a MongoDB database connection called 'db'
+        collection = db['users']
+        user = collection.find_one({"_id" : ObjectId(userId)})  # Assuming you have a MongoDB database connection called 'db'
         friend = getUserByUsername(friend_name)
+        print(friend)
 
         user1_friends = list(user.get("friends", []))  # Convert to list
         user2_friends = list(friend.get("friends", []))  # Convert to list
@@ -1197,12 +1090,13 @@ def getFriendDetails():
         data = {
             "friend": friend,
             "common_friends": common_friends,
-            "common_groups": common_groups
+            "common_groups": common_groups,
+            "username": session.get('username')
         }
         print(data)
         return jsonify(data)
     except Exception as e:
-        print(e)
+        print(str(e) + " This is error")
         return jsonify({"error": str(e)}), 500
 
 
@@ -1509,80 +1403,6 @@ def fetch_random_riddle():
     random_riddle = collection.find({}, {'_id': 0}).skip(random_index).limit(1)[0]
     return jsonify(random_riddle)
 
-# @app.route('/get-user-daily-tasks', methods=['GET'])
-# def getUserDailyTask():
-#     # Assume you have the user's username as a query parameter
-#     username = request.args.get('username')
-#     collection = db['users']
-#     user_document = collection.find_one({'username': username})
-
-#     if user_document:
-#         # Extract the daily tasks array from the user document
-#         daily_tasks = user_document.get('dailytasks', [])
-
-#         # Return the daily tasks array as JSON response
-#         return jsonify({'daily_tasks': daily_tasks})
-#     else:
-#         return jsonify({'error': 'User not found'}), 404
-
-# @app.route('/save-user-daily-tasks', methods=['POST'])
-# def save_user_daily_tasks():
-#     try:
-#         collection = db['users']
-#         username = session.get('username')
-#         data = request.json
-#         tasks = data.get('tasks', [])
-
-#         for task in tasks:
-#             task_name = task.get('name')
-#             priority = task.get('priority')
-
-#             new_task = {
-#             'task': task_name,
-#             'priority': priority,
-#             'completed': 0,
-#             'lastupdate': 0
-#             }   
-#         # Process the tasks data as needed
-#         for task in tasks:
-#             task_name = task.get('name')
-#             task_priority = task.get('priority')
-
-#             result = collection.update_one({'username': username}, {'$push': {'dailytasks': new_task}})
-
-#             print(f'Task Name: {task_name}, Priority: {task_priority}')
-
-#         # Return a success response
-#         return jsonify({'message': 'Tasks received and processed successfully'}), 200
-#     except Exception as e:
-#         # Return an error response if there's an exception
-#         return jsonify({'error': str(e)}), 500
-
-# @app.route('/add-new-user-daily-task', methods=['POST'])
-# def addNewuserDailyTask():
-    
-#     # Get data from request args
-#     username = session.get('username')
-#     task_name = request.args.get('task')
-#     priority = int(request.args.get('priority'))  # Convert to integer
-#     completed = int(request.args.get('completed'))  # Convert to integer
-#     last_update = datetime.now()
-
-#     # Create a new task dictionary
-#     new_task = {
-#         'task': task_name,
-#         'priority': priority,
-#         'completed': completed,
-#         'lastupdate': last_update
-#     }
-
-    # Find the user document and update the dailytasks array
-    # result = collection.update_one({'username': username}, {'$push': {'dailytasks': new_task}})
-
-    # if result.modified_count > 0:
-    #     return jsonify({'message': 'Task added successfully'}), 200
-    # else:
-    #     return jsonify({'error': 'Failed to add task'}), 500
 
 @app.route('/create-user-daily-task', methods=['POST'])
 def createUserDailyTask():
@@ -1729,13 +1549,15 @@ def mark_task_as_complete():
                     collection = db['users']
                     user = collection.find_one({'_id': user_id})
                     user['daily_tasks_data'][0]['lastComplete'] = datetime.now()
-                    user['daily_tasks_data'][0]['totalCompletes'].append(today_date)
+                    user['daily_tasks_data'][0]['totalCompletes'].append(datetime.now())
                     user['stats'][0]['hearts'] += 1
                     collection.update_one({'_id': user['_id']}, {'$set': user})
 
                     if user['stats'][0]['hearts'] % 10 == 0:
                         if user['stats'][0]['hearts'] % 100 == 0:
                             user['stats'][0]['gems'] += user['stats'][0]['hearts'] // 100
+                            # print(user['stats'][0]['hearts'] // 100)
+                            # print(user['stats'][0]['gems'])
                         else:
                             user['stats'][0]['gems'] += 1
                     else:
@@ -1752,40 +1574,101 @@ def mark_task_as_complete():
     except Exception as e:
         # print(str(e))
         return jsonify({'error': str(e)}), 500
+
+@app.route('/user-pomo-rating', methods=['POST'])
+def user_pomo_rating():
+    try:
+        collection = db['suggestions_data']
+        data = request.json
+        rating = data.get('rating')
+        sequence = data.get('sequence')
+        print(sequence)
+
+        total_usage_hours = session.get('total_usage_hours')
+
+        # Store data in MongoDB
+        result = collection.insert_one({
+            "Pomodoro Sequence": sequence,
+            "Total Usage Hours": total_usage_hours,
+            "Rating": rating
+        })
+
+        return jsonify({'message': 'Rating stored successfully', 'id': str(result.inserted_id), 'seq':sequence})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
 @app.route('/create-streak', methods=['POST'])
 def createStreak():
     try:
-        streaks_collection = db['streaks']
-        # Get data from the request
-        # data = request.json
-        # sender_id = data.get('sender_id')
-        # receiver_id = data.get('receiver_id')
-        # task_id = data.get('task_id')  # Optional, if you want to associate a task with the streak
-        # message = data.get('message')  # Optional message accompanying the streak
+        collection = db['streaks']
+        data = request.json
+        print(data)
+        user_name = session.get('username')
+        friend_name = data.get('friend_name')
+        print(friend_name)
 
-        data = "O mere humsafar!"
-        sender_id = 'Villian Ek Tha'
-        receiver_id = "Dusra Villan Ko"
-        task_id = "Id Nahi mout milegi"  # Optional, if you want to associate a task with the streak
-        message = "Message nhi jahar milega " 
-
-        # Create a streak document
-        streak = {
-            'sender_id': sender_id,
-            'receiver_id': receiver_id,
-            'task_id': task_id,
-            'timestamp': datetime.date(),
-            'message': message
+        streak_data = {
+            "user_id": user_name,
+            "friend_id": friend_name,
+            "start_date": datetime.now(),
+            "last_interaction_dates": {user_name: 0, friend_name: 0},  # Track last interaction date for each user
+            "current_streak_lengths": 0,
+            "max_streak_lengths": 0,  # Track max streak length for each user
+            "active": False
         }
 
-        # Insert the streak document into the database
-        result = streaks_collection.insert_one(streak)
+        # Insert streak document into MongoDB
+        result = collection.insert_one(streak_data)
+        db.users.update_one(
+            {"username": user_name},  # Match documents where username equals the provided username
+            {"$push": {"streaks_with": friend_name}}  # Append user_name to the streaks_with array
+        )
+        db.users.update_one(
+            {"username": friend_name},  # Match documents where username equals the provided username
+            {"$push": {"streaks_with": user_name}}  # Append user_name to the streaks_with array
+        )
 
-        if result.inserted_id:
-            return jsonify({'message': 'Streak created successfully', 'streak_id': str(result.inserted_id)})
-        else:
-            return jsonify({'error': 'Failed to create streak'}), 500
+        createNotification(session.get('username'),friend_name, 3)
+
+
+        return jsonify({'message': 'Streak created successfully', 'id': str(result.inserted_id)})
+
+    except Exception as e:
+        print(e)
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/send-streak', methods=['POST'])
+def send_streak():
+    try:
+        data = request.json
+        friend_name = data.get('friend_name')
+        
+        # Process the streak data as needed
+        # For example, you can store the streak in the database
+        
+        # Return a success response
+        return jsonify({'message': 'Streak sent successfully'})
+
+    except Exception as e:
+        # Handle any errors
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/get-streaks', methods=['GET'])
+def get_streaks():
+    try:
+        collection = db['streaks']
+        # Get the username from the session
+        user_name = session.get('username')
+        
+        # Fetch streaks for the user from MongoDB
+        user_streaks = list(collection.find({'$or': [{'user_id': user_name}, {'friend_id': user_name}]}))
+        # Convert ObjectId to string for JSON serialization
+        for streak in user_streaks:
+            streak['_id'] = str(streak['_id'])
+        
+        # Return the user's streaks as JSON response
+        return jsonify(user_streaks)
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -1794,4 +1677,3 @@ def createStreak():
 # 
 if __name__ == '__main__':
     app.run(debug=True, port=8888)
-    createStreak()

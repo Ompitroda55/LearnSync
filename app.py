@@ -129,7 +129,7 @@ def createUser(username, password, email):
         "groups": [],
         "friends": [],
         "daily_tasks_data": [
-            {"lastComplete" : datetime.now(),
+            {"lastComplete" : 0,
              "daysCompeletes":[],
              "longestStreak": 0,
              "userRank":0,
@@ -584,7 +584,7 @@ def insertFlashCard():
 
 # Function to Handle Signup
 
-@app.route('/sign-up', methods=['POST','GET'])
+@app.route('/sign-up', methods=['GET'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -597,13 +597,13 @@ def signup():
         user = collection.find_one({'username': username})
         session['username'] = user['username']
         session['user_id'] = str(user['_id'])
-        # user_id = str(user.inserted_id)
-        # user = fetch_user_by_id(user_id)
-        # print(user)
+        # # user_id = str(user.inserted_id)
+        # # user = fetch_user_by_id(user_id)
+        # # print(user)
         user = collection.find_one({'username': username})
-        return render_template('dashboard.html', user=user)
-        print("I am Called")
-        # return render_template('home_alt.html')
+        # return render_template('dashboard.html', user=user)
+        # print("I am Called")
+        return render_template('home_alt.html')
     else:
         return render_template('signup.html')
 
@@ -1182,12 +1182,9 @@ def getUserFriends1(mode):
 def getFriendDetails():
     try:
         friend_name = request.form.get('friend')
-        print(friend_name)
         userId = session.get('user_id')
         user = db.users.find_one({"_id" : ObjectId(userId)})  # Assuming you have a MongoDB database connection called 'db'
         friend = getUserByUsername(friend_name)
-        # print(friend)
-        print(user)
 
         user1_friends = list(user.get("friends", []))  # Convert to list
         user2_friends = list(friend.get("friends", []))  # Convert to list
@@ -1706,6 +1703,8 @@ def mark_task_as_complete():
         # Get the task ID from the request data
         data = request.json
         task_id = data.get('taskId')
+        mode = data.get('mode')
+        
         collection = db['dailys']
         # Search for the task in the database
         task = collection.find_one({'_id': ObjectId(task_id)})
@@ -1716,20 +1715,39 @@ def mark_task_as_complete():
             completed_status = 1 if task.get('completed', 0) == 0 else 0
 
             # Update the task's completed status
+            today_date = datetime.now().strftime('%Y-%m-%d')
             updated_task = collection.find_one_and_update(
                 {'_id': ObjectId(task_id)},
-                {'$set': {'completed': completed_status}},
+                {'$set': {'completed': completed_status, 'lastCompleted': today_date}},
                 # return_document=True
             )
             user_id = ObjectId(session.get('user_id'))
             if updated_task:
                 all_tasks_completed = all(task.get('completed', 0) == 1 for task in collection.find({'createdBy': user_id}))
                 # print(all_tasks_completed)
+                if mode == 1:
+                    user = collection.find_one({'_id': user_id})
+                    user['daily_tasks_data'][0]['lastComplete'] = datetime.now()
+                    user['daily_tasks_data'][0]['daysCompeletes'].append(today_date)
+                    user['stats'][0]['hearts'] += 1
+                    collection = db['users']
+                    collection.update_one({'_id': user['_id']}, {'$set': user})
+
+                    if user['stats'][0]['hearts'] % 10 == 0:
+                        if user['stats'][0]['hearts'] % 100 == 0:
+                            user['stats'][0]['gems'] += user['stats'][0]['hearts'] // 100
+                        else:
+                            user['stats'][0]['gems'] += 1
+                    else:
+                        user['stats'][0]['hearts'] += 1
+                    
                 return jsonify({'message': 'Task status toggled successfully', 'all_tasks_completed': all_tasks_completed})
             else:
                 return jsonify({'error': 'Failed to toggle task status'}), 500
         else:
             return jsonify({'error': 'Task not found'}), 404
+
+            
     except Exception as e:
         # print(str(e))
         return jsonify({'error': str(e)}), 500
@@ -1774,5 +1792,5 @@ def createStreak():
 # Main() function of app
 # 
 if __name__ == '__main__':
-    app.run(debug=False, port=8888)
-    # createStreak()
+    app.run(debug=True, port=8888)
+    createStreak()

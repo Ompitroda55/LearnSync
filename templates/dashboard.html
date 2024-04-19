@@ -1782,14 +1782,14 @@
                         </div>
                     </div>
                     <script>
-                        async function markDailyTaskAsComplete(taskId) {
+                        async function markDailyTaskAsComplete(taskId, mode = 0) {
                             try {
                                 const response = await fetch('/mark-daily-task-as-complete', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
                                     },
-                                    body: JSON.stringify({ taskId: taskId })
+                                    body: JSON.stringify({ taskId: taskId, mode: mode })
                                 });
 
                                 if (response.ok) {
@@ -1889,7 +1889,7 @@
                                                     completedTaskList[taskDiv.dataset.idx] = 0;
                                                     console.log(completedTaskList);
                                                 }
-                                                var res = await markDailyTaskAsComplete(tskId);
+                                                var res = await markDailyTaskAsComplete(tskId, 1);
                                                 console.log(res);
                                                 if (res) {
                                                     var completeButtons = document.querySelectorAll('.mark-complete-daily-task');
@@ -3804,7 +3804,6 @@
                 link.setAttribute("href", "#");
                 link.addEventListener('click', function (event) {
                     event.preventDefault();
-                    console.log(friend);
                     openFriendView(friend);
                 });
 
@@ -3837,9 +3836,7 @@
         async function getFriendDetails(friend) {
             try {
                 const formData = new FormData();
-                console.log(friend)
                 formData.append('friend', friend);
-                console.log(formData + "Todaty is tuesday.");
 
                 const response = await fetch('/get-friend-details', {
                     method: 'POST',
@@ -3858,9 +3855,8 @@
             }
         }
         async function openFriendView(friendData) {
-            console.log(friendData+"This is friend Data");
             const friend = await getFriendDetails(friendData);
-            console.log(friend);
+            console.log(friend.friend);
             const friendContainer = document.querySelector(".selected-friend-info")
             const emptySate = document.querySelector('#empty-state-friend');
             friendContainer.style.display = 'flex';
@@ -3886,6 +3882,7 @@
                         await generateUserFriendsList("");
                         friendContainer.style.display = "none";
                         emptySate.style.display = "flex";
+
                     }
 
                 } catch (error) {

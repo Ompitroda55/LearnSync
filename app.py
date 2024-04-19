@@ -129,8 +129,8 @@ def createUser(username, password, email):
         "groups": [],
         "friends": [],
         "daily_tasks_data": [
-            {"lastComplete" : 0,
-             "daysCompeletes":[],
+            {"lastComplete" : datetime(1900, 1, 1),
+             "daysCompletes":[],
              "longestStreak": 0,
              "userRank":0,
              "experience":"rookie",
@@ -181,7 +181,7 @@ def createDailyTask(task_name, task_priority):
         "task_name": task_name,
         "priority": task_priority,
         "completed": 0,  # Assuming 0 means task is not completed, adjust as needed
-        "lastCompleted": 0  # Assuming initial value for lastCompleted, adjust as needed
+        "lastCompleted": datetime(1900, 1, 1)  # Assuming initial value for lastCompleted, adjust as needed
     }
 
     try:
@@ -1715,7 +1715,7 @@ def mark_task_as_complete():
             completed_status = 1 if task.get('completed', 0) == 0 else 0
 
             # Update the task's completed status
-            today_date = datetime.now().strftime('%Y-%m-%d')
+            today_date = datetime.now()
             updated_task = collection.find_one_and_update(
                 {'_id': ObjectId(task_id)},
                 {'$set': {'completed': completed_status, 'lastCompleted': today_date}},
@@ -1726,11 +1726,11 @@ def mark_task_as_complete():
                 all_tasks_completed = all(task.get('completed', 0) == 1 for task in collection.find({'createdBy': user_id}))
                 # print(all_tasks_completed)
                 if mode == 1:
+                    collection = db['users']
                     user = collection.find_one({'_id': user_id})
                     user['daily_tasks_data'][0]['lastComplete'] = datetime.now()
-                    user['daily_tasks_data'][0]['daysCompeletes'].append(today_date)
+                    user['daily_tasks_data'][0]['totalCompletes'].append(today_date)
                     user['stats'][0]['hearts'] += 1
-                    collection = db['users']
                     collection.update_one({'_id': user['_id']}, {'$set': user})
 
                     if user['stats'][0]['hearts'] % 10 == 0:
@@ -1740,7 +1740,8 @@ def mark_task_as_complete():
                             user['stats'][0]['gems'] += 1
                     else:
                         user['stats'][0]['hearts'] += 1
-                    
+                    collection.update_one({'_id': user_id}, {'$set': user})
+
                 return jsonify({'message': 'Task status toggled successfully', 'all_tasks_completed': all_tasks_completed})
             else:
                 return jsonify({'error': 'Failed to toggle task status'}), 500

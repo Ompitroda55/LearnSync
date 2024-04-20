@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import bcrypt
 from bson.objectid import ObjectId
@@ -122,17 +122,18 @@ def createUser(username, password, email):
             {
                 "streaks":0,
                 "gems":0,
-                "hearts":0,
+                "hearts":0,                
             }
         ], 
         "groups": [],
         "friends": [],
         "streaks_with": [],
         "daily_tasks_data": [
-            {"lastComplete" : datetime(1900, 1, 1),
+            {"lastComplete" : 0,
              "daysCompletes":[],
              "longestStreak": 0,
              "userRank":0,
+             "userScore":0,
              "experience":"rookie",
              "highestRank":10000
             }
@@ -1544,7 +1545,7 @@ def mark_task_as_complete():
             user_id = ObjectId(session.get('user_id'))
             if updated_task:
                 all_tasks_completed = all(task.get('completed', 0) == 1 for task in collection.find({'createdBy': user_id}))
-                # print(all_tasks_completed)
+                print(all_tasks_completed)
                 if mode == 1:
                     collection = db['users']
                     user = collection.find_one({'_id': user_id})
@@ -1612,10 +1613,10 @@ def createStreak():
             "user_id": user_name,
             "friend_id": friend_name,
             "start_date": datetime.now(),
-            "last_interaction_dates": {user_name: 0, friend_name: 0},  # Track last interaction date for each user
+            "last_interaction_dates": [[user_name, 0], [friend_name, 0]],  # Track last interaction date for each user
             "current_streak_lengths": 0,
             "max_streak_lengths": 0,  # Track max streak length for each user
-            "active": False
+            "active": 0
         }
 
         # Insert streak document into MongoDB
@@ -1639,21 +1640,88 @@ def createStreak():
         return jsonify({'error': str(e)}), 500
     
 @app.route('/send-streak', methods=['POST'])
-def send_streak():
+def sendStreak():
     try:
         data = request.json
-        friend_name = data.get('friend_name')
-        
-        # Process the streak data as needed
-        # For example, you can store the streak in the database
-        
-        # Return a success response
-        return jsonify({'message': 'Streak sent successfully'})
+        streak_id = data.get('streak_id')
+        current_user = session.get('username')
+        collection = db['dailys']
+        all_tasks_completed = all(task.get('completed', 0) == 1 for task in collection.find({'createdBy': session.get('user_id')}))
+        # Fetch streak document by its _id
+        streak = db.streaks.find_one({'_id': ObjectId(streak_id)})
+        if streak:
+            # Determine the index of the current user in the last_interaction_dates array
+            user_index = 0 if streak['last_interaction_dates'][0][0] == current_user else 1
+            
+            # Check if the last interaction date is set to zero (initial value)
+            if streak['last_interaction_dates'][user_index][1] == 0:
+                # Set the last interaction date to the current time
+                streak['last_interaction_dates'][user_index][1] = datetime.now()
+            else:
+                # Check when the streak was last updated for the current user
+                last_update_time = streak['last_interaction_dates'][user_index][1]
+                time_difference = datetime.now() - last_update_time
+                if time_difference <= timedelta(1):
+                    # Streak was updated within the last 24 hours, do not increment streak count
+                    return jsonify({'message': 'Streak already updated within the last 24 hours'})
+            
+            # Update the last interaction date for the current user
+            streak['last_interaction_dates'][user_index][1] = datetime.now()
+            
+            # Check if both users have sent streaks to each other within the past 24 hours
+            other_user_index = 1 - user_index  # Index of the other user in the last_interaction_dates array
+            last_interaction_date = streak['last_interaction_dates'][other_user_index][1]
+            if last_interaction_date != 0:
+                time_difference = datetime.now() - last_interaction_date
+                if time_difference <= timedelta(days=1):
+                    # Both users have sent streaks to each other within 24 hours, increase streak count
+                    streak['current_streak_lengths'] += 1
+                    
+                    # Update the max streak length if the current streak is longer
+                    if streak['current_streak_lengths'] > streak['max_streak_lengths']:
+                        streak['max_streak_lengths'] = streak['current_streak_lengths']
+                        db.users.update_one({'_id': ObjectId(session.get('user_id'))}, {'$set'})
+                else:
+                    # Streak is broken, reset streak count to 0
+                    streak['current_streak_lengths'] = 0
+
+            # Update the streak document in the database
+            db.streaks.update_one({'_id': ObjectId(streak_id)}, {'$set': streak})
+            
+            return jsonify({'message': 'Streak updated successfully'})
+        else:
+            return jsonify({'error': 'Streak not found'})
 
     except Exception as e:
-        # Handle any errors
+        print(e)
         return jsonify({'error': str(e)}), 500
-    
+
+def time_difference_to_string(start_time, end_time):
+    time_diff = end_time - start_time
+
+    # Calculate days, hours, and minutes
+    days = time_diff.days
+    hours, remainder = divmod(time_diff.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    # Convert to string representation based on magnitude
+    if days > 0:
+        if hours == 0:
+            return f"{days} days"
+        elif hours == 1:
+            return f"{days} days and 1 hour"
+        else:
+            return f"{days} days and {hours} hours"
+    elif hours > 0:
+        if minutes == 0:
+            return f"{hours} hours"
+        elif minutes == 1:
+            return f"{hours} hours and 1 minute"
+        else:
+            return f"{hours} hours and {minutes} minutes"
+    else:
+        return f"{minutes} minutes"
+
 @app.route('/get-streaks', methods=['GET'])
 def get_streaks():
     try:
@@ -1666,12 +1734,90 @@ def get_streaks():
         # Convert ObjectId to string for JSON serialization
         for streak in user_streaks:
             streak['_id'] = str(streak['_id'])
-        
+            # print(streak)
+            
+            if(session.get('username') == streak['user_id']):
+                streak['friend'] = streak['friend_id']
+                if streak['last_interaction_dates'][1][1] == 0:
+                    streak['received_time'] = "Start a journey!"
+                else:
+                    streak['received_time'] = time_difference_to_string(streak['last_interaction_dates'][0][1], datetime.now())
+            else:
+                streak['friend'] = streak['user_id']
+                if streak['last_interaction_dates'][0][1] == 0:
+                    streak['received_time'] = "Start a journey!"
+                else:
+                    streak['received_time'] = time_difference_to_string(streak['last_interaction_dates'][1][1], datetime.now())
         # Return the user's streaks as JSON response
+        print(user_streaks)
         return jsonify(user_streaks)
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/get-streaks', methods=['POST'])
+def getUserLongestStreakWith():
+    # Get the username from the session
+    collection = db['streaks']
+    current_user = session.get('username')
+    # Get the username from the POST request
+    data = request.get_json()
+    search_username = data.get('username')
+
+    # Search for streaks where the search username is either user_id or friend_id
+    streak = collection.find_one({
+        "$and": [
+            {"$or": [
+                {"user_id": current_user},
+                {"friend_id": current_user}
+            ]},
+            {"$or": [
+                {"user_id": search_username},
+                {"friend_id": search_username}
+            ]}
+        ]
+    })  
+
+    if streak:
+        if streak['user_id'] == current_user or streak['friend_id'] == current_user:
+            max_streak = streak.get('max_streak_lengths', "NA")
+            return jsonify({'max_streak': max_streak})
+        else:
+            return jsonify({'max_streak': "NA"})
+    else:
+        return jsonify({'max_streak': "NA"})
+    
+@app.route('/user_ranks', methods=['POST'])
+def get_user_ranks():
+    mode = request.json.get('mode', 0)  # Get mode from POST data
+    users_collection = db['users']
+    if mode == 0:
+        # Fetch all users from MongoDB
+        all_users = users_collection.find()
+    elif mode == 1:
+        # Get current user's friends list
+        current_user_id = ObjectId(session.get('user_id'))
+        current_user = users_collection.find_one({"_id": current_user_id})
+        friends_list = current_user.get("friends", [])
+        
+        # Fetch data for friends only
+        all_users = users_collection.find({"_id": {"$in": friends_list}})
+
+    # Create a list to store user ranks, usernames, and scores
+    user_ranks = []
+
+    # Iterate over each user and append their rank, username, and score to the list
+    for user in all_users:
+        rank = user["daily_tasks_data"][0].get("userRank", 0)
+        username = user.get("username", "")
+        score = user["daily_tasks_data"][0].get("userScore", 0)
+        user_ranks.append({"rank": rank, "username": username, "score": score})
+
+    # Sort the user ranks list based on ranks (ascending order)
+    user_ranks.sort(key=lambda x: x["rank"])
+
+    # Return the sorted user ranks list as JSON
+    return jsonify(user_ranks,session.get('username'))
 # 
 # Main() function of app
 # 

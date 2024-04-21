@@ -138,6 +138,12 @@ def createUser(username, password, email):
              "highestRank":10000
             }
         ],
+        "todays_task":{'complete':0, 'total':0},
+        "task_stat":[],
+        "todays_pomo":0,
+        "pomodoro_stat" : [],
+        "consecutive_login":0,
+        "last_login":datetime.now(),
         "pomodoro_sequences":[
             [25.0,5.0,25.0,5.0,25.0,30.0],
             [60.0,10.0,60.0,10.0,60.0,30.0],
@@ -156,7 +162,9 @@ def add_time_to_user():
 
     # Extract the variable value
     variable = data['variable']
+    """
 
+    """
     # Assuming you have a function to find and update the user in the database
     # Here's a sample implementation
     username = session.get('username')
@@ -164,10 +172,11 @@ def add_time_to_user():
     if user:
         # Update the user's pomodoro_usage_hours
         user['pomodoro_usage_hours'] += variable
+        user['todays_pomo'] += variable
         # Update the user's joining_date if needed
         # Assuming you have a function to update the user in the database
         db.users.update_one({"username": username}, {"$set": user})
-        return jsonify({"message": "User's time updated successfully"})
+        return jsonify({"message": "User's time & daily time updated successfully"})
     else:
         return jsonify({"error": "User not found"})
 
@@ -530,6 +539,25 @@ def index():
 # Code for Login and Homepage
 #
 
+def update_todays_task(user_id):
+    # Assuming db is the MongoDB database connection
+    dailys_collection = db['dailys']
+    users_collection = db['users']
+    
+    # Find tasks created by the user
+    user_tasks = dailys_collection.find({"createdBy": ObjectId(user_id)})
+    
+    # Count the total and completed tasks
+    total_tasks = dailys_collection.count_documents({"createdBy": ObjectId(user_id)})
+    completed_tasks = dailys_collection.count_documents({"createdBy": ObjectId(user_id), "completed": 1})
+    
+    # Update the user document with today's task data
+    users_collection.update_one({"_id": ObjectId(user_id)}, {
+        "$set": {
+            "todays_task": {"complete": completed_tasks, "total": total_tasks}
+        }
+    })
+
 # Code to handle login request
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -541,6 +569,7 @@ def login():
         session['user_id'] = str(user['_id'])
         session['total_usage_hours'] = int(user['pomodoro_usage_hours'])
 
+        update_todays_task(str(user['_id']))
 
         return render_template('dashboard.html', user=user)
     else:
@@ -1818,6 +1847,51 @@ def get_user_ranks():
 
     # Return the sorted user ranks list as JSON
     return jsonify(user_ranks,session.get('username'))
+
+def convert_to_h_m(hours):
+    # Calculate the hours and minutes
+    h = int(hours)
+    m = int((hours - h) * 60)
+    # Format the time as "h:m"
+    # return f"{h}:{m}"
+    return f"{h}:{m:02d}"
+
+def get_last_n_elements(arr):
+    if len(arr) <= 9:
+        return arr
+    else:
+        return arr[-9:]
+
+@app.route('/pomodoro-times', methods=['GET'])
+def get_pomodoro_times():
+    try:
+        users_collection = db['users']
+        user_id = ObjectId(session.get('user_id'))  # Replace with actual user identifier
+        user = users_collection.find_one({'_id': user_id})
+
+        pomodoro_stat = user.get('pomodoro_stat', [])
+        total_time = user.get('pomodoro_usage_hours')
+        total_time = convert_to_h_m(total_time)
+        todays_time = convert_to_h_m(user.get('todays_pomo'))
+        while len(pomodoro_stat) < 9:
+            pomodoro_stat.insert(0, 0)
+
+        print(pomodoro_stat)
+
+        formatted_pomodoro_times = []
+        for time in pomodoro_stat:
+            formatted_time = convert_to_h_m(time)  # Use the function you provided
+            formatted_pomodoro_times.append(formatted_time)
+        print(formatted_pomodoro_times, total_time)
+        formatted_pomodoro_times.append(todays_time)
+        formatted_pomodoro_times.reverse()
+        return jsonify(formatted_pomodoro_times, total_time)
+
+    except Exception as e:
+        # Handle any exceptions that occur during the process
+        print(e)
+        return jsonify({'error': str(e)}), 500
+
 # 
 # Main() function of app
 # 

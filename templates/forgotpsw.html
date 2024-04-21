@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnSync Password Reset</title>
+    <link rel="stylesheet" href="../static/css/style-updated.css">
+    <link rel="stylesheet" href="../static/css/style-login.css">
+</head>
+
+<body>
+    <signup-overlay id="signup-overlay">
+        <!-- <button id="close-login" class="link-tertiary">Close</button> -->
+        <form id="signup-form">
+
+            <div class="login-container">
+                <div class="heading">Reset Password</div>
+                <div id="step1" class="form-step">
+                    <!-- <div class="sup-username">
+                        <input type="text" name="username" id="username" placeholder="Username">
+                        <span class="material-symbols-outlined" id="username-state" data-style="inactive"
+                            style="font-size: 28px;">
+                            check
+                        </span>
+                    </div> -->
+
+                    <!-- <script>
+                        document.querySelector("#username").addEventListener('input', async function () {
+                            var state = document.querySelector('#username-state');
+                            var passCon = document.querySelector('.sup-password');
+
+                            var pass = document.querySelector('#password');
+                            var notPass = document.querySelector('#not-pass');
+
+                            console.log(await checkUsername(this.value.trim()));
+                            if (await checkUsername(this.value) == true && this.value.trim() != "" && !this.value.includes(' ') && this.value.length < 12) {
+                                console.log("Valid Input");
+                                state.style.backgroundColor = 'var(--feather-green)';
+                                pass.disabled = false;
+                                notPass.disabled = false;
+                                passCon.style.backgroundColor = "var(--snow)";
+                                passCon.style.color = "var(--eel)";
+                                passCon.style.cursor = "pointer";
+                            } else if (this.value.trim() == "") {
+                                state.style.backgroundColor = "var(--polar)";
+                                state.style.color = "var(--swan)";
+                                pass.disabled = true;
+                                notPass.disabled = true;
+                                passCon.style.backgroundColor = "var(--polar)";
+                                passCon.style.color = "var(--swan)";
+                                passCon.style.cursor = "pointer";
+                            } else {
+                                state.style.backgroundColor = "var(--cardinal)";
+                                state.style.color = "var(--snow)";
+                                pass.disabled = true;
+                                notPass.disabled = true;
+                                passCon.style.backgroundColor = "var(--polar)";
+                                passCon.style.color = "var(--swan)";
+                                passCon.style.cursor = "pointer";
+                            }
+
+
+                        });
+                    </script> -->
+                    <div class="sup-password">
+                        <input type="password" name="password" id="password" placeholder="Password">
+                        <span class="material-symbols-outlined" id="password-state" data-style="inactive"
+                            style="font-size: 28px;">
+                            check
+                        </span>
+                    </div>
+                    <script>
+                        document.querySelector("#password").addEventListener('input', async function () {
+                            var state = document.querySelector('#password-state');
+                            var passCon = document.querySelector('.sup-password');
+
+                            var pass = document.querySelector('#password');
+                            var notPass = document.querySelector('.sup-notpass');
+
+                            if (validatePassword(this.value.trim()) == true && this.value.trim() != "") {
+
+                                console.log("Valid Password");
+                                state.style.backgroundColor = 'var(--feather-green)';
+                                state.style.color = "var(--snow)";
+                                // pass.disabled = false;
+                                notPass.disabled = false;
+                                notPass.style.backgroundColor = "var(--snow)";
+                                notPass.style.color = "var(--eel)";
+                                notPass.style.cursor = "pointer";
+                            } else if (this.value.trim() == "") {
+                                state.style.backgroundColor = "var(--polar)";
+                                state.style.color = "var(--swan)";
+                                // pass.disabled = true;
+                                notPass.disabled = true;
+                                // passCon.style.backgroundColor = "var(--polar)";
+                                // passCon.style.color = "var(--swan)";
+                                // passCon.style.cursor = "pointer";
+                            } else {
+                                state.style.backgroundColor = "var(--cardinal)";
+                                state.style.color = "var(--snow)";
+                                // pass.disabled = true;
+                                notPass.disabled = true;
+                                // passCon.style.backgroundColor = "var(--polar)";
+                                // passCon.style.color = "var(--swan)";
+                                // passCon.style.cursor = "pointer";
+                            }
+
+                        });
+                        function validatePassword(password) {
+                            // Regular expressions to check for uppercase, lowercase, digit, and special character
+                            var upperCaseRegex = /[A-Z]/;
+                            var lowerCaseRegex = /[a-z]/;
+                            var digitRegex = /[0-9]/;
+                            var specialCharRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/;
+
+                            // Check if the password meets the criteria
+                            var isLengthValid = password.length >= 8;
+                            var hasUpperCase = upperCaseRegex.test(password);
+                            var hasLowerCase = lowerCaseRegex.test(password);
+                            var hasDigit = digitRegex.test(password);
+                            var hasSpecialChar = specialCharRegex.test(password);
+
+                            // Return true if all criteria are met, otherwise return false
+                            return true;
+                            return isLengthValid && hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar;
+                        }
+                    </script>
+                    <div class="sup-notpass">
+                        <input type="password" name="not-pass" id="not-pass" placeholder="Re-confirm Password" >
+                        <span class="material-symbols-outlined" id="notpassword-state" data-style="inactive"
+                            style="font-size: 28px;">
+                            check
+                        </span>
+                    </div>
+                    <script>
+                        document.querySelector("#not-pass").addEventListener('input', async function () {
+                            var state = document.querySelector('#notpassword-state');
+                            var passCon = document.querySelector('.sup-notpass');
+
+                            var pass = document.querySelector('#password');
+                            var notPass = document.querySelector('#not-pass');
+
+                            if (this.value == pass.value && this.value.trim() != "") {
+                                console.log("Valid Password");
+                                state.style.backgroundColor = 'var(--feather-green)';
+                                state.style.color = "var(--snow)";
+                                document.querySelector('#state-button').style.opacity = '1';
+
+
+
+                            } else if (this.value.trim() == "") {
+                                state.style.backgroundColor = "var(--polar)";
+                                state.style.color = "var(--swan)";
+                                document.querySelector('#state-button').style.opacity = '0';
+
+
+
+                            } else {
+                                state.style.backgroundColor = "var(--cardinal)";
+                                state.style.color = "var(--snow)";
+                                document.querySelector('#state-button').style.opacity = '0';
+
+
+                            }
+
+                        });
+                    </script>
+                    <!-- <span class="less-imp-text" style="max-width: 80%;">Usernames are unique identifiers that can
+                        contain special characters, alphabets, or numbers but not spaces. They must be less than 12
+                        characters in length.</span> -->
+                    <span class="less-imp-text" style="max-width: 80%;">Password must be at least 8 characters with <u>a
+                            uppercase, a lowercase, a digit, and a special character</u>.</span>
+                    <!-- <span>or continue with</span> 
+                        <a href="#" class="link-primary">Google</a> -->
+                </div>
+                <div id="step2" class="form-step">
+                    <div class="sup-email">
+                        <input type="email" name="email" id="email" placeholder="Enter Your Email" required>
+                        <span class="material-symbols-outlined" id="email-state" data-style="inactive"
+                            style="font-size: 28px;">
+                            check
+                        </span>
+                    </div>
+                    <button class="ui-button-3 send-mail-btn"><span class="material-symbols-outlined"
+                            style="font-size: 28px;" id="send-mail-icon">
+                            outgoing_mail
+                        </span>&nbsp;Get OTP</button>
+
+                    <div class="otp-fields">
+                        <input type="text" maxlength="1" id="otp-field-1"
+                            onkeyup="moveToNextField(event, 'otp-field-2')">
+                        <input type="text" maxlength="1" id="otp-field-2"
+                            onkeyup="moveToNextField(event, 'otp-field-3')">
+                        <input type="text" maxlength="1" id="otp-field-3"
+                            onkeyup="moveToNextField(event, 'otp-field-4')">
+                        <input type="text" maxlength="1" id="otp-field-4"
+                            onkeyup="moveToNextField(event, 'otp-field-5')">
+                        <input type="text" maxlength="1" id="otp-field-5"
+                            onkeyup="moveToNextField(event, 'otp-field-6')">
+                        <input type="text" maxlength="1" id="otp-field-6">
+                    </div>
+
+                    <span id="otp-tip" class="less-imp-text">Enter OTP sent to your Email address.</span>
+                    <div class="signup-link-con">
+                        <div class="alert-box-warn">
+                            <span class="material-symbols-outlined" style="font-size: 28px; color: var(--cardinal);">
+                                error
+                            </span><span id="alert-box-span"></span>
+                        </div>
+                        <button class="link-primary" id="signup-link">Signup</button>
+                    </div>
+                    <script>
+                        document.querySelector("#signup-link").addEventListener("click", function () {
+                            // nago mago;
+                            var res = verifyOtp(receivedOTP);
+                            if (res == false) {
+                                var alertbox = document.querySelector('.alert-box-warn');
+                                var alertSpan = document.querySelector('#alert-box-span');
+                                alertSpan.textContent = "Invalid OTP";
+                                alertbox.style.display = 'flex';
+                                for (let i = 1; i <= 6; i++) {
+                                    document.getElementById('otp-field-' + i).value = '';
+                                }
+                                setTimeout(function () {
+                                    alertbox.style.display = 'none';
+                                }, 3000)
+                            }
+                        });
+
+                        function moveToNextField(event, nextFieldId) {
+                            var maxLength = parseInt(event.target.getAttribute('maxlength'));
+                            var currentLength = event.target.value.length;
+                            if (currentLength >= maxLength) {
+                                document.getElementById(nextFieldId).focus();
+                            }
+                        }
+                    </script>
+                </div>
+                <div class="nav-form">
+
+                    <button id="state-button" class="ui-button-2">
+                        <span class="material-symbols-outlined" style="font-size: 28px;">
+                            arrow_forward
+                        </span>
+                    </button>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var currentState = 0;
+                            const steps = document.querySelectorAll('.form-step');
+                            steps[0].style.display = 'none';
+                            steps[1].style.display = 'none';
+                            viewManager(0); // show first form
+                            document.querySelector('#state-button').style.opacity = '0';
+
+
+                            function viewManager(viewStep = null) {
+                                const stateButton = document.querySelector('#state-button');
+                                const stateButtonSpan = stateButton.querySelector('.material-symbols-outlined');
+                                const steps = document.querySelectorAll('.form-step');
+                                if (viewStep == 0) {
+                                    currentState = 0;
+                                    steps[0].style.display = 'flex';
+                                    steps[1].style.display = 'none';
+                                    stateButtonSpan.textContent = "arrow_forward";
+
+                                } else {
+                                    currentState = 1;
+                                    steps[1].style.display = 'flex';
+                                    steps[0].style.display = 'none';
+                                    stateButtonSpan.textContent = "arrow_back";
+                                }
+                            }
+                            document.querySelector("#state-button").addEventListener('click', function () {
+                                if (currentState == 0) {
+                                    viewManager(1);
+                                } else {
+                                    viewManager(0);
+                                }
+                            });
+                        })
+
+                    </script>
+
+                </div>
+            </div>
+        </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Get the form element
+                var form = document.getElementById('signup-form');
+
+                // Add event listener for form submission
+                form.addEventListener('submit', function (event) {
+                    // Prevent the default form submission behavior
+                    event.preventDefault();
+
+                    // Your custom form submission logic goes here
+                    // For example, you can use AJAX to submit the form data asynchronously
+                    // Or perform client-side validation before submitting the form data
+                });
+            });
+
+            var receivedOTP = 0;
+            const sendMailBtn = document.querySelector(".send-mail-btn");
+            const sendMailIcon = document.getElementById("send-mail-icon");
+
+            sendMailBtn.addEventListener("click", async function () {
+                var email = document.querySelector("#email").value;
+                var emailCon = document.querySelector(".sup-email");
+                var otpTip = document.querySelector("#otp-tip");
+                sendMailIcon.textContent = "pending";
+                const otp = await verifyEmail(email);
+                receivedOTP = otp;
+                this.style.position = "absolute";
+                this.style.left = "-9999px";
+                var link = document.querySelector("#signup-link");
+                console.log(link);
+                link.style.display = "block";
+
+                emailCon.style.backgroundColor = "var(--polar)";
+                emailCon.style.color = "var(--swan)";
+                emailCon.style.cursor = "pointer";
+                email.disabled = true;
+                otpTip.style.display = "flex";
+                // alert(otp);
+                if (otp) {
+                    console.log(otp);
+                    const otpFields = document.querySelector('.otp-fields');
+                    otpFields.style.display = 'flex';
+                    for (let i = 1; i <= 6; i++) {
+                        var inputField = document.getElementById('otp-field-' + i);
+                        inputField.style.opacity = "1";
+                    }
+                }
+
+                // Code to execute when the send-mail-btn is clicked
+            });
+
+            function validateEmail(email) {
+                // Regular expression pattern for validating email addresses
+                var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return regex.test(email);
+            }
+
+
+
+            document.querySelector("#email").addEventListener('input', async function () {
+                var state = document.querySelector('#email-state');
+                var passCon = document.querySelector('.sup-password');
+                var getOTPBtn = document.querySelector('.send-mail-btn');
+                getOTPBtn.style.display = 'none';
+                var pass = document.querySelector('#password');
+                var notPass = document.querySelector('#not-pass');
+                var otpTip = document.querySelector('#otp-tip');
+
+                // console.log(await checkUsername(this.value.trim()));
+                console.log("****************************************************************");
+
+                console.log(validateEmail(this.value.trim()));
+                console.log(this.value.trim() != "");
+                console.log(await checkEmail(this.value.trim()) == true);
+                console.log("****************************************************************");
+
+                // console.log(validateEmail(this.value.trim()) && this.value.trim() != "" && await checkEmail(this.value.trim()) == 'true');
+                if (validateEmail(this.value.trim()) && this.value.trim() != "" && await checkEmail(this.value.trim()) == true) {
+                    console.log("Valid Email");
+                    state.style.backgroundColor = 'var(--feather-green)';
+                    state.style.color = "var(--snow)";
+
+                    var styleElement = document.createElement('style');
+
+                    var cssRule = '.send-mail-btn { display: flex !important; opacity: 1 !important; }';
+
+                    styleElement.innerHTML = cssRule;
+
+                    document.head.appendChild(styleElement);
+                    // }
+                    getOTPBtn.style.display = "flex";
+                    getOTPBtn.style.opacity = "1";
+                    // otpTip.style.display = 'flex';
+
+                } else if (this.value.trim() == "") {
+                    state.style.backgroundColor = "var(--polar)";
+                    state.style.color = "var(--swan)";
+                    for (var i = 1; i <= 6; i++) {
+                        var inputField = document.getElementById('otp-field-' + i);
+                        inputField.style.opacity = "0";
+
+                    }
+                    getOTPBtn.style.display = "none";
+                    getOTPBtn.style.opacity = "0";
+                    otpTip.style.display = 'none';
+
+
+                } else {
+                    state.style.backgroundColor = "var(--cardinal)";
+                    state.style.color = "var(--snow)";
+
+                    for (var i = 1; i <= 6; i++) {
+                        var inputField = document.getElementById('otp-field-' + i);
+                        inputField.style.opacity = "0";
+
+                    }
+                    getOTPBtn.style.display = "none";
+                    getOTPBtn.style.opacity = "0";
+                    otpTip.style.display = 'none';
+
+                }
+
+
+            });
+        </script>
+    </signup-overlay>
+    <!-- <script src="../static/js/signup.js"></script> -->
+    <script>
+
+
+
+        async function checkUsername(username) {
+            const response = await fetch('/check-username-availability', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `username=${username}`
+            });
+            const data = await response.json();
+            return data.message === 'Username available';
+        }
+
+        async function checkEmail(email) {
+            const response = await fetch('/check-email-availability', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `email=${email}`
+            });
+            const data = await response.json();
+            return data.message === 'Email available';
+        }
+
+        async function verifyEmail(email) {
+            const response = await fetch('/send-verification-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
+            });
+            const data = await response.json();
+            // alert(data.otp);
+            return data.otp;
+        }
+
+        function verifyOtp(otp) {
+
+            event.preventDefault(); // Prevent default form submission behavior
+            console.log(otp + "This is otp inside me.");
+            var OTP = '';
+            // Loop through each OTP field and concatenate its value
+            for (var i = 1; i <= 6; i++) {
+                var inputField = document.getElementById('otp-field-' + i);
+                OTP += inputField.value;
+            }
+            const enteredOTP = parseInt(OTP);
+            const actualOTP = parseInt(otp); // Assuming `otp` is a global variable containing the actual OTP
+            // alert("Tumne enter kiya hain!", enteredOTP);
+            console.log(enteredOTP + "Entered OTP");
+            console.log(actualOTP + "Actual OTP");
+            console.log(enteredOTP === actualOTP);
+            if (enteredOTP === actualOTP) {
+                // OTP verification successful
+                // Proceed with form submission
+                const formData = new FormData(document.getElementById('signup-form'));
+                fetch('/sign-up', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Form submission successful
+                            alert("Form submitted successfully!");
+                            window.location.href = 'http://127.0.0.1:8888/login';
+                        } else {
+                            // Form submission failed
+                            alert("Error submitting form. Please try again.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("An error occurred while submitting the form.");
+                    });
+                return true;
+            } else {
+                // OTP verification failed
+                // Show error message or take appropriate action
+                return false;
+            }
+
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var passCon = document.querySelector('.sup-password');
+            var notPassCon = document.querySelector('.sup-notpass');
+            var uiBtns = document.querySelectorAll('.ui-button-3');
+            // var getOTPBtn = document.querySelector('.send-mail-btn');
+
+            var otpTip = document.querySelector('#otp-tip');
+            var otpFi
+            otpTip.style.display = 'none';
+            // console.log(getOTPBtn);
+            // getOTPBtn.style.opacity = "0";
+            // getOTPBtn.style.display = "none";
+            console.log("Code Executed");
+            uiBtns[0].style.display = 'none';
+            uiBtns.forEach(element => {
+                element.style.opacity = '0';
+            });
+            var otpField = document.querySelector(".otp-fields");
+            otpField.style.display = "none";
+            for (var i = 1; i <= 6; i++) {
+                var inputField = document.getElementById('otp-field-' + i);
+                inputField.style.opacity = "0";
+            }
+            // Your code to execute after the document has loaded
+            passCon.style.backgroundColor = "var(--polar)";
+            passCon.style.color = "var(--swan)";
+            passCon.style.cursor = "not-allowed";
+            notPassCon.style.backgroundColor = "var(--polar)";
+            notPassCon.style.color = "var(--swan)";
+            notPassCon.style.cursor = "not-allowed";
+            // You can perform any action here, such as manipulating the DOM or making AJAX requests.
+        });
+    </script>
+</body>
+
+</html>

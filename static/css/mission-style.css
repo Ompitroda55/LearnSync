@@ -23,7 +23,7 @@ body {
 
 .nav-links {
   display: flex;
-  gap: 1svw;
+  gap: 3svw;
   justify-content: left;
   min-width: 100%;
   overflow: hidden;
@@ -110,5 +110,11 @@ hr {
 }
 
 hr {
-  width: 94%;
+  width: 100%;
+}
+
+.about-img {
+  width: 300px;
+  height: auto;
+  padding: 0px 20px 0px;
 }

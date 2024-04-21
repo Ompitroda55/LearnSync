@@ -151,7 +151,7 @@
             <div class="foot-main-content">
                 <div class="sub-heading foot-title">About Us</div>
                 <ul class="foot-list">
-                    <li><a href="mission.html">Mission</a></li>
+                    <li><a href="/templates/mission.html">Mission</a></li>
                     <li><a href="#">Approach</a></li>
                     <li><a href="#">Efficacy</a></li>
                     <li><a href="#">Team</a></li>
@@ -311,6 +311,7 @@ document.querySelector('#submit-link').addEventListener('click', async function 
     } else if (isCredsValid === 'Incorrect Password') {
         alertBox.style.display = 'flex';
         alertBoxSpan.textContent = 'Incorrect Password';
+
         setTimeout(function () {
             alertBox.style.display = 'none';
         }, 3000)

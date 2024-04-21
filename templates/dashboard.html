@@ -3945,7 +3945,6 @@
             const u_top10 = document.querySelector('#u-top10');
             const join_date = document.querySelector('#profile-join-date');
 
-
             u_name.textContent = user.username;
             u_email.textContent = user.email;
             u_social.textContent = `You've ${user.friends.length} friends and member in ${user.groups.length} groups.`;
@@ -3953,7 +3952,9 @@
             u_xp.textContent = user['stats'][0]['gems'];
             u_hearts.textContent = user['stats'][0]['hearts'];
             if (user['daily_tasks_data'][0]['highestRank'] == 10000) {
-                u_top10.textContent = "-inf.";
+                u_top10.textContent = "N/A";
+            } else {
+                u_top10.textContent = user['daily_tasks_data'][0]['highestRank'];
             }
             const joiningDate = user.joinging_date;
             const date = new Date(joiningDate);

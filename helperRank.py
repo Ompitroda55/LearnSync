@@ -31,21 +31,6 @@ def calculate_rank(stats):
 
     return int(total_score)
 
-# def update_all_user_ranks():
-#     users_collection = db['users']
-#     # Fetch all users from MongoDB
-#     all_users = users_collection.find()
-
-#     for user in all_users:
-#         # Calculate rank for each user
-#         rank = calculate_rank(user.get("stats", {}))
-
-#         # Update userRank field
-#         users_collection.update_one({"_id": user["_id"]}, {"$set": {"daily_tasks_data.userRank": rank}})
-
-#         # Compare with highest rank and update if necessary
-#         highest_rank = user["daily_tasks_data"][0].get("highestRank", 10000)
-#         if rank < highest_rank:
 def calculate_score(stats):
     # Extract stats values
     streaks = max(stats[0].get("streaks", 0), 1)

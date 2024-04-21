@@ -262,6 +262,155 @@
                                 }
                             </script>
                         </div>
+                        <div class="widget-pomo-stat container-default">
+                            <span id="pomo-insight-head" class="secondary-heading">Pomodoro Insights</span>
+                            <div class="todays-pomodoro-time">
+                                <div class="today-desc less-imp-text">Total Time of Pomodoro</div>
+                                <div class="today-time">9:59</div>
+                            </div>
+                            <div class="last-10-days">
+                                <div class="pomo-day">
+                                    <div class="pomo-day-con"
+                                        style="color: var(--eel);font-weight: 900;background-color: var(--macaw-mask-light);padding: 5px;box-shadow: inset 0 0 0 3px var(--macaw)">
+                                        10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Today</div>
+                                </div>
+                                <div class="pomo-day">
+                                    <div class="pomo-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 2</div>
+                                </div>
+                                <div class="pomo-day">
+                                    <div class="pomo-day-con">1:1</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 3</div>
+                                </div>
+                                <div class="pomo-day">
+                                    <div class="pomo-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 4</div>
+                                </div>
+                                <div class="pomo-day">
+                                    <div class="pomo-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 5</div>
+                                </div>
+                                <div class="pomo-day">
+                                    <div class="pomo-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 6</div>
+                                </div>
+                                <div class="pomo-day">
+                                    <div class="pomo-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 7</div>
+                                </div>
+                                <div class="pomo-day">
+                                    <div class="pomo-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 8</div>
+                                </div>
+                                <div class="pomo-day">
+                                    <div class="pomo-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 9</div>
+                                </div>
+                                <div class="pomo-day">
+                                    <div class="pomo-day-con">
+                                        10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 10</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-task-stat container-default">
+                            <span id="stat-insight-head" class="secondary-heading">Daily Task Insights</span>
+                            <div class="total-tasks-val">
+                                <div class="task-desc less-imp-text">Day Task Completed</div>
+                                <div class="task-val">3 of 20 days</div>
+                            </div>
+                            <div class="last-10-tasks">
+                                <div class="task-day">
+                                    <div class="task-day-con"
+                                        style="color: var(--eel);font-weight: 900;background-color: var(--bee-mask);padding: 5px;box-shadow: inset 0 0 0 3px var(--bee)">
+                                        3/9</div>
+                                    <div class="pomo-day-desc less-imp-text">Today</div>
+                                </div>
+                                <div class="task-day">
+                                    <div class="task-day-con"><span class="material-symbols-outlined" style="font-size: 28px;">
+                                        task_alt
+                                        </span></div>
+                                    <div class="pomo-day-desc less-imp-text">Day 2</div>
+                                </div>
+                                <div class="task-day">
+                                    <div class="task-day-con">1:1</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 3</div>
+                                </div>
+                                <div class="task-day">
+                                    <div class="task-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 4</div>
+                                </div>
+                                <div class="task-day">
+                                    <div class="task-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 5</div>
+                                </div>
+                                <div class="task-day">
+                                    <div class="task-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 6</div>
+                                </div>
+                                <div class="task-day">
+                                    <div class="task-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 7</div>
+                                </div>
+                                <div class="task-day">
+                                    <div class="task-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 8</div>
+                                </div>
+                                <div class="task-day">
+                                    <div class="task-day-con">10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 9</div>
+                                </div>
+                                <div class="task-day">
+                                    <div class="task-day-con">
+                                        10:10</div>
+                                    <div class="pomo-day-desc less-imp-text">Day 10</div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            async function getPomodoroTimes() {
+                                // Define the endpoint URL
+                                const url = '/pomodoro-times';
+
+                                try {
+                                    // Send a GET request to fetch pomodoro times
+                                    const response = await fetch(url);
+
+                                    // Check if the response is successful
+                                    if (!response.ok) {
+                                        throw new Error('Failed to fetch pomodoro times');
+                                    }
+
+                                    // Parse the JSON response
+                                    const pomodoroTimes = await response.json();
+
+                                    // Return the pomodoro times array
+                                    return pomodoroTimes;
+                                } catch (error) {
+                                    // Handle any errors that occurred during the fetch request
+                                    console.error('Error fetching pomodoro times:', error.message);
+                                }
+                            }
+
+                            async function fillPomoTimes() {
+                                // Select the container for last 10 days
+                                const last10DaysContainer = document.querySelector('.last-10-days');
+                                const times = await getPomodoroTimes();
+                                // Loop through each day element
+                                const pomoDays = last10DaysContainer.querySelectorAll('.pomo-day');
+                                pomoDays.forEach((day, index) => {
+                                    // Get the time element and update its text content
+                                    const timeElement = day.querySelector('.pomo-day-con');
+                                    timeElement.textContent = times[0][index];
+                                });
+
+                                // Update today's time
+                                const todayTimeElement = document.querySelector('.today-time');
+                                todayTimeElement.textContent = times[1];
+                            }
+
+                        </script>
                     </div>
                     <div class="container-preferences" id="container-preferences">
                         <div class="title-dashboard">User Preferences</div>
@@ -1744,13 +1893,12 @@
                         <div class="container-default" style="display: flex; flex-direction: column;"
                             id="leaderboard-con">
                             <span id="leaderboard-heading" style="text-align: center; color: var(--eel);"
-                                class="secondary-heading" >Global Leaderboard</span>
-                                <span id="leaderboard-tagline " 
-                                style="color: var(--hare); text-align: center;;"
+                                class="secondary-heading">Global Leaderboard</span>
+                            <span id="leaderboard-tagline " style="color: var(--hare); text-align: center;;"
                                 class="less-imp-text">Rise to the top and lead with distinction and pride.</span>
-                                <div class="curr-user-info" style="color: var(--hare);">
+                            <div class="curr-user-info" style="color: var(--hare);">
 
-                                </div>
+                            </div>
                             <!-- <div class="leaderboard-select" style="display: flex; flex-direction: row; justify-content: center;">
                                 <button class="ui-button-3"><span class="material-symbols-outlined" style="font-size: 28px;">
                                     public
@@ -1759,7 +1907,7 @@
                                         diversity_1
                                         </span>&nbsp;My Community</button>
                             </div> -->
-                            
+
                             <hr style="max-width: 450px; margin-bottom: 10px;">
                             <div class="leaderboard-list-con">
                                 <!-- <div class="leaderboard-item first">
@@ -1838,7 +1986,7 @@
                                 { image: '../static/resources/images/dashboard/rank3' }
                             ];
                             const leaderboardListCon = document.querySelector('.leaderboard-list-con');
-                            while(currIdx < 3) {
+                            while (currIdx < 3) {
                                 // Create a new leaderboard item div
                                 const leaderboardItem = document.createElement('div');
                                 leaderboardItem.classList.add('leaderboard-item', 'first');
@@ -1868,9 +2016,9 @@
                                 // Append left and right parts to the leaderboard item
                                 leaderboardItem.appendChild(leaderLeft);
                                 leaderboardItem.appendChild(leaderRight);
-                                if(data[currIdx].username == username) {
+                                if (data[currIdx].username == username) {
                                     leaderboardItem.classList.add('current-user');
-                                    document.querySelector('.curr-user-info').textContent = "Your global rank is "+ data[currIdx].rank + " & socre is " +data[currIdx].score;
+                                    document.querySelector('.curr-user-info').textContent = "Your global rank is " + data[currIdx].rank + " & socre is " + data[currIdx].score;
                                 }
                                 // Append the leaderboard item to the container
                                 leaderboardListCon.appendChild(leaderboardItem);
@@ -1906,9 +2054,9 @@
                                 // Append left and right parts to the leaderboard item
                                 leaderboardItem.appendChild(leaderLeft);
                                 leaderboardItem.appendChild(leaderRight);
-                                if(data[currIdx].username == username) {
+                                if (data[currIdx].username == username) {
                                     leaderboardItem.classList.add('current-user');
-                                    document.querySelector('.curr-user-info').textContent = "Your rank is "+ data[currIdx].rank + " & socre is " +data[currIdx].score;
+                                    document.querySelector('.curr-user-info').textContent = "Your rank is " + data[currIdx].rank + " & socre is " + data[currIdx].score;
                                 }
                                 // Append the leaderboard item to the container
                                 leaderboardListCon.appendChild(leaderboardItem);
@@ -1940,7 +2088,7 @@
                                 return null;
                             }
                         }
-                        
+
                     </script>
                 </content-container>
                 <script>
@@ -1975,7 +2123,7 @@
                         }
 
                         // Call viewManager with 0 to show container-home by default
-                        viewManager(1);
+                        viewManager(0);
 
                         // Add event listeners to links to call viewManager with the corresponding position
                         linkIds.forEach((id, index) => {
@@ -2366,12 +2514,18 @@
                         <span class="secondary-heading" style="display: flex; align-items: center;">
                             <span class="material-symbols-outlined" style="font-size: 28px;">
                                 leaderboard
-                                </span>&nbsp;Merit Metrics
+                            </span>&nbsp;Merit Metrics
                         </span>
-                        <span class="normal-text" style="color: var(--wolf); text-align: justify; font-size: var(--font-for-flash-card);">
-                            LearnSync's ranking system calculates scores and ranks algorithmically from user activity, promoting fair competition and acknowledgment.<br><br>
-Weightage-agnostic, it ensures transparency and equal opportunity, reflecting user dedication and achievements accurately.
-                        </span>
+                        <ul>
+                            <span class="less-imp-text"
+                                style="color: var(--wolf); text-align: auto; font-size: var(--font-for-flash-card);">
+                                <li>Scores and ranks calculated algorithmically from user activity.</li>
+                                <li>Fair competition and acknowledgment promoted.</li>
+                                <li>Weightage-agnostic for transparency and equal opportunity.</li>
+                                <li>Reflects user dedication and achievements accurately.</li>
+                                <li>Reflects user dedication and achievements accurately.</li>
+                            </span>
+                        </ul>
                     </div>
                     <script>
                         // let streakItems = [
@@ -2800,7 +2954,7 @@ Weightage-agnostic, it ensures transparency and equal opportunity, reflecting us
                 });
         }
 
-        function startTimer() {
+        async function startTimer() {
             startButton.disabled = true;
             const panel = document.querySelector(".ratings-panel-con");
             stopButton.disabled = false;
@@ -2811,6 +2965,7 @@ Weightage-agnostic, it ensures transparency and equal opportunity, reflecting us
             panel.setAttribute('data-sequence', ts);
             console.log(timeSequence);
             var currentTIme = timeSequence[sequenceIndex] * 1;
+            console.log(currentTIme);
             let endTime = startTime + (timeSequence[sequenceIndex] * 60 * 1000);
             localStorage.setItem('endTime', endTime);
             timerInterval = setInterval(() => {
@@ -2823,6 +2978,7 @@ Weightage-agnostic, it ensures transparency and equal opportunity, reflecting us
                     timerSound.play();
                     console.log('timerSound played!');
                     addTimeToUser(currentTIme);
+                    fillPomoTimes();
                 }
 
                 if (secondsLeft <= 0) {
@@ -3766,7 +3922,7 @@ Weightage-agnostic, it ensures transparency and equal opportunity, reflecting us
 
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
 
             updateStats();
             fillProfile();
@@ -3777,6 +3933,7 @@ Weightage-agnostic, it ensures transparency and equal opportunity, reflecting us
             generateUserGroupsList("");
             generateUserFriendsList("");
             generateUserDailyTasks();
+            await fillPomoTimes();
             // getStreaksData();
             generateFriendStreakItems();
             setInterval(updateNotifications, 5000);

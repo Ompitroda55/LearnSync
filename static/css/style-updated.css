@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&family=Satisfy&family=Varela+Round&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0');
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap');
 
 :root {
 
@@ -76,6 +77,13 @@
     --diff-lvl-3: #00ff91bd;
     /* Colors for Task Difficulty */
 
+}
+
+.pt-serif-regular {
+    font-family: "PT Serif", serif;
+    font-weight: 400;
+    font-size: var(--heading-font-size);
+    font-style: normal;
 }
 
 * body {

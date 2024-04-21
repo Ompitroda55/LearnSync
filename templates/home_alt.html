@@ -21,7 +21,7 @@
     <login-overlay id="login-overlay">
 
         <a id="close-login" class="ui-button-3"><span class="material-symbols-outlined">
-            close
+                close
             </span></a>
         <form action="/login" id="form-login" method="post">
             <div class="login-container">
@@ -151,11 +151,11 @@
             <div class="foot-main-content">
                 <div class="sub-heading foot-title">About Us</div>
                 <ul class="foot-list">
-                    <li><a href="/templates/mission.html">Mission</a></li>
-                    <li><a href="#">Approach</a></li>
-                    <li><a href="#">Efficacy</a></li>
-                    <li><a href="#">Team</a></li>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="/mission">Mission</a></li>
+                    <li><a href="/mission">Approach</a></li>
+                    <li><a href="/mission">Efficacy</a></li>
+                    <li><a href="/mission">Team</a></li>
+                    <li><a href="/mission">Contact Us</a></li>
                 </ul>
             </div>
             <div class="foot-main-content">
@@ -233,103 +233,103 @@
     </script>
     <script>
         window.addEventListener('scroll', function () {
-    var scrollPosition = window.scrollY;
-    var navHeight = document.querySelector('.nav').offsetHeight;
-    var navElement = document.querySelector('.nav');
+            var scrollPosition = window.scrollY;
+            var navHeight = document.querySelector('.nav').offsetHeight;
+            var navElement = document.querySelector('.nav');
 
-    if (scrollPosition > navHeight) {
-        navElement.classList.add('nav-border');
-    } else {
-        navElement.classList.remove('nav-border');
-    }
-});
+            if (scrollPosition > navHeight) {
+                navElement.classList.add('nav-border');
+            } else {
+                navElement.classList.remove('nav-border');
+            }
+        });
 
-window.addEventListener('scroll', function () {
-    var targetElement = document.getElementById('target-1');
-    var targetElement1 = document.getElementById('target-2');
-    // Get the height from the top of the page
-    var elementHeightFromTop = targetElement.offsetTop;
-    var elementHeightFromTop1 = targetElement1.offsetTop;
+        window.addEventListener('scroll', function () {
+            var targetElement = document.getElementById('target-1');
+            var targetElement1 = document.getElementById('target-2');
+            // Get the height from the top of the page
+            var elementHeightFromTop = targetElement.offsetTop;
+            var elementHeightFromTop1 = targetElement1.offsetTop;
 
-    // Get the current scroll position from the top of the page
-    var currentScroll = window.pageYOffset;
+            // Get the current scroll position from the top of the page
+            var currentScroll = window.pageYOffset;
 
-    if (currentScroll > elementHeightFromTop - 60 && currentScroll < elementHeightFromTop1 - 60) {
-        document.getElementById('top-get-started').style.display = 'block';
-    } else {
-        document.getElementById('top-get-started').style.display = 'none';
-    }
-    console.log('Element height from top of the page: ' + elementHeightFromTop + ' pixels');
-    console.log('Current scroll position from the top: ' + currentScroll + ' pixels');
-});
+            if (currentScroll > elementHeightFromTop - 60 && currentScroll < elementHeightFromTop1 - 60) {
+                document.getElementById('top-get-started').style.display = 'block';
+            } else {
+                document.getElementById('top-get-started').style.display = 'none';
+            }
+            console.log('Element height from top of the page: ' + elementHeightFromTop + ' pixels');
+            console.log('Current scroll position from the top: ' + currentScroll + ' pixels');
+        });
 
-document.getElementById('open-login').addEventListener('click', function() {
-    // Show the overlay
-    document.getElementById('login-overlay').style.display = 'flex';
+        document.getElementById('open-login').addEventListener('click', function () {
+            // Show the overlay
+            document.getElementById('login-overlay').style.display = 'flex';
 
-    // Disable all focusable elements
-});
+            // Disable all focusable elements
+        });
 
-document.getElementById('close-login').addEventListener('click', function() {
-    // Hide the overlay
-    document.getElementById('login-overlay').style.display = 'none';
+        document.getElementById('close-login').addEventListener('click', function () {
+            // Hide the overlay
+            document.getElementById('login-overlay').style.display = 'none';
 
-    // Enable all focusable elements
-});
+            // Enable all focusable elements
+        });
 
-AOS.init();
+        AOS.init();
 
-// Login Logic for Page
-async function checkCredentials(username, password) {
-    const requestBody = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+        // Login Logic for Page
+        async function checkCredentials(username, password) {
+            const requestBody = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
-    const response = await fetch('/check-credentials', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: requestBody
-    });
+            const response = await fetch('/check-credentials', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: requestBody
+            });
 
-    const data = await response.json();
-    return data.message;
-}
+            const data = await response.json();
+            return data.message;
+        }
 
 
-document.querySelector('#submit-link').addEventListener('click', async function (e) {
-    e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const isCredsValid = await checkCredentials(username, password);
-    console.log(isCredsValid);
-    const alertBox = document.querySelector(".alert-box-warn");
-    const alertBoxSpan = document.querySelector("#alert-box-span");
-    const signupLink = document.getElementById('signup-link');
+        document.querySelector('#submit-link').addEventListener('click', async function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const isCredsValid = await checkCredentials(username, password);
+            console.log(isCredsValid);
+            const alertBox = document.querySelector(".alert-box-warn");
+            const alertBoxSpan = document.querySelector("#alert-box-span");
+            const signupLink = document.getElementById('signup-link');
 
-    if (isCredsValid === 'Valid Creds') {
-        document.getElementById('form-login').submit();
-    } else if (isCredsValid === 'Incorrect Password') {
-        alertBox.style.display = 'flex';
-        alertBoxSpan.textContent = 'Incorrect Password';
+            if (isCredsValid === 'Valid Creds') {
+                document.getElementById('form-login').submit();
+            } else if (isCredsValid === 'Incorrect Password') {
+                alertBox.style.display = 'flex';
+                alertBoxSpan.textContent = 'Incorrect Password';
 
-        setTimeout(function () {
-            alertBox.style.display = 'none';
-        }, 3000)
-    } else if (isCredsValid === 'Username not available') {
-        alertBox.style.display = 'flex';
-        alertBoxSpan.textContent = 'Username not found';
-        setTimeout(function () {
-            alertBox.style.display = 'none';
-        }, 3000)
-        // signupLink.style.display = 'flex';
-    } else {
-        alertBox.style.display = 'flex';
-        alertBoxSpan.textContent = 'Invalid State! Reload Page.';
-        setTimeout(function () {
-            alertBox.style.display = 'none';
-        }, 3000)
-    }
-});
+                setTimeout(function () {
+                    alertBox.style.display = 'none';
+                }, 3000)
+            } else if (isCredsValid === 'Username not available') {
+                alertBox.style.display = 'flex';
+                alertBoxSpan.textContent = 'Username not found';
+                setTimeout(function () {
+                    alertBox.style.display = 'none';
+                }, 3000)
+                // signupLink.style.display = 'flex';
+            } else {
+                alertBox.style.display = 'flex';
+                alertBoxSpan.textContent = 'Invalid State! Reload Page.';
+                setTimeout(function () {
+                    alertBox.style.display = 'none';
+                }, 3000)
+            }
+        });
 
     </script>
 </body>

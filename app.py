@@ -1943,8 +1943,13 @@ def getDailyTasksInsights():
         print(e)
         return jsonify({'error': str(e)}), 500
 
+@app.route('/mission')
+def mission():
+    # Assuming mission.html is located in the templates folder
+    return render_template('mission.html')
 # 
 # Main() function of app
 # 
 if __name__ == '__main__':
     app.run(debug=True, port=8888)
+

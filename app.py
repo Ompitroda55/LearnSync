@@ -1892,6 +1892,57 @@ def get_pomodoro_times():
         print(e)
         return jsonify({'error': str(e)}), 500
 
+@app.route('/daily_task_insights', methods=['GET'])
+def getDailyTasksInsights():
+    try:
+        # Access the users collection
+        users_collection = db['users']
+
+        # Get the current user's ID from the session
+        user_id = session.get('user_id')
+
+        # Find the current user's document in the users collection
+        user = users_collection.find_one({'_id': ObjectId(user_id)})
+        # Get the necessary data for task insights
+        todays_task = user.get('todays_task')
+        task_stat = user.get('task_stat', [])
+        while len(task_stat) < 9:
+            task_stat.insert(0, {'complete': 0, 'total': 0})
+
+        # Add ocde for counting total no. ofdays completd here
+
+        # Calculate total completed tasks and total days
+        # completed_tasks = todays_task['complete']
+        # total_days = len(task_stat)
+        # print(task_stat)
+        # print("THis is task stat...................")
+        task_stat.append(todays_task)
+        total_completed_days = sum(1 for task in task_stat if task['complete'] == task['total'])
+
+# Calculate total number of days
+        total_days = len(task_stat)
+
+        # Get the last 10 days' task data
+        last_10_tasks = task_stat[-10:]
+        last_10_tasks.reverse()
+
+        # Construct the response data
+        # print(last_10_tasks)
+        # Return the task insights data as JSON response
+        response_data = {
+            "last_10_tasks": last_10_tasks,
+            "total_completed_days": total_completed_days,
+            "total_days": total_days
+        }
+
+# Return the task insights data as JSON response
+        return jsonify(response_data)
+
+    except Exception as e:
+        # Handle any errors that occur
+        print(e)
+        return jsonify({'error': str(e)}), 500
+
 # 
 # Main() function of app
 # 

@@ -328,42 +328,43 @@
                                     <div class="pomo-day-desc less-imp-text">Today</div>
                                 </div>
                                 <div class="task-day">
-                                    <div class="task-day-con"><span class="material-symbols-outlined" style="font-size: 28px;">
-                                        task_alt
+                                    <div class="task-day-con"><span class="material-symbols-outlined"
+                                            style="font-size: 28px;">
+                                            task_alt
                                         </span></div>
                                     <div class="pomo-day-desc less-imp-text">Day 2</div>
                                 </div>
                                 <div class="task-day">
-                                    <div class="task-day-con">1:1</div>
+                                    <div class="task-day-con">4/5</div>
                                     <div class="pomo-day-desc less-imp-text">Day 3</div>
                                 </div>
                                 <div class="task-day">
-                                    <div class="task-day-con">10:10</div>
+                                    <div class="task-day-con">4/5</div>
                                     <div class="pomo-day-desc less-imp-text">Day 4</div>
                                 </div>
                                 <div class="task-day">
-                                    <div class="task-day-con">10:10</div>
+                                    <div class="task-day-con">4/5</div>
                                     <div class="pomo-day-desc less-imp-text">Day 5</div>
                                 </div>
                                 <div class="task-day">
-                                    <div class="task-day-con">10:10</div>
+                                    <div class="task-day-con">4/5</div>
                                     <div class="pomo-day-desc less-imp-text">Day 6</div>
                                 </div>
                                 <div class="task-day">
-                                    <div class="task-day-con">10:10</div>
+                                    <div class="task-day-con">4/5</div>
                                     <div class="pomo-day-desc less-imp-text">Day 7</div>
                                 </div>
                                 <div class="task-day">
-                                    <div class="task-day-con">10:10</div>
+                                    <div class="task-day-con">4/5</div>
                                     <div class="pomo-day-desc less-imp-text">Day 8</div>
                                 </div>
                                 <div class="task-day">
-                                    <div class="task-day-con">10:10</div>
+                                    <div class="task-day-con">4/5</div>
                                     <div class="pomo-day-desc less-imp-text">Day 9</div>
                                 </div>
                                 <div class="task-day">
                                     <div class="task-day-con">
-                                        10:10</div>
+                                        5/6</div>
                                     <div class="pomo-day-desc less-imp-text">Day 10</div>
                                 </div>
                             </div>
@@ -410,6 +411,55 @@
                                 todayTimeElement.textContent = times[1];
                             }
 
+
+                            // FOr tasks
+
+                            async function fillTaskInsights() {
+                                try {
+                                    // Define the endpoint URL
+                                    const url = '/daily_task_insights';
+
+                                    // Send a GET request to fetch the task insights
+                                    const response = await fetch(url);
+                                    if (!response.ok) {
+                                        throw new Error('Failed to fetch task insights');
+                                    }
+
+                                    // Parse the JSON response
+                                    const taskInsights = await response.json();
+                                    console.info(taskInsights);
+
+                                    // Fill the total tasks value
+                                    const totalTasksVal = document.querySelector('.total-tasks-val .task-val');
+                                    totalTasksVal.textContent = `${taskInsights.total_completed_days} of ${taskInsights.total_days} days`;
+
+                                    // Fill the last 10 tasks
+                                    const last10Tasks = document.querySelector('.last-10-tasks');
+ // Clear existing content          c
+                                    const data = taskInsights['last_10_tasks'];
+                                    const pomoDays = last10Tasks.querySelectorAll('.task-day');
+                                    pomoDays.forEach((day, index) => {
+                                        // Get the time element and update its text content
+                                        const timeElement = day.querySelector('.task-day-con');
+                                        if(data[index].total != 0 && data[index].complete==data[index].total) {
+                                            timeElement.innerHTML = `<span class="material-symbols-outlined"
+                                            style="font-size: 28px;">
+                                            task_alt
+                                            </span>`;
+                                        }
+                                        else if(data[index].total != 0) {
+                                            timeElement.textContent = data[index].complete + "/" + data[index].total;
+                                        }
+                                        else {
+                                            timeElement.textContent = "N/A";
+                                        }
+                                    });
+
+                                    console.log('Task insights filled successfully.');
+                                } catch (error) {
+                                    console.error('Error filling task insights:', error.message);
+                                }
+                            } fillTaskInsights();
                         </script>
                     </div>
                     <div class="container-preferences" id="container-preferences">
@@ -1122,7 +1172,7 @@
                                         class="profile-stats-icon">
                                     <div class="profile-stats-data">
                                         <span class="stats-data-main" id="u-top10">32</span>
-                                        <span class="stats-data-label" id="u-top10">Top Most Rank</span>
+                                        <span class="stats-data-label">Top Most Rank</span>
                                     </div>
                                 </div>
                             </div>

@@ -77,14 +77,16 @@ def update_task_stat_for_all_users():
             sample_task = {'complete': 0, 'total': 0}  # Initialize with default values
             todays_task = user['todays_task']
             # Update task_stat array
-            users_collection.update_one(
-                {'_id': user_id},
-                {'$push': {'task_stat': todays_task}},
-            )
+            print(str(user['todays_task']['total']) + "is for user " + user['username'])
+            if(user['todays_task']['total']> 0):
+                users_collection.update_one(
+                    {'_id': user_id},
+                    {'$push': {'task_stat': todays_task}},
+                )
 
             users_collection.update_one(
                 {'_id': user_id},
-                {'$set': {'todays_task': todays_task}}
+                {'$set': {'todays_task': sample_task}}
             )
 
         print("Task stat updated for all users successfully.")
@@ -128,9 +130,10 @@ def update_todays_task_for_all_users():
 update_todays_task_for_all_users()
 
 # Call the function to update task_stat for all users
-update_task_stat_for_all_users() # yeh raat ko chalega
+#update_task_stat_for_all_users() # yeh raat ko chalega
+# update_todays_task_for_all_users()
 
 
-update_pomodoro_stat()
-check_streaks()
-reset_completed_tasks()
+# update_pomodoro_stat()
+# check_streaks()
+# reset_completed_tasks()

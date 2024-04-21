@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pymongo.mongo_client import MongoClient
@@ -69,4 +70,9 @@ def upload_riddles_to_mongodb(riddles):
     collection.insert_many(riddles)
     print("Riddles uploaded successfully to MongoDB.")
 
-upload_riddles_to_mongodb(riddles)
+# upload_riddles_to_mongodb(riddles)
+
+previous_date = (datetime.now().date() - timedelta(days=1))
+print(previous_date)
+print(datetime.now().date() == (previous_date + timedelta(days=1)))
+print()

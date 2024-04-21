@@ -33,10 +33,10 @@
 
                 // Add click event listener to each rating button
                 ratingButtons.forEach(function (button) {
-                    button.addEventListener("click", function () {
+                    button.addEventListener("click", async function () {
                         // Get the parent element with the class 'ratings-panel-con'
                         const ratingsPanelCon = document.querySelector(".ratings-panel-con");
-
+                        await fillPomoTimes();
                         ratingsPanelCon.style.display = "none";
                     });
                 });
@@ -435,19 +435,19 @@
 
                                     // Fill the last 10 tasks
                                     const last10Tasks = document.querySelector('.last-10-tasks');
- // Clear existing content          c
+                                    // Clear existing content          c
                                     const data = taskInsights['last_10_tasks'];
                                     const pomoDays = last10Tasks.querySelectorAll('.task-day');
                                     pomoDays.forEach((day, index) => {
                                         // Get the time element and update its text content
                                         const timeElement = day.querySelector('.task-day-con');
-                                        if(data[index].total != 0 && data[index].complete==data[index].total) {
+                                        if (data[index].total != 0 && data[index].complete == data[index].total) {
                                             timeElement.innerHTML = `<span class="material-symbols-outlined"
                                             style="font-size: 28px;">
                                             task_alt
                                             </span>`;
                                         }
-                                        else if(data[index].total != 0) {
+                                        else if (data[index].total != 0) {
                                             timeElement.textContent = data[index].complete + "/" + data[index].total;
                                         }
                                         else {
@@ -459,7 +459,7 @@
                                 } catch (error) {
                                     console.error('Error filling task insights:', error.message);
                                 }
-                            } fillTaskInsights();
+                            } 
                         </script>
                     </div>
                     <div class="container-preferences" id="container-preferences">
@@ -1451,8 +1451,8 @@
                                                                 const removeButton = document.createElement('button');
                                                                 removeButton.classList.add('ui-button-2', 'remove-group-member');
                                                                 removeButton.addEventListener('click', async function () {
-                                                                    if(await createConfirmBox("Remove "+groupMemberItem.dataset.name, "Removing a member will remove her from every task. Member will receive a notification above it. Are you sure?"))
-                                                                    await removeGrpMember(grpI, groupMemberItem.dataset.name, grpN, isUserAdmin);
+                                                                    if (await createConfirmBox("Remove " + groupMemberItem.dataset.name, "Removing a member will remove her from every task. Member will receive a notification above it. Are you sure?"))
+                                                                        await removeGrpMember(grpI, groupMemberItem.dataset.name, grpN, isUserAdmin);
                                                                     await generateManagerList(grpN, grpI, isUserAdmin);
                                                                     await generateExFriendsList('.add-member-list');
                                                                 });
@@ -1613,7 +1613,39 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="container-acc-act">
+                            <div class="secondary-heading">Account Actions</div>
+                            <div class="account-actions-container container-default">
+                                <button class="link-primary" id="del-acc-button" style="border: none;">Delete
+                                    Account</button>
+                            </div>
+                            <script>
+                                document.getElementById('del-acc-button').addEventListener('click', function () {
+                                    if(createConfirmBox("Delete Account","Once account is deleted, it cannot be recovered and all of the data and social connection will be removed related with the account are you sure to delete your account?"))
+                                    fetch('/delete-account', {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        }
+                                    })
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Network response was not ok');
+                                            }
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            // Handle success response
+                                            console.log(data.message); // Log success message
+                                            // Optionally, redirect or perform other actions
+                                        })
+                                        .catch(error => {
+                                            // Handle error
+                                            console.error('There was a problem with the fetch operation:', error);
+                                        });
+                                });
+                            </script>
+                        </div>
                         <script>
                             const createTaskButton = document.getElementById("create-grp-task-btn");
                             const grpTskAlert = document.getElementById("group-tsk-crt-alert");
@@ -1853,7 +1885,7 @@
                                             try {
                                                 // Call the deleteGroup function
                                                 const groupManager = document.querySelector('.group-handle-con');
-                                                if(await createConfirmBox(`Delete Group ${groupManager.dataset.grpN}`, "Deleting a group will delete all tasks and group will be removed. Members will receive a notification regarding deletion.")) {
+                                                if (await createConfirmBox(`Delete Group ${groupManager.dataset.grpN}`, "Deleting a group will delete all tasks and group will be removed. Members will receive a notification regarding deletion.")) {
                                                     const res = await deleteGroup(groupManager.dataset.grpI, groupManager.dataset.isUserAdmin);
                                                     if (res) {
                                                         generateUserGroupsList("");
@@ -1863,7 +1895,7 @@
                                                         groupHandleConBack.style.display = "none";
                                                         eS.style.display = "flex";
                                                         groupContainer.style.display = "none";
-    
+
                                                     }
 
                                                 } else {
@@ -2152,7 +2184,7 @@
                     document.addEventListener('DOMContentLoaded', function () {
                         const linkIds = ['link-home', 'link-leaderboards', 'link-profile', 'link-preferences'];
                         const containerIds = ['container-home', 'container-leaderboards', 'container-profile', 'container-preferences'];
-                        const sideContainerIds = ['notification-container', 'leaderboard-side','daily-tasks-container', 'friends-container-side','groups-container-side','friends-list-side']
+                        const sideContainerIds = ['notification-container', 'leaderboard-side', 'daily-tasks-container', 'friends-container-side', 'groups-container-side', 'friends-list-side']
                         function viewManager(position) {
                             containerIds.forEach(id => {
                                 document.getElementById(id).style.display = 'none';
@@ -2166,11 +2198,11 @@
                                 document.getElementById(sideContainerIds[2]).style.display = 'flex';
                                 document.getElementById(sideContainerIds[5]).style.display = 'flex';
 
-                            } 
+                            }
                             else if (position == 1) {
                                 document.getElementById(containerIds[position]).style.display = 'flex';
                                 document.getElementById(sideContainerIds[1]).style.display = 'flex';
-                            } 
+                            }
                             else if (position == 2) {
                                 document.getElementById(containerIds[2]).style.display = 'grid';
                                 document.getElementById(sideContainerIds[3]).style.display = 'flex';
@@ -2228,9 +2260,22 @@
                         </div>
                     </div>
                     <div class="notification-container container-default" id="notification-container">
-                        <div class="secondary-heading">Notifications</div>
+                        <div class="secondary-heading"
+                            style="display: flex; flex-direction: row; justify-content: space-between;">
+                            <span class="secondary-heading">Notifications</span>
+                            <button class="ui-button-3" id="noti-refresh-btn"><span class="material-symbols-outlined"
+                                    style="font-size: 28px;">
+                                    refresh
+                                </span>&nbsp;Refresh</button>
+                        </div>
                         <div class="notification-social-reqs">
                         </div>
+                        <script>
+                            document.getElementById("noti-refresh-btn").addEventListener("click", async function () {
+                                // Your function here
+                                await updateNotifications(); // Example function, replace with your desired function
+                            });
+                        </script>
                     </div>
                     <div class="daily-tasks-container  container-default" id="daily-tasks-container">
                         <div class="daily-tasks-container-wrapper">
@@ -2387,10 +2432,11 @@
                                                     console.log("Task Toggled");
                                                     var btn = document.querySelector('#send-streak-to-friends');
                                                     btn.disabled = false;
-                                                }
+                                                } await fillTaskInsights();
                                             }
                                         } else {
                                             await markDailyTaskAsComplete(tskId);
+                                            await fillTaskInsights();
                                             // console.log(countFrequency(completedTaskList, 0) + "is frequency/");
                                             // if(isAllComplete == true) {
                                             //     awardDailyPoints();
@@ -3369,14 +3415,14 @@
             }
         }
 
-        async function getFriendRequests(receiverId) {
+        async function getFriendRequests() {
             try {
                 const response = await fetch('/get-reqs-for-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ receiver_id: receiverId })
+                    body: JSON.stringify()
                 });
                 if (!response.ok) {
                     throw new Error('Failed to fetch friend requests');
@@ -3388,14 +3434,14 @@
             }
         }
 
-        async function getNotifications(receiverId) {
+        async function getNotifications() {
             try {
                 const response = await fetch('/get-noti-for-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ receiver_id: receiverId })
+                    body: JSON.stringify()
                 });
                 if (!response.ok) {
                     throw new Error('Failed to fetch friend requests');
@@ -3407,10 +3453,10 @@
             }
         }
         async function updateNotifications() {
-            let user = await getUser();
-            // Updating Notifications
-            const friendRequests = await getFriendRequests(user._id);
-            // console.log(friendRequests);
+            // let user = await getUser();
+
+            const friendRequests = await getFriendRequests();
+
             const notificationsContainer = document.querySelector('.notification-social-reqs');
             notificationsContainer.innerHTML = ''; // Clear previous notifications
             friendRequests.forEach(request => {
@@ -3427,7 +3473,7 @@
                 notificationsContainer.appendChild(notificationElement);
             });
 
-            const userNotifications = await getNotifications(user._id);
+            const userNotifications = await getNotifications();
             // console.log(userNotifications);
 
             userNotifications.forEach(notification => {
@@ -3446,17 +3492,16 @@
         }
 
         async function updateStats() {
-            let userStats = getUserStats();
+            let userStats = await getUserStats();
 
-            let user = await getUser();
+            // let user = await getUser();
+            console.log(userStats);
 
-            userStats.then((stats) => {
-                document.getElementById('streaks-stat').textContent = stats[0].streaks;
-                document.getElementById('gems-stat').textContent = stats[0].gems;
-                document.getElementById('hearts-stat').textContent = stats[0].hearts;
-                // console.log(stats[0].gems);
+            document.getElementById('streaks-stat').textContent = userStats[0].streaks;
+            document.getElementById('gems-stat').textContent = userStats[0].gems;
+            document.getElementById('hearts-stat').textContent = userStats[0].hearts;
+            // console.log(stats[0].gems);
 
-            })
 
 
         };
@@ -4007,11 +4052,12 @@
             generateUserGroupsList("");
             generateUserFriendsList("");
             generateUserDailyTasks();
-            await fillPomoTimes();
+            fillPomoTimes();
+            fillTaskInsights();
             // getStreaksData();
             generateFriendStreakItems();
-            setInterval(updateNotifications, 5000);
-            setInterval(updateStats, 5000);
+            setInterval(updateNotifications, 10000);
+            setInterval(updateStats, 30000);
         });
 
 

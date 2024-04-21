@@ -208,8 +208,21 @@ content-container {
         "info info"
         "stats stats"
         "friends friends"
-        "groups groups";
+        "groups groups"
+        "acc-act acc-act";
     grid-gap: 15px;
+}
+
+.container-acc-act {
+    grid-area: acc-act;
+    .link-primary {
+        background-color: var(--cardinal);
+        box-shadow: 0px 6px 1px var(--cardinal-mask);
+        color: var(--snow);
+        &:hover {
+            background-color: var(--cardinal-light);
+        }
+    }
 }
 
 .title-dashboard {

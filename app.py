@@ -441,6 +441,90 @@ def send_verification_email():
         # If an exception occurs, return an error response
         return jsonify({'error': str(e)})
 
+@app.route('/send-del-acc-mail', methods=['POST'])
+def send_del_acc_email():
+    try:
+        # Get email and generate OTP
+        data = request.get_json()
+        email = data.get('email')
+        # print(email)
+        otp = str(random.randint(100000, 999999))
+
+        # Construct HTML content for the email
+        subject = 'Delete Acc Mail'
+        html_content = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>{subject}</title>
+            <style>
+                body {{
+                    margin: 0;
+                    padding: 0;
+                    font-family: Arial, sans-serif;
+                    background-color: #ffffff;
+                }}
+                .container {{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: #58cc02;
+                    color: #ffffff;
+                    padding: 20px;
+                }}
+                .logo {{
+                    font-size: 2.5rem;
+                    font-family: 'Varela Round', sans-serif;
+                    font-weight: 800;
+                    margin-bottom: 20px;
+                }}
+                .subject {{
+                    font-size: 1.5rem;
+                    font-family: 'Poppins', sans-serif;
+                    margin-bottom: 20px;
+                }}
+                .text {{
+                    font-size: 1rem;
+                    font-family: 'Poppins', sans-serif;
+                }}
+                #email, #otp {{
+                    font-weight: 600;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <span class="logo">LearnSync</span>
+                <span class="subject">{subject}</span>
+                <div class="text">Your OTP for email <span id="email">{email}</span> is <span id="otp">{otp}</span>.</div>
+            </div>
+        </body>
+        </html>
+        """.format(subject=subject, email=email, otp=otp)
+
+        # Create MIME message
+        msg = MIMEMultipart()
+        msg['From'] = 'taccovan001@gmail.com'
+        msg['To'] = email
+        msg['Subject'] = subject
+        msg.attach(MIMEText(html_content, 'html'))
+
+        # Connect to SMTP server and send email
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login('taccovan001@gmail.com', 'zrntrzoqwjgdhjzs')  # Update with your email password
+        server.sendmail(email, email, msg.as_string())
+        server.quit()
+
+        return jsonify({'otp': otp})
+
+    except Exception as e:
+        # If an exception occurs, return an error response
+        return jsonify({'error': str(e)})
+
 def createFlashCard(name, category, hashtags_list, flashcard_data, user_name):
     collection = db["flashcards"]
 
@@ -478,20 +562,21 @@ def fetch_flashcard_by_id(flashcard_id):
 # Function to fetch object of user from its object_id
 def fetch_user_by_id(user_id):
     collection = db["users"]
-    user_object_id = ObjectId(user_id)
-    user = collection.find_one({"_id": user_object_id})
+    user = collection.find_one({"_id": user_id})
     # print(type(user))
     return user
 
 @app.route('/get-reqs-for-user', methods = ['POST'])
 def get_requests_for_receiver():
-    receiver_id = request.get_json()
-    receiver_id = receiver_id.get('receiver_id')
+
+    receiver_id = ObjectId(session.get('user_id'))
+    print(receiver_id)
     collection = db["requests"]
-    receiver_object_id = ObjectId(receiver_id)
-    receiver = fetch_user_by_id(receiver_object_id)
+
+    username = session.get('username')
+
     # print(receiver, "It is receiver")
-    requests = list(collection.find({"receiver": receiver['username'], "status": "pending"}))
+    requests = list(collection.find({"receiver": username, "status": "pending"}))
     #  requests = list(collection.find({"receiver": receiver['username'], "status": "pending"}).sort([("timestamp_field", -1)]))
     # print(requests)
     for req in requests:
@@ -501,8 +586,7 @@ def get_requests_for_receiver():
 
 @app.route('/get-noti-for-user', methods=['POST'])
 def get_notification_for_receiver():
-    receiver_id = request.get_json()
-    receiver_id = receiver_id.get('receiver_id')
+    receiver_id = session.get('user_id')
     collection = db["notifications"]
     receiver_object_id = ObjectId(receiver_id)
     receiver = fetch_user_by_id(receiver_object_id)
@@ -1645,7 +1729,8 @@ def createStreak():
             "last_interaction_dates": [[user_name, 0], [friend_name, 0]],  # Track last interaction date for each user
             "current_streak_lengths": 0,
             "max_streak_lengths": 0,  # Track max streak length for each user
-            "active": 0
+            "active": 0,
+            "last_complete": 0
         }
 
         # Insert streak document into MongoDB
@@ -1678,45 +1763,56 @@ def sendStreak():
         all_tasks_completed = all(task.get('completed', 0) == 1 for task in collection.find({'createdBy': session.get('user_id')}))
         # Fetch streak document by its _id
         streak = db.streaks.find_one({'_id': ObjectId(streak_id)})
-        if streak:
+        if streak and all_tasks_completed:
             # Determine the index of the current user in the last_interaction_dates array
             user_index = 0 if streak['last_interaction_dates'][0][0] == current_user else 1
-            
+            other_user_index = 1 - user_index 
+            user_current_date = streak['last_interaction_dates'][user_index][1].date()
+            other_current_date = streak['last_interaction_dates'][other_user_index][1].date()
+            previous_date = (datetime.now().date() - timedelta(days=1))
+            current_date = datetime.now().date()
             # Check if the last interaction date is set to zero (initial value)
             if streak['last_interaction_dates'][user_index][1] == 0:
                 # Set the last interaction date to the current time
                 streak['last_interaction_dates'][user_index][1] = datetime.now()
             else:
                 # Check when the streak was last updated for the current user
-                last_update_time = streak['last_interaction_dates'][user_index][1]
-                time_difference = datetime.now() - last_update_time
-                if time_difference <= timedelta(1):
-                    # Streak was updated within the last 24 hours, do not increment streak count
-                    return jsonify({'message': 'Streak already updated within the last 24 hours'})
+                # last_update_time = streak['last_interaction_dates'][user_index][1]
+                # time_difference = datetime.now() - last_update_time
+                # if time_difference <= timedelta(1):
+                #     # Streak was updated within the last 24 hours, do not increment streak count
+                #     return jsonify({'message': 'Streak already updated within the last 24 hours'})
+                if user_current_date == current_date:
+                    return jsonify({'message': 'Streak already updated within today.'})
+                else:
+                    streak['last_interaction_dates'][user_index][1] = datetime.now()
+                    # return jsonify({'message': 'Streak updated for today.'})
             
             # Update the last interaction date for the current user
-            streak['last_interaction_dates'][user_index][1] = datetime.now()
+            # streak['last_interaction_dates'][user_index][1] = datetime.now()
             
             # Check if both users have sent streaks to each other within the past 24 hours
-            other_user_index = 1 - user_index  # Index of the other user in the last_interaction_dates array
-            last_interaction_date = streak['last_interaction_dates'][other_user_index][1]
-            if last_interaction_date != 0:
-                time_difference = datetime.now() - last_interaction_date
-                if time_difference <= timedelta(days=1):
-                    # Both users have sent streaks to each other within 24 hours, increase streak count
+             # Index of the other user in the last_interaction_dates array
+            if other_current_date != 0:
+                if user_current_date == other_current_date == current_date and streak['last_complete'] == datetime.now().date() - timedelta(days=1):
                     streak['current_streak_lengths'] += 1
-                    
+                    streak['last_complete'] = datetime.now()
+
                     # Update the max streak length if the current streak is longer
                     if streak['current_streak_lengths'] > streak['max_streak_lengths']:
                         streak['max_streak_lengths'] = streak['current_streak_lengths']
-                        db.users.update_one({'_id': ObjectId(session.get('user_id'))}, {'$set'})
-                else:
-                    # Streak is broken, reset streak count to 0
-                    streak['current_streak_lengths'] = 0
 
-            # Update the streak document in the database
+                    user = db.users.find_one({'_id': ObjectId(session.get('user_id'))})
+                    if(user['daily_tasks_data'][0]['longestStreak']) < streak['current_streak_lengths']:
+                        db.users.update_one({'_id': ObjectId(session.get('user_id'))}, {"$set": {"longestStreak": streak['current_streak_lengths']}})
+                elif user_current_date == other_current_date == current_date:
+                    streak['current_streak_lengths'] = 1
+                else:
+                    streak['active'] = 0
+                
+
             db.streaks.update_one({'_id': ObjectId(streak_id)}, {'$set': streak})
-            
+
             return jsonify({'message': 'Streak updated successfully'})
         else:
             return jsonify({'error': 'Streak not found'})
@@ -1946,6 +2042,36 @@ def getDailyTasksInsights():
 def mission():
     # Assuming mission.html is located in the templates folder
     return render_template('mission.html')
+
+@app.route('/delete-account', methods=['DELETE'])
+def delete_account():
+    try:
+        username = session.get('username')
+        groups_collection = db['groups']
+        # Delete the user's tasks from the groups collection
+        groups_collection.update_many({"members": username}, {"$pull": {"members": username}})
+        
+        daily_tasks_collection = db['dailys']
+
+        # Delete the user's tasks from the daily tasks collection
+        daily_tasks_collection.delete_many({"createdBy": ObjectId(session.get('user_id'))})
+        
+        users_collection = db['users']
+        # Delete the user from the users collection
+        users_collection.delete_one({"username": username})
+        
+        # Update groups collection to remove the user from all groups
+        groups_collection.update_many({"members": username}, {"$pull": {"members": username}})
+        
+        streaks_collection = db['streaks']
+        # Delete streaks associated with the user
+        streaks_collection.delete_many({"$or": [{"user_id": username}, {"friend_id": username}]})
+        
+        return jsonify({'message': 'Account deleted successfully'})
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 # 
 # Main() function of app
 # 

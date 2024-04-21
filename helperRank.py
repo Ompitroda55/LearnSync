@@ -9,27 +9,6 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["LearnSyncDatabase"]
 # Connect to MongoDB
 
-def calculate_rank(stats):
-    # Extract stats values
-    streaks = stats[0].get("streaks", 0)
-    gems = stats[0].get("gems", 0)
-    hearts = stats[0].get("hearts", 0)
-    longest_streak = stats[0].get("longest_streak", 0)
-
-    # Assign weights to stats
-    streaks_weight = 0.3
-    gems_weight = 0.2
-    hearts_weight = 0.2
-    longest_streak_weight = 0.3
-
-    # Calculate total score based on weighted sum of stats
-    total_score = (streaks * streaks_weight) + (gems * gems_weight) + (hearts * hearts_weight) + (longest_streak * longest_streak_weight)
-
-    # Ensure XP starts from 1 if all stats are zero
-    if total_score == 0:
-        total_score = 1
-
-    return int(total_score)
 
 def calculate_score(stats):
     # Extract stats values

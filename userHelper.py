@@ -14,7 +14,7 @@ new_user_structure = {
     "groups": [],
     "friends": [],
     "streaks_with": [],
-    "daily_tasks_data": [{"lastComplete": 0, "daysCompletes": [], "longestStreak": 0, "userRank": 0, "userScore": 0, "experience": "rookie", "highestRank": 10000}],
+    "daily_tasks_data": [{"lastComplete": 0, "daysCompletes": [], "longestStreak": 0, "userRank": 0, "userScore": 0, "experience": "rookie", "highestRank": 10000, "taskScore":0}],
     "todays_pomo": 0,
     "todays_task":{'complete':0, 'total':0},
     "task_stat":[],

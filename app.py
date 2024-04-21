@@ -568,7 +568,7 @@ def login():
         session['username'] = user['username']
         session['user_id'] = str(user['_id'])
         session['total_usage_hours'] = int(user['pomodoro_usage_hours'])
-
+        # user['none']
         update_todays_task(str(user['_id']))
 
         return render_template('dashboard.html', user=user)
@@ -1935,7 +1935,6 @@ def getDailyTasksInsights():
             "total_days": total_days
         }
 
-# Return the task insights data as JSON response
         return jsonify(response_data)
 
     except Exception as e:

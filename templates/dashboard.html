@@ -1172,7 +1172,7 @@
                                         class="profile-stats-icon">
                                     <div class="profile-stats-data">
                                         <span class="stats-data-main" id="u-top10">32</span>
-                                        <span class="stats-data-label">Top Most Rank</span>
+                                        <span class="stats-data-label">Highest Rank</span>
                                     </div>
                                 </div>
                             </div>
@@ -1297,7 +1297,7 @@
                                                             alt="" class="friend-stats-icon">
                                                         <div class="report-card-data">
                                                             <span class="report-val" id="report-leaderboard">32</span>
-                                                            <span class="report-desc">Top 10 finishes</span>
+                                                            <span class="report-desc">Highest Rank</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1451,6 +1451,7 @@
                                                                 const removeButton = document.createElement('button');
                                                                 removeButton.classList.add('ui-button-2', 'remove-group-member');
                                                                 removeButton.addEventListener('click', async function () {
+                                                                    if(await createConfirmBox("Remove "+groupMemberItem.dataset.name, "Removing a member will remove her from every task. Member will receive a notification above it. Are you sure?"))
                                                                     await removeGrpMember(grpI, groupMemberItem.dataset.name, grpN, isUserAdmin);
                                                                     await generateManagerList(grpN, grpI, isUserAdmin);
                                                                     await generateExFriendsList('.add-member-list');
@@ -1852,18 +1853,24 @@
                                             try {
                                                 // Call the deleteGroup function
                                                 const groupManager = document.querySelector('.group-handle-con');
+                                                if(await createConfirmBox(`Delete Group ${groupManager.dataset.grpN}`, "Deleting a group will delete all tasks and group will be removed. Members will receive a notification regarding deletion.")) {
+                                                    const res = await deleteGroup(groupManager.dataset.grpI, groupManager.dataset.isUserAdmin);
+                                                    if (res) {
+                                                        generateUserGroupsList("");
+                                                        const groupHandleConBack = document.querySelector(".group-handle-con-back");
+                                                        const eS = document.querySelector("#group-empty-state");
+                                                        const groupContainer = document.querySelector(".selected-group-info");
+                                                        groupHandleConBack.style.display = "none";
+                                                        eS.style.display = "flex";
+                                                        groupContainer.style.display = "none";
+    
+                                                    }
 
-                                                const res = await deleteGroup(groupManager.dataset.grpI, groupManager.dataset.isUserAdmin);
-                                                if (res) {
-                                                    generateUserGroupsList("");
-                                                    const groupHandleConBack = document.querySelector(".group-handle-con-back");
-                                                    const eS = document.querySelector("#group-empty-state");
-                                                    const groupContainer = document.querySelector(".selected-group-info");
-                                                    groupHandleConBack.style.display = "none";
-                                                    eS.style.display = "flex";
-                                                    groupContainer.style.display = "none";
-
+                                                } else {
+                                                    console.log("Not delete Group");
                                                 }
+
+
                                             } catch (error) {
                                                 console.error('An error occurred:', error);
                                                 // Handle errors here
@@ -2145,10 +2152,8 @@
                     document.addEventListener('DOMContentLoaded', function () {
                         const linkIds = ['link-home', 'link-leaderboards', 'link-profile', 'link-preferences'];
                         const containerIds = ['container-home', 'container-leaderboards', 'container-profile', 'container-preferences'];
-                        const sideContainerIds = ['notification-container', 'daily-tasks-container', 'friends-container-side']
+                        const sideContainerIds = ['notification-container', 'leaderboard-side','daily-tasks-container', 'friends-container-side','groups-container-side','friends-list-side']
                         function viewManager(position) {
-
-                            // Hide all containers
                             containerIds.forEach(id => {
                                 document.getElementById(id).style.display = 'none';
                             });
@@ -2156,19 +2161,37 @@
                                 document.getElementById(id).style.display = 'none';
                             });
                             if (position == 0) {
-                                document.getElementById(sideContainerIds[0]).style.display = 'flex';
-                                document.getElementById(sideContainerIds[1]).style.display = 'flex';
-
-                            }
-                            if (position == 2) {
-                                document.getElementById(sideContainerIds[2]).style.display = 'flex';
-                            }
-                            if (position == 0 || position === 2) {
                                 document.getElementById(containerIds[position]).style.display = 'grid';
+                                document.getElementById(sideContainerIds[0]).style.display = 'flex';
+                                document.getElementById(sideContainerIds[2]).style.display = 'flex';
+                                document.getElementById(sideContainerIds[5]).style.display = 'flex';
 
-                            } else {
+                            } 
+                            else if (position == 1) {
                                 document.getElementById(containerIds[position]).style.display = 'flex';
+                                document.getElementById(sideContainerIds[1]).style.display = 'flex';
+                            } 
+                            else if (position == 2) {
+                                document.getElementById(containerIds[2]).style.display = 'grid';
+                                document.getElementById(sideContainerIds[3]).style.display = 'flex';
+                                document.getElementById(sideContainerIds[4]).style.display = 'flex';
+                                document.getElementById(sideContainerIds[5]).style.display = 'flex';
+
                             }
+                            else if (position == 3) {
+                                document.getElementById(containerIds[3]).style.display = 'flex';
+                                document.getElementById(sideContainerIds[2]).style.display = 'flex';
+
+                            }
+                            // if (position == 2) {
+                            //     document.getElementById(sideContainerIds[2]).style.display = 'flex';
+                            // }
+                            // if (position == 0 || position === 2) {
+                            //     document.getElementById(containerIds[position]).style.display = 'grid';
+
+                            // } else {
+                            //     document.getElementById(containerIds[position]).style.display = 'flex';
+                            // }
                             // Show the container corresponding to the given position
                         }
 
@@ -4536,7 +4559,7 @@
             friendStreaks.textContent = friend.friend.stats[0].streaks;
             friendGems.textContent = friend.friend.stats[0].gems;
             friendHearts.textContent = friend.friend.stats[0].hearts;
-            friendLeaderboard.textContent = friend.friend.stats[0].streaks;
+            friendLeaderboard.textContent = friend.friend.daily_tasks_data[0]['highestRank'];
             // longestStreak.textContent = friend.friend.daily_tasks_data[0].longestStreak;
             longestStreak.textContent = await getUserLongestStreakWith(friend.friend.username);
 

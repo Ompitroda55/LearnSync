@@ -2459,6 +2459,11 @@ align-items: center;
     /* background-size: cover; */
 }
 
+#leaderboard-side {
+    display: flex;
+    flex-direction: column;
+}
+
 #leaderboard-con {
     max-height: 200dvh;
     /* border: none; */

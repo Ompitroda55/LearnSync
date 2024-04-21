@@ -125,15 +125,137 @@ def update_todays_task_for_all_users():
     except Exception as e:
         print(f"Error: {str(e)}")
 
+def update_highest_rank():
+    users_collection = db['users']
+    # Iterate through each user in the collection
+    for user in users_collection.find():
+        # Get the current user's highest rank
+        highest_rank = user['daily_tasks_data'][0].get('highestRank')
 
-# Call the function to update today's task for all users
-update_todays_task_for_all_users()
+        # Get the user's current rank
+        current_rank = user['daily_tasks_data'][0].get('userRank')
 
-# Call the function to update task_stat for all users
-#update_task_stat_for_all_users() # yeh raat ko chalega
+        # Update the user's highest rank if the current rank is lower
+        if current_rank < highest_rank:
+            users_collection.update_one(
+                {'_id': user['_id']},
+                {'$set': {'highestRank': current_rank}}
+            )
+
+    print("Highest ranks updated successfully.")
+
+def calculate_task_scores():
+    users_collection = db['users']
+    # Iterate through each user in the collection
+    for user in users_collection.find():
+        # Get the total number of days and completed tasks
+        task_stat = user.get('task_stat')
+        total_days = len(task_stat)
+        completed_tasks = sum(task['complete'] for task in task_stat)
+        total_tasks = 0
+        total_completes = 0
+        print(task_stat)
+        for task in task_stat:
+            if task['total']>0 and task['complete']:
+                if task['complete']==task['total']:
+                    total_completes+=task['complete']
+                total_tasks+=task['total']
+
+            else:
+                total_tasks+=1
+                total_completes+=1
+        print(total_completes)
+        print(total_tasks)
+        print()
+        # Calculate the completion percentage
+        completion_percentage = total_completes / total_tasks if total_days > 0 else 0
+
+
+        # Assign a score based on the completion percentage
+        # You can define your scoring logic here
+        score = int(completion_percentage * 100)
+
+
+        # Update the user's score in the database
+        users_collection.update_one(
+            {'_id': user['_id']},
+            {'$set': {'daily_tasks_data.0.taskScore': score}}
+        )
+        print(f"For completing {completed_tasks} from {total_tasks} {user['username']} got {score}")
+
+    print("Task scores calculated and updated successfully.")
+
+def calculate_score(stats):
+    # Extract stats values
+    streaks = max(stats[0].get("streaks", 0), 1)
+    gems = max(stats[0].get("gems", 0), 1)
+    hearts = max(stats[0].get("hearts", 0), 1)
+    longest_streak = max(stats[0].get("longest_streak", 0), 1)
+
+    # Assign weights to stats
+    streaks_weight = 0.3
+    gems_weight = 0.2
+    hearts_weight = 0.2
+    longest_streak_weight = 0.3
+
+    # Calculate total score based on weighted sum of stats
+    total_score = (streaks * streaks_weight) + (gems * gems_weight) + (hearts * hearts_weight) + (longest_streak * longest_streak_weight)
+
+    return int(total_score)
+
+def update_all_user_ranks():
+    users_collection = db['users']
+    # Fetch all users from MongoDB
+    all_users = users_collection.find()
+
+    # Create a 2D array to store user scores and usernames
+    user_scores = []
+
+    for user in all_users:
+        # Calculate score for each user
+        score = calculate_score(user.get("stats", {}))
+        username = user.get("username")
+
+        # Append username and score to the array
+        user_scores.append([username, score])
+
+    # Sort the user scores array based on scores (descending order)
+    user_scores.sort(key=lambda x: x[1], reverse=True)
+
+    # Assign ranks based on the sorted order
+    for rank, (username, score) in enumerate(user_scores, start=1):
+        # Update userScore field
+        users_collection.update_one(
+            {"username": username},
+            {"$set": {"daily_tasks_data.0.userScore": score}}
+        )
+
+        # Update userRank field with current rank
+        users_collection.update_one(
+            {"username": username},
+            {"$set": {"daily_tasks_data.0.userRank": rank}}
+        )
+
+        print(f"For Score: {score} user {username} got rank {rank}")
+
+
+
+# update_all_user_ranks()
+
+# Call the function to calculate task scores
+calculate_task_scores()
+
+
+# update_highest_rank()
+
 # update_todays_task_for_all_users()
+
+
+#update_task_stat_for_all_users() # yeh raat ko chalega
 
 
 # update_pomodoro_stat()
 # check_streaks()
 # reset_completed_tasks()
+
+# update_todays_task_for_all_users()

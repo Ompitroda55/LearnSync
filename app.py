@@ -590,7 +590,7 @@ def get_notification_for_receiver():
     collection = db["notifications"]
     receiver_object_id = ObjectId(receiver_id)
     receiver = fetch_user_by_id(receiver_object_id)
-    notifications = list(collection.find({"receiver": receiver['username'], "status": "pending"}).sort("timestamp", -1))
+    notifications = list(collection.find({"receiver": session.get("username"), "status": "pending"}).sort("timestamp", -1))
     notifications.sort(key=lambda x: x['timestamp'], reverse=True)
     for req in notifications:
         req['_id'] = str(req['_id'])
@@ -652,7 +652,18 @@ def login():
         session['username'] = user['username']
         session['user_id'] = str(user['_id'])
         session['total_usage_hours'] = int(user['pomodoro_usage_hours'])
-        # user['none']
+        if(user['last_login'].date() == (datetime.now().date() - timedelta(days=1))):
+            user['stats'][0]['gems']+=1
+            user['consecutive_login']+=1
+            if(user['consecutive_login'] == 10):
+                user['stats'][0]['gems']+=10
+                user['consecutive_login'] = 0
+        else:
+            user['consecutive_login'] = 0
+        
+        # user['last_login'] = datetime.now()
+
+        # collection.update_one({'username': username}, {'$set': user})
         update_todays_task(str(user['_id']))
 
         return render_template('dashboard.html', user=user)
@@ -987,9 +998,20 @@ def getUserStats():
     # user_id = request.form.get('userId')
     user_id = userId
     user_stats = fetch_user_stats(user_id)
+    users_collection = db["users"]
+    user = db["users"].find_one({"_id": ObjectId(user_id)})
+    # print(user)
+    # Check if the user exists
+    if user:
+        # Extract and return the user stats
+        user_stats = user.get("stats", {})
+        # print(user_stats)
+        return jsonify(user_stats)
+    else:
+        # Return None if the user is not found
+        return jsonify("None was found")
     # print(user_stats, "user stats")
     # print(user_id,"Turueueddkdkdkdkue")
-    return jsonify(user_stats)
 
 @app.route('/getUser/<userId>', methods = ['POST'])
 def getUser(userId):
@@ -1774,15 +1796,12 @@ def sendStreak():
             # Check if the last interaction date is set to zero (initial value)
             if streak['last_interaction_dates'][user_index][1] == 0:
                 # Set the last interaction date to the current time
+                print("0 wali condition ")
                 streak['last_interaction_dates'][user_index][1] = datetime.now()
             else:
-                # Check when the streak was last updated for the current user
-                # last_update_time = streak['last_interaction_dates'][user_index][1]
-                # time_difference = datetime.now() - last_update_time
-                # if time_difference <= timedelta(1):
-                #     # Streak was updated within the last 24 hours, do not increment streak count
-                #     return jsonify({'message': 'Streak already updated within the last 24 hours'})
                 if user_current_date == current_date:
+                    print(user_index)
+                    print(user_current_date,current_date)
                     return jsonify({'message': 'Streak already updated within today.'})
                 else:
                     streak['last_interaction_dates'][user_index][1] = datetime.now()
@@ -1790,32 +1809,40 @@ def sendStreak():
             
             # Update the last interaction date for the current user
             # streak['last_interaction_dates'][user_index][1] = datetime.now()
+            db.streaks.update_one({'_id': ObjectId(streak_id)}, {'$set': streak})
             
             # Check if both users have sent streaks to each other within the past 24 hours
              # Index of the other user in the last_interaction_dates array
             if other_current_date != 0:
-                if user_current_date == other_current_date == current_date and streak['last_complete'] == datetime.now().date() - timedelta(days=1):
+                print(current_date,other_current_date,other_current_date == current_date)
+                print(streak['last_complete'],(datetime.now().date() - timedelta(days=1)),streak['last_complete'] == (datetime.now().date() - timedelta(days=1)))
+                print(other_current_date == current_date and streak['last_complete'].date() == (datetime.now().date() - timedelta(days=1)))
+                print(str(user_current_date) + "THis is current user date")
+                if other_current_date == current_date and streak['last_complete'].date() == (datetime.now().date() - timedelta(days=1)):
+
                     streak['current_streak_lengths'] += 1
                     streak['last_complete'] = datetime.now()
-
+                    streak['active'] = 1
+                    print("Streak increased")
                     # Update the max streak length if the current streak is longer
                     if streak['current_streak_lengths'] > streak['max_streak_lengths']:
                         streak['max_streak_lengths'] = streak['current_streak_lengths']
-
-                    user = db.users.find_one({'_id': ObjectId(session.get('user_id'))})
-                    if(user['daily_tasks_data'][0]['longestStreak']) < streak['current_streak_lengths']:
-                        db.users.update_one({'_id': ObjectId(session.get('user_id'))}, {"$set": {"longestStreak": streak['current_streak_lengths']}})
+                        print("Streak Length Increased")
                 elif user_current_date == other_current_date == current_date:
                     streak['current_streak_lengths'] = 1
                 else:
                     streak['active'] = 0
                 
+                user = db.users.find_one({'_id': ObjectId(session.get('user_id'))})
+                if(user['daily_tasks_data'][0]['longestStreak']) < streak['current_streak_lengths']:
+                    print("User streak updated")
+                    db.users.update_one({'_id': ObjectId(session.get('user_id'))}, {"$set": {"longestStreak": streak['current_streak_lengths']}})
 
             db.streaks.update_one({'_id': ObjectId(streak_id)}, {'$set': streak})
 
             return jsonify({'message': 'Streak updated successfully'})
         else:
-            return jsonify({'error': 'Streak not found'})
+            return jsonify({'error': 'Complete All Tasks First'})
 
     except Exception as e:
         print(e)
@@ -1880,7 +1907,7 @@ def get_streaks():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/get-streaks', methods=['POST'])
+@app.route('/get-longest-streaks', methods=['POST'])
 def getUserLongestStreakWith():
     # Get the username from the session
     collection = db['streaks']

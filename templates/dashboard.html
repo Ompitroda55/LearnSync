@@ -1019,7 +1019,7 @@
                                 </div>
                                 <span class="less-imp-text"
                                     style="align-items: center; display: flex; flex-direction: row; text-align: center;">LearnSync
-                                    employs AI to suggest study sequences based on >users usage hours and ratings.
+                                    employs Advanced Algorithms to suggest study sequences based on >users usage hours and ratings.
                                     Pomodoro suggestion feature is beta. Results may vary.</span>
                                 <script>
                                     var arr = [];
@@ -1620,8 +1620,8 @@
                                     Account</button>
                             </div>
                             <script>
-                                document.getElementById('del-acc-button').addEventListener('click', function () {
-                                    if(createConfirmBox("Delete Account","Once account is deleted, it cannot be recovered and all of the data and social connection will be removed related with the account are you sure to delete your account?"))
+                                document.getElementById('del-acc-button').addEventListener('click', async function () {
+                                    if(await createConfirmBox("Delete Account","Once account is deleted, it cannot be recovered and all of the data and social connection will be removed related with the account are you sure to delete your account?"))
                                     fetch('/delete-account', {
                                         method: 'DELETE',
                                         headers: {
@@ -4614,7 +4614,7 @@
         }
 
         async function getUserLongestStreakWith(username) {
-            const url = '/get-streaks';
+            const url = '/get-longest-streaks';
             const data = { username: username };
 
             try {

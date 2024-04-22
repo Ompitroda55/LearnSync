@@ -705,7 +705,7 @@ def insertFlashCard():
 
 # Function to Handle Signup
 
-@app.route('/sign-up', methods=['GET'])
+@app.route('/sign-up', methods=['GET','POST'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -725,7 +725,7 @@ def signup():
         session['total_usage_hours'] = int(user['pomodoro_usage_hours'])
         # return render_template('dashboard.html', user=user)
         # print("I am Called")
-        return render_template('home_alt.html')
+        return render_template('dashboard.html', user=user)
     else:
         return render_template('signup.html')
 
@@ -1685,7 +1685,7 @@ def mark_task_as_complete():
                     collection = db['users']
                     user = collection.find_one({'_id': user_id})
                     user['daily_tasks_data'][0]['lastComplete'] = datetime.now()
-                    user['daily_tasks_data'][0]['totalCompletes'].append(datetime.now())
+                    # user['daily_tasks_data'][0]['totalCompletes'].append(datetime.now())
                     user['stats'][0]['hearts'] += 1
                     collection.update_one({'_id': user['_id']}, {'$set': user})
 
@@ -1698,6 +1698,7 @@ def mark_task_as_complete():
                             user['stats'][0]['gems'] += 1
                     else:
                         user['stats'][0]['hearts'] += 1
+                        print("Stats Updated;")
                     collection.update_one({'_id': user_id}, {'$set': user})
 
                 return jsonify({'message': 'Task status toggled successfully', 'all_tasks_completed': all_tasks_completed})
@@ -2032,20 +2033,11 @@ def getDailyTasksInsights():
         while len(task_stat) < 9:
             task_stat.insert(0, {'complete': 0, 'total': 0})
 
-        # Add ocde for counting total no. ofdays completd here
-
-        # Calculate total completed tasks and total days
-        # completed_tasks = todays_task['complete']
-        # total_days = len(task_stat)
-        # print(task_stat)
-        # print("THis is task stat...................")
         task_stat.append(todays_task)
-        total_completed_days = sum(1 for task in task_stat if task['complete'] == task['total'])
+        total_completed_days = sum(1 for task in task_stat if task['complete'] == task['total'] != 0 )
 
-# Calculate total number of days
         total_days = len(task_stat)
 
-        # Get the last 10 days' task data
         last_10_tasks = task_stat[-10:]
         last_10_tasks.reverse()
 

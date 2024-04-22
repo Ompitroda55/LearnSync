@@ -580,6 +580,9 @@
                             });
                         </script>
                         <script>
+                            async function genDailyTasks() {
+                                await generateUserDailyTasksToShow();
+                            }
                             var colors = ['#13d1ff', '#19a5ff', '#fee719', '#fe4f19', '#f00c18'];
 
                             var container = document.querySelector('.user-daily-tasks-set');
@@ -636,14 +639,15 @@
                                     var inputLevel = inputField.dataset.level;
                                     saveButton.disabled = true;
                                     // console.log(inputValue, inputLevel);
-                                    await generateUserDailyTasksToShow();
                                     createUserDailyTask(inputValue, inputLevel)
-                                        .then(taskId => {
-                                            taskItemContainer.dataset.task_Id = taskId;
-                                        })
-                                        .catch(error => {
-                                            console.error('Error creating daily task:', error);
-                                        });
+                                    .then(taskId => {
+                                        taskItemContainer.dataset.task_Id = taskId;
+                                    })
+                                    .catch(error => {
+                                        console.error('Error creating daily task:', error);
+                                    });
+                                    
+                                    genDailyTasks();
                                 });
 
                                 // Create delete button
@@ -2365,6 +2369,7 @@
                                 btn.disabled = false;
                             }
                             console.log(isTasksCompleted);
+                            console.log("Task Generated For User on Click")
                             var parentElement = document.querySelector('.daily-tasks-show');
                             parentElement.textContent = "";
                             var completedTasksElements = [];
@@ -4048,7 +4053,7 @@
             updateNotifications();
             generateFriendsList('.group-member-add-list');
             // generateFriendsList('.friends-list');
-            generateUserDailyTasksToShow();
+            await generateUserDailyTasksToShow();
             generateUserGroupsList("");
             generateUserFriendsList("");
             generateUserDailyTasks();
@@ -4057,6 +4062,7 @@
             // getStreaksData();
             generateFriendStreakItems();
             setInterval(updateNotifications, 10000);
+            // setInterval(generateUserDailyTasksToShow, 1000);
             setInterval(updateStats, 30000);
         });
 

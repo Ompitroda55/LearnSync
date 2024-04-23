@@ -528,7 +528,7 @@
                                 </form> -->
                             </div>
                         </div>
-                        <div class="user-daily-tasks-info">
+                        <!-- <div class="user-daily-tasks-info">
                             <div class="secondary-heading">Your Tasks Overview</div>
                             <div class="user-daily-tasks-stats-con">
                                 <div class="user-daily-tasks-total container-default">
@@ -544,7 +544,7 @@
 
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <script>
                             document.addEventListener("DOMContentLoaded", function () {
                                 // Add click event listener to the document and delegate it to the button
@@ -2733,8 +2733,10 @@
                                 let button = document.createElement('button');
                                 button.classList.add('ui-button-2');
                                 button.setAttribute('id', 'send-strk-button');
-                                button.addEventListener('click', function () {
+                                button.addEventListener('click', async function () {
                                     sendStreak(item['_id']);
+                                    awakeStreakCon();
+                                    // await getStreaksData();
                                 });
 
                                 // Add bolt icon to button
@@ -2765,7 +2767,10 @@
                         //     { name: 'Friend 3', streakLength: 120 }
                         // ];
 
+                        async function awakeStreakCon(){
+                            await getStreaksData();
 
+                        }
                     </script>
 
                     <script>

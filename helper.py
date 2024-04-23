@@ -240,22 +240,22 @@ def update_all_user_ranks():
 
 
 
-# update_all_user_ranks()
+update_all_user_ranks()
 
 # Call the function to calculate task scores
 calculate_task_scores()
 
 
-# update_highest_rank()
+update_highest_rank()
 
-# update_todays_task_for_all_users()
+update_todays_task_for_all_users()
 
 
 #update_task_stat_for_all_users() # yeh raat ko chalega
 
 
-# update_pomodoro_stat()
-# check_streaks()
-# reset_completed_tasks()
+update_pomodoro_stat()
+check_streaks()
+reset_completed_tasks()
 
-# update_todays_task_for_all_users()
+update_todays_task_for_all_users()

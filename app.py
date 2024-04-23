@@ -846,7 +846,9 @@ def searchFlashcards():
 def addFriend():
     user_id = session.get('user_id')
     print(user_id)
-    user = fetch_user_by_id(user_id)
+    user = getUser(user_id)
+
+    user = db['users'].find_one({"_id": ObjectId(session.get('user_id'))})
     print(user)
     friend_username = request.form['friend-username']
     print(friend_username)
@@ -857,15 +859,16 @@ def addFriend():
         return jsonify({'message': 'Friend already in friends list'}), 400
     else:
         # If not, add the friend to the user's friends array
-        # result = db["users"].update_one({"_id": ObjectId(user_id)}, {"$push": {"friends": friend_username}})
+        result = db["users"].update_one({"_id": ObjectId(user_id)}, {"$push": {"friends": friend_username}})
         if createRequest(user['username'], friend_username, 0):
             return jsonify({'message': 'Friend Request Sent!'}), 200
         else:
             return jsonify({'message': 'Failed to add friend'}), 500
 
 def handleFriendSearch():
-    user_id = session.get('user_id')
-    user = fetch_user_by_id(user_id)
+    # user_id = session.get('user_id')
+    # user = fetch_user_by_id(user_id)
+    user = getUser(session.get('user_id'))
     friend_username = request.form['friend-username']
     if friend_username in user['friends']:
         return jsonify({'message': 0}), 400

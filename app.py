@@ -1793,8 +1793,9 @@ def sendStreak():
             # Determine the index of the current user in the last_interaction_dates array
             user_index = 0 if streak['last_interaction_dates'][0][0] == current_user else 1
             other_user_index = 1 - user_index 
-            user_current_date = streak['last_interaction_dates'][user_index][1].date()
-            other_current_date = streak['last_interaction_dates'][other_user_index][1].date()
+
+            user_current_date = streak['last_interaction_dates'][user_index][1]
+            other_current_date = streak['last_interaction_dates'][other_user_index][1]
             previous_date = (datetime.now().date() - timedelta(days=1))
             current_date = datetime.now().date()
             # Check if the last interaction date is set to zero (initial value)
@@ -1802,6 +1803,7 @@ def sendStreak():
                 # Set the last interaction date to the current time
                 print("0 wali condition ")
                 streak['last_interaction_dates'][user_index][1] = datetime.now()
+                user_current_date = streak['last_interaction_dates'][user_index][1].date()
             else:
                 if user_current_date == current_date:
                     print(user_index)
@@ -1818,6 +1820,7 @@ def sendStreak():
             # Check if both users have sent streaks to each other within the past 24 hours
              # Index of the other user in the last_interaction_dates array
             if other_current_date != 0:
+                other_current_date = other_current_date.date()
                 print(current_date,other_current_date,other_current_date == current_date)
                 print(streak['last_complete'],(datetime.now().date() - timedelta(days=1)),streak['last_complete'] == (datetime.now().date() - timedelta(days=1)))
                 print(other_current_date == current_date and streak['last_complete'].date() == (datetime.now().date() - timedelta(days=1)))

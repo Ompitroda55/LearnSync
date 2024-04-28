@@ -1756,7 +1756,7 @@ def createStreak():
             "current_streak_lengths": 0,
             "max_streak_lengths": 0,  # Track max streak length for each user
             "active": 0,
-            "last_complete": 0
+            "last_complete": datetime(2000, 1, 1)
         }
 
         # Insert streak document into MongoDB
@@ -1803,8 +1803,10 @@ def sendStreak():
                 # Set the last interaction date to the current time
                 print("0 wali condition ")
                 streak['last_interaction_dates'][user_index][1] = datetime.now()
+                db.streaks.update_one({'_id': ObjectId(streak_id)}, {'$set': streak})
                 user_current_date = streak['last_interaction_dates'][user_index][1].date()
             else:
+                print(user_current_date == current_date, user_current_date, current_date)
                 if user_current_date == current_date:
                     print(user_index)
                     print(user_current_date,current_date)
@@ -1856,6 +1858,8 @@ def sendStreak():
         return jsonify({'error': str(e)}), 500
 
 def time_difference_to_string(start_time, end_time):
+    if start_time == 0 :
+        start_time = datetime.now()
     time_diff = end_time - start_time
 
     # Calculate days, hours, and minutes
@@ -1912,6 +1916,7 @@ def get_streaks():
         return jsonify(user_streaks)
 
     except Exception as e:
+        print(e)
         return jsonify({'error': str(e)}), 500
 
 @app.route('/get-longest-streaks', methods=['POST'])

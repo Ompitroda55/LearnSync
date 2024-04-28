@@ -2437,11 +2437,13 @@
                                                     console.log("Task Toggled");
                                                     var btn = document.querySelector('#send-streak-to-friends');
                                                     btn.disabled = false;
-                                                } await fillTaskInsights();
+                                                }
+                                                await revokeInsight();
                                             }
                                         } else {
                                             await markDailyTaskAsComplete(tskId);
-                                            await fillTaskInsights();
+                                            await revokeInsight();
+                                            // await fillTaskInsights();
                                             // console.log(countFrequency(completedTaskList, 0) + "is frequency/");
                                             // if(isAllComplete == true) {
                                             //     awardDailyPoints();
@@ -2514,6 +2516,9 @@
                                 span.style.margin = "10px auto";
                                 parentElement.appendChild(span);
                             }
+                        }
+                        async function revokeInsight() {
+                            await fillTaskInsights()
                         }
                         async function fetchUserDailyTasksToShow() {
                             try {
@@ -2736,7 +2741,7 @@
                                 button.addEventListener('click', async function () {
                                     sendStreak(item['_id']);
                                     awakeStreakCon();
-                                    // await getStreaksData();
+                                    
                                 });
 
                                 // Add bolt icon to button
@@ -3671,7 +3676,7 @@
                     formData.append('groupname', groupName);
                     formData.append('selectedFriends', JSON.stringify(selectedFriends));
                     const response = await createGroup(formData);
-
+                    await revokeGrop();
                     alertbox.style.display = 'flex';
                     // alertbox.style.backgroundColor = 'var(--feather-green)';
                     alertbox.innerHTML = '<span class="material-symbols-outlined" style="font-size: 24px; color: var(--feather-green);">sentiment_very_satisfied</span>Group Succesfully Created</span>'
@@ -3691,7 +3696,9 @@
 
             }
         });
-
+        async function revokeGrop() {
+            generateUserGroupsList();
+        }
         document.getElementById('add-btn-grp').addEventListener('click', async function (event) {
             event.preventDefault();
             const groupManager = document.querySelector('.group-handle-con');
@@ -4600,6 +4607,7 @@
                     if (await createConfirmBox("Confirm Starting Streak", "This will send a create a streak between you two. Are you sure of it?")) {
                         await createAStreak(friendUsername); // Replace someAsyncFunction with the function you want to call
                         stkBtn.disabled = true;
+                        await revokeStreak();
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -4623,7 +4631,9 @@
             longestStreakDesc.textContent = `Longest Streak between you and ${friend.friend.username}`
 
         }
-
+        async function revokeStreak() {
+            await generateFriendStreakItems();
+        }
         async function getUserLongestStreakWith(username) {
             const url = '/get-longest-streaks';
             const data = { username: username };
